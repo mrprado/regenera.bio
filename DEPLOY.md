@@ -1,36 +1,50 @@
-# Deploying regenera.bio to Vercel
+# Deploying regenera.bio to Netlify
 
-This is a standard Next.js 14 App Router project. Vercel detects it automatically,
-so no `vercel.json` is required (adding one for framework detection or routing
-would only risk overriding Vercel's correct defaults). The only thing lower-level
-config controls is remote image hosts, already set in `next.config.js`
-(`upload.wikimedia.org`, `commons.wikimedia.org`).
+This is a standard Next.js 14 App Router project. Netlify builds it via the
+official `@netlify/plugin-nextjs` adapter, declared in `netlify.toml` at the
+repo root:
+
+```toml
+[build]
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+```
+
+The plugin handles routing, SSR, and Image Optimization (including the
+remote Wikimedia hosts already allow-listed in `next.config.js`) without
+further config.
 
 ## 1. Push to a Git repository
 
-Vercel deploys from GitHub, GitLab, or Bitbucket.
+This repo already lives at https://github.com/mrprado/regenera.bio, so this
+step is done. For reference, from scratch it's:
 
 ```bash
 git init
 git add .
 git commit -m "Initial commit"
 git remote add origin <your-repo-url>
+git branch -M main
 git push -u origin main
 ```
 
-## 2. Import the project in Vercel
+## 2. Import the project in Netlify
 
-1. Go to https://vercel.com/new and import the repository.
-2. Framework Preset: **Next.js** (auto-detected).
-3. Root Directory: `regenera-nextjs` if the repo root is `Regenera.bio/` (this
-   folder contains `reference-design.html` alongside the app); set it to `.` if
-   you push the contents of `regenera-nextjs/` as the repo root instead.
-4. Build Command / Output: leave as the Next.js defaults (`next build`).
+1. Go to https://app.netlify.com/start and pick "Import an existing project"
+   → GitHub → select `mrprado/regenera.bio`.
+2. Netlify auto-detects the `netlify.toml` and the Next.js plugin; leave the
+   build command and publish directory as whatever the plugin sets (don't
+   override them manually).
+3. Base directory: leave blank if the repo root is `regenera-nextjs/`
+   itself (this is how it's currently pushed). If you ever restructure so
+   the app lives in a subfolder, set the base directory there instead.
 
 ## 3. Environment variables
 
-Add these in Vercel Project Settings → Environment Variables (Production,
-Preview, and Development as appropriate). Values come from `.env.example`.
+Add these in Site configuration → Environment variables. Values come from
+`.env.example`.
 
 | Variable | Required | Notes |
 |---|---|---|
@@ -50,12 +64,12 @@ DNS records it gives you (SPF/DKIM) at your DNS provider.
 
 ## 4. Attach the domain
 
-1. Vercel Project Settings → Domains → add `regenera.bio` and `www.regenera.bio`.
-2. Point DNS at Vercel per the instructions Vercel shows (either an `A`/`ALIAS`
-   record at the apex to Vercel's IP, or delegate via nameservers if the
-   registrar supports it), and a `CNAME` for `www` to `cname.vercel-dns.com`.
-3. In Domains settings, set the redirect direction (`www` → apex or apex →
-   `www`) once both resolve. Vercel issues the TLS certificate automatically.
+1. Site configuration → Domain management → Add a domain → `regenera.bio`.
+2. Point DNS at Netlify per what it shows (Netlify DNS, or an `A` record at
+   the apex to Netlify's load balancer IP plus a `CNAME` for `www` to your
+   `<site-name>.netlify.app`).
+3. Netlify issues the TLS certificate automatically once DNS resolves, and
+   lets you choose the `www` ↔ apex redirect direction in domain settings.
 
 ## 5. Verify after deploy
 
@@ -66,6 +80,7 @@ DNS records it gives you (SPF/DKIM) at your DNS provider.
 - Submit the Field Notes subscribe form and confirm the address appears in
   Buttondown.
 - Check `/sitemap.xml` and `/robots.txt` resolve and list all routes.
+- Confirm the favicon renders in a browser tab.
 - Run Lighthouse or PageSpeed Insights against the production URL as a final
   sanity check on Core Web Vitals.
 
