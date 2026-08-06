@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useLegalModal } from "@/components/LegalModalProvider";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
+  const openModal = useLegalModal();
 
   useEffect(() => {
     try {
@@ -31,9 +32,13 @@ export default function CookieBanner() {
         services.
       </p>
       <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-        <Link href="/notice" className="btn btn-line" style={{ padding: "9px 18px", fontSize: 10 }}>
+        <button
+          className="btn btn-line"
+          style={{ padding: "9px 18px", fontSize: 10 }}
+          onClick={() => openModal("notice")}
+        >
           Read Notice
-        </Link>
+        </button>
         <button className="btn btn-gold" style={{ padding: "9px 18px", fontSize: 10 }} onClick={accept}>
           Accept
         </button>

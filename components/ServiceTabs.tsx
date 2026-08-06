@@ -46,9 +46,9 @@ export default function ServiceTabs({ initial = "energy" as TabId }: { initial?:
               </p>
             </div>
             <div className="svc-note">
-              Our current pipeline spans 10 GW of energy projects, solar and waste to energy, in
-              development across international markets. Project specifics are shared under confidentiality after an
-              introductory call.
+              Our current pipeline includes solar and waste to energy projects in development
+              across international markets. Project details are shared under confidentiality
+              following an introductory call.
             </div>
           </div>
           <div className="scope">
@@ -149,23 +149,23 @@ export default function ServiceTabs({ initial = "energy" as TabId }: { initial?:
                 Project <em>readiness.</em>
               </h2>
               <p className="lede">
-                Most good projects fail institutional review for fixable reasons. Incomplete
-                documentation, unclear structure, or a value case told in the wrong language.
-                Readiness work fixes that before capital ever sees the project.
+                Strong projects often fall short of institutional requirements for fixable
+                reasons: incomplete documentation, unclear structures, unresolved risks, or a
+                value proposition presented in the wrong language. Readiness work addresses
+                these gaps before formal capital engagement.
               </p>
             </div>
             <div className="svc-note">
-              The Five Capitals assessment measures financial, social, cultural, living, and
-              experiential capital together, so a project&apos;s full value is visible, not just
-              its cash flows.
+              Our assessment examines the project as a whole, revealing its strengths, risks,
+              sources of value, and long term potential beyond cash flow alone.
             </div>
           </div>
           <div className="scope">
             <div className="scope-row">
               <div className="srk">Diagnostics</div>
               <div className="srv">
-                Five Capitals assessment and ecosystem layer mapping to establish what the
-                project is worth and where it fits.
+                Assessing the project, site, structure, risks, and wider ecosystem to establish
+                what the project is worth and where it fits.
               </div>
             </div>
             <div className="scope-row">
@@ -206,8 +206,7 @@ export default function ServiceTabs({ initial = "energy" as TabId }: { initial?:
               </p>
             </div>
             <div className="svc-note">
-              Regenera acts in an introductory capacity only. We do not execute transactions,
-              hold client funds, or provide investment advice. All investment decisions are made
+              Regenera acts in an introductory capacity. All investment decisions are made
               independently by the parties.
             </div>
           </div>

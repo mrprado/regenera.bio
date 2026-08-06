@@ -11,7 +11,7 @@ const LAYERS = [
     color: "#b4693e",
     ring: "rgba(180,105,62,",
     name: "Land and Soil",
-    desc: "Land strategy, site analysis, regenerative agriculture, soil restoration, land valuation, development planning, and land backed project structures.",
+    desc: "Land use strategy, site analysis, soil fertility, biodiversity, development planning, land value strategy, and land based project structuring.",
     angle: 250
   },
   {
@@ -19,7 +19,7 @@ const LAYERS = [
     color: "#5a86a8",
     ring: "rgba(90,134,168,",
     name: "Water",
-    desc: "Water access, treatment, irrigation, watershed restoration, resource security, environmental monitoring, and infrastructure planning.",
+    desc: "Water access, treatment, reuse, irrigation, watershed restoration, resource security, and water systems planning.",
     angle: 315
   },
   {
@@ -27,7 +27,7 @@ const LAYERS = [
     color: "#c9a84c",
     ring: "rgba(201,168,76,",
     name: "Energy and Waste",
-    desc: "Utility scale solar, energy storage, waste to energy, resource recovery, carbon markets, and integrated energy infrastructure.",
+    desc: "Utility scale solar, energy storage, waste to energy, resource recovery, circular systems, and integrated energy planning.",
     angle: 30
   },
   {
@@ -35,7 +35,7 @@ const LAYERS = [
     color: "#6f9459",
     ring: "rgba(111,148,89,",
     name: "Food Systems",
-    desc: "Regenerative agriculture, agri industrial zones, food processing, rural infrastructure, and the integration of energy, water, land, and food systems.",
+    desc: "Regenerative agriculture, agri industrial development, food processing, storage, distribution, and regional supply chains.",
     angle: 215
   },
   {
@@ -43,7 +43,7 @@ const LAYERS = [
     color: "#a85a5a",
     ring: "rgba(168,90,90,",
     name: "Community and Health",
-    desc: "Infrastructure that improves access to clean energy, water, food, health services, education, employment, and long term community resilience.",
+    desc: "Community infrastructure, public health, education, local employment, stakeholder participation, and shared economic resilience.",
     angle: 135
   },
   {
@@ -51,7 +51,7 @@ const LAYERS = [
     color: "#7d8894",
     ring: "rgba(125,136,148,",
     name: "Built Environment",
-    desc: "Sustainable real estate, masterplanning, development strategy, site infrastructure, smart buildings, district energy, water integrated development, electric mobility, climate resilience, and net zero districts.",
+    desc: "Real estate strategy, master planning, site infrastructure, high performance buildings, district systems, electric mobility, climate adaptation, and net zero development.",
     angle: 90
   },
   {
@@ -59,7 +59,7 @@ const LAYERS = [
     color: "#8a76a8",
     ring: "rgba(138,118,168,",
     name: "Orbital Intelligence",
-    desc: "Earth observation, environmental intelligence, satellite enabled monitoring, climate risk analysis, asset level verification, responsible orbital infrastructure, and stewardship of shared orbital environments.",
+    desc: "Earth observation, satellite enabled monitoring, climate and environmental risk analysis, asset verification, impact measurement, and responsible orbital stewardship.",
     angle: 55
   }
 ];

@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useLegalModal } from "@/components/LegalModalProvider";
 
 export default function Footer() {
+  const openModal = useLegalModal();
+
   return (
     <>
       <div className="reg">
@@ -30,9 +35,9 @@ export default function Footer() {
             </p>
           </div>
           <div className="flinks">
-            <Link href="/notice">Important Notice</Link>
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/cookies">Cookies</Link>
+            <button onClick={() => openModal("notice")}>Important Notice</button>
+            <button onClick={() => openModal("privacy")}>Privacy</button>
+            <button onClick={() => openModal("cookies")}>Cookies</button>
             <Link href="/contact?path=general">Contact</Link>
           </div>
         </div>

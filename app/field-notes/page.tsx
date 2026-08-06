@@ -22,12 +22,11 @@ export default function FieldNotesPage() {
             <span>Field Notes</span>
           </div>
           <h1>
-            Notes from the work <em>itself.</em>
+            Where systems, capital, and <em>place converge.</em>
           </h1>
           <p className="lede">
-            A running record across everything the practice touches: energy systems, land and
-            agriculture, real estate and materials, water, waste, capital markets, and orbital
-            verification.
+            Analysis and observations across energy, land, water, food, waste, real estate,
+            infrastructure, and environmental intelligence.
           </p>
         </div>
       </div>

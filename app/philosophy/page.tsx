@@ -48,43 +48,43 @@ export default function PhilosophyPage() {
           </p>
           <div className="prin r d2">
             <div>
-              <strong>Place Based Intelligence</strong>Every engagement begins with the realities
-              of place. Land, ecology, water, infrastructure, regulation, markets, culture, and
-              community.
+              <strong>Place Based Intelligence</strong>Every engagement begins with the
+              realities of place, including land, ecology, water, infrastructure, regulation,
+              markets, culture, and community.
             </div>
             <div>
-              <strong>Community Legitimacy</strong>Projects should create durable local value,
-              respond to community priorities, and earn the trust required for long term
+              <strong>Community Legitimacy</strong>Projects should respond to local priorities,
+              create durable benefits, and build the trust required for successful long term
               operation.
             </div>
             <div>
-              <strong>Systems Integration</strong>We identify value at the intersections of
-              land, water, energy, waste, food systems, mobility, infrastructure, and capital.
+              <strong>Systems Integration</strong>We examine the relationships among land, water,
+              energy, waste, food, mobility, infrastructure, and capital to identify
+              opportunities that isolated analysis may overlook.
             </div>
             <div>
-              <strong>Resilience and Bankability</strong>We balance efficiency, resilience,
-              adaptability, and risk adjusted performance to support long term project
-              viability.
+              <strong>Resilience and Bankability</strong>We balance environmental performance,
+              adaptability, commercial viability, and risk adjusted returns to support durable
+              projects and investable structures.
             </div>
             <div>
-              <strong>Aligned Governance</strong>We establish clear roles, aligned incentives,
-              decision rights, and accountability among landowners, developers, communities,
-              authorities, technical partners, operators, and capital providers.
+              <strong>Aligned Governance</strong>We clarify roles, incentives, decision rights,
+              and accountability among landowners, developers, communities, authorities,
+              technical partners, operators, and capital providers.
             </div>
             <div>
-              <strong>Circular Resource Design</strong>We seek to convert waste, water, heat,
-              materials, and underutilized assets into productive inputs where technically and
+              <strong>Circular Resource Use</strong>We seek productive uses for waste, water,
+              heat, materials, and underutilized assets where technically, environmentally, and
               economically viable.
             </div>
             <div>
-              <strong>Adaptive Execution</strong>Strategies and structures evolve as technical
-              data, permitting conditions, stakeholder requirements, and market signals become
-              clearer.
+              <strong>Adaptive Execution</strong>Strategies evolve as technical data, permitting
+              conditions, stakeholder needs, and market realities become clearer.
             </div>
             <div>
-              <strong>Whole System Value</strong>We assess value across financial performance,
-              ecological condition, community outcomes, institutional capacity, and the long
-              term quality of place.
+              <strong>Whole System Value</strong>We evaluate success across financial
+              performance, ecological condition, community benefit, institutional capacity, and
+              the enduring quality of place.
             </div>
           </div>
         </div>

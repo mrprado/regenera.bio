@@ -10,10 +10,7 @@ const STATIC_ROUTES: { path: string; priority: number; changeFrequency: Metadata
   { path: "/philosophy", priority: 0.8, changeFrequency: "monthly" },
   { path: "/projects", priority: 0.8, changeFrequency: "monthly" },
   { path: "/field-notes", priority: 0.7, changeFrequency: "weekly" },
-  { path: "/contact", priority: 0.6, changeFrequency: "yearly" },
-  { path: "/notice", priority: 0.3, changeFrequency: "yearly" },
-  { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
-  { path: "/cookies", priority: 0.3, changeFrequency: "yearly" }
+  { path: "/contact", priority: 0.6, changeFrequency: "yearly" }
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -19,9 +19,11 @@ orbital intelligence).
 1. NO em-dashes or en-dashes anywhere in copy. Use commas or periods.
 2. Compliance copy is load-bearing. Never add: response-time promises, fee commitments,
    return/IRR figures, "guaranteed", or securities offering language. The Important Notice
-   text in `components/Footer.tsx` and `app/notice/page.tsx` must stay verbatim.
+   text in `components/Footer.tsx` and `components/LegalModalProvider.tsx` must stay verbatim.
 3. Logo is REGENERA (all caps, no period, gold). Never restyle without instruction.
 4. Header nav has NO Contact tab; contact is reached only via "Get in Touch" and footer.
+   Important Notice / Privacy / Cookies are footer-triggered modal popups
+   (`components/LegalModalProvider.tsx`), not separate pages; only Contact navigates.
 5. Images: Wikimedia Commons only, via the deterministic thumb URL scheme already used.
    No image may appear twice anywhere on the site. No visible photo credits (owner's
    decision; if licensing posture changes, add a /credits page rather than captions).

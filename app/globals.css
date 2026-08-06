@@ -265,8 +265,8 @@ footer{background:var(--night);border-top:1px solid rgba(201,168,76,0.07);paddin
 .fw{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;align-items:flex-start}
 .flogo{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:0.2em;color:rgba(201,168,76,0.5)}
 .flinks{display:flex;gap:20px;flex-wrap:wrap}
-.flinks a{background:none;border:none;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(201,168,76,0.3);transition:color .2s;padding:0;text-decoration:none}
-.flinks a:hover{color:rgba(201,168,76,0.6)}
+.flinks a,.flinks button{background:none;border:none;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(201,168,76,0.3);transition:color .2s;padding:0;text-decoration:none;cursor:pointer}
+.flinks a:hover,.flinks button:hover{color:rgba(201,168,76,0.6)}
 .fleg{font-size:10px;font-weight:300;color:rgba(214,231,203,0.22);line-height:1.7;max-width:520px;margin-top:10px}
 
 /* ── modal ── */

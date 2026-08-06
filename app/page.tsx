@@ -53,13 +53,11 @@ export default function HomePage() {
             <span>Regenerative Ecosystem Advisory</span>
           </div>
           <h1 className="hh">
-            Finance aligned with <em>living systems.</em>
+            Capital aligned with <em>living systems.</em>
           </h1>
           <p className="hs">
-            We connect infrastructure and real estate projects with institutional capital, and
-            structure the land, energy, and communities they touch for their full potential.
-            Solar, waste to energy, real estate, and regenerative development across 8+
-            countries.
+            We connect capital with projects and structure each opportunity around the land,
+            energy, and communities it touches to realize its full potential.
           </p>
           <div className="hcta">
             <Link href="/how-we-work" className="btn btn-gold">
@@ -187,8 +185,8 @@ export default function HomePage() {
               <div className="pt">Project Readiness</div>
               <div className="pb">
                 Preparing projects, portfolios, and places for institutional capital.
-                Documentation, structure, diagnostics, and the Five Capitals assessment that
-                shows what a project is really worth.
+                Documentation, structure, diagnostics, and an assessment that shows what a
+                project is really worth.
               </div>
               <span className="pl">
                 Get ready <span className="arr">&rarr;</span>
@@ -226,46 +224,45 @@ export default function HomePage() {
               </h2>
             </div>
             <p style={{ fontSize: 14.5, fontWeight: 300, color: "rgba(214,231,203,0.5)", lineHeight: 1.82 }}>
-              Most firms work in one layer. Regenera works across the whole system, from soil to
-              orbit, so that capital lands where it creates compounding value across several
-              layers at once.
+              Regenera works across the whole system, from soil to orbit, so that capital lands
+              where it can create compounding value across multiple layers at once.
             </p>
           </div>
           <div className="eco-strip r d1" role="list">
             <Link href="/philosophy#land" className="eco-c" role="listitem">
               <div className="ed" style={{ background: "var(--terra)" }}></div>
               <div className="en">Land and Soil</div>
-              <div className="ex">Regenerative land, soil health, agriculture</div>
+              <div className="ex">Soil fertility, biodiversity, productive landscapes, and long term land value</div>
             </Link>
             <Link href="/philosophy#water" className="eco-c" role="listitem">
               <div className="ed" style={{ background: "var(--water)" }}></div>
               <div className="en">Water</div>
-              <div className="ex">Access, watersheds, resource security</div>
+              <div className="ex">Water security, treatment, reuse, and watershed health</div>
             </Link>
             <Link href="/philosophy#energy" className="eco-c" role="listitem">
               <div className="ed" style={{ background: "var(--gold)" }}></div>
               <div className="en">Energy and Waste</div>
-              <div className="ex">Solar, storage, waste to energy</div>
+              <div className="ex">Renewable generation, storage, resource recovery, and circular infrastructure</div>
             </Link>
             <Link href="/philosophy#food" className="eco-c" role="listitem">
               <div className="ed" style={{ background: "var(--food)" }}></div>
               <div className="en">Food Systems</div>
-              <div className="ex">Agri-industrial zones, processing</div>
+              <div className="ex">Regenerative agriculture, processing infrastructure, and resilient regional supply chains</div>
             </Link>
             <Link href="/philosophy#human" className="eco-c" role="listitem">
               <div className="ed" style={{ background: "var(--human)" }}></div>
               <div className="en">Community and Health</div>
-              <div className="ex">Energy, water, and health outcomes</div>
+              <div className="ex">Health supportive infrastructure, local participation, and inclusive economic opportunity</div>
             </Link>
             <Link href="/philosophy#urban" className="eco-c" role="listitem">
               <div className="ed" style={{ background: "var(--urban)" }}></div>
               <div className="en">Built Environment</div>
-              <div className="ex">Smart building, energy integrated real estate</div>
+              <div className="ex">High performance buildings, adaptive reuse, and place based development shaped by local climate and ecology</div>
             </Link>
             <Link href="/philosophy#orbital" className="eco-c" role="listitem">
               <div className="ed" style={{ background: "var(--orbit)" }}></div>
               <div className="en">Orbital Intelligence</div>
-              <div className="ex">Earth observation &amp; verification</div>
+              <div className="ex">Earth observation, environmental monitoring, risk intelligence, and impact verification</div>
             </Link>
           </div>
         </div>

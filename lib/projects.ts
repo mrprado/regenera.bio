@@ -189,7 +189,7 @@ export const PROJECT_TABS: ProjectTab[] = [
   },
   {
     id: "capital",
-    label: "Capital Partnerships",
+    label: "Capital Partners",
     heading: "Aligned capital relationships for prepared opportunities.",
     intro: [
       "Our network includes relationships with family offices, institutional investors, impact funds, and strategic capital partners interested in energy, infrastructure, natural assets, waste, and regenerative real estate.",
