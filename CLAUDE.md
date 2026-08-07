@@ -10,6 +10,12 @@ orbital intelligence).
   Garamond + Instrument Sans, parchment/forest/gold palette)
 - Content data in `lib/` (fieldNotes.ts, projects.ts); pages in `app/`; interactive pieces
   are small client components in `components/`
+- Supabase (project "Regenera.bio", `xbgrtjcslbnnvvhwqcye`) persists contact and subscribe
+  form submissions. No auth: RLS grants `anon`/`authenticated` INSERT-only on
+  `contact_submissions` and `subscribers`, no SELECT, so the publishable key in the
+  browser bundle can never read data back. Clients in `lib/supabase/` (server.ts used from
+  the two Route Handlers; client.ts unused today, kept for parity with the standard
+  `@supabase/ssr` Next.js pattern in case auth is added later).
 
 ## Commands
 - `npm run dev` — dev server
@@ -42,13 +48,17 @@ orbital intelligence).
 ## Known open items
 - `npm audit` shows remaining high-severity advisories on next@14.2.35; upgrading to
   Next 15/16 is a known future task (breaking changes).
-- Contact form requires `RESEND_API_KEY` and `CONTACT_FROM_EMAIL` (verified sender domain
-  in Resend); subscribe form requires `BUTTONDOWN_API_KEY`. See `.env.example` and
-  `DEPLOY.md`. Without them, forms validate but return a graceful error on submit.
+- Email notifications are best-effort, not required for a submission to succeed. Contact
+  form email requires `RESEND_API_KEY` and `CONTACT_FROM_EMAIL` (verified sender domain in
+  Resend); subscribe form email requires `BUTTONDOWN_API_KEY`. Without them, the form still
+  succeeds (row is stored in Supabase), it just skips the email and logs why server-side.
+  `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` are required for the
+  forms to work at all. See `.env.example` and `DEPLOY.md`.
 
 ## Resolved
-- Contact + subscribe forms wired to `app/api/contact/route.ts` (Resend) and
-  `app/api/subscribe/route.ts` (Buttondown).
+- Contact + subscribe forms write to Supabase (`contact_submissions` / `subscribers`) as
+  the source of truth, then best-effort notify via Resend (`app/api/contact/route.ts`) and
+  Buttondown (`app/api/subscribe/route.ts`).
 - Fonts migrated to `next/font/google` (Cormorant Garamond, Instrument Sans), exposed as
   `--font-serif` / `--font-sans` consumed by `--serif` / `--sans` in globals.css.
 - Scroll-reveal ported via `components/ScrollReveal.tsx` (IntersectionObserver, threshold

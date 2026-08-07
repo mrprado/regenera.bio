@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
@@ -49,23 +50,42 @@ export async function POST(req: Request) {
     );
   }
 
+  // Supabase is the source of truth for every enquiry. Email notification
+  // below is a best-effort convenience on top of it, not a requirement for
+  // success: a submission that's safely stored but fails to email out is a
+  // fixable ops problem, not a lost enquiry.
+  const supabase = createClient();
+  const { error: dbError } = await supabase.from("contact_submissions").insert({
+    name,
+    org: org || null,
+    email,
+    type,
+    message,
+    consent
+  });
+
+  if (dbError) {
+    console.error("Supabase contact insert failed:", dbError);
+    return NextResponse.json(
+      { ok: false, error: "We could not send your enquiry right now. Please try again shortly or email us directly." },
+      { status: 500 }
+    );
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL || "info@regenera.bio";
   const from = process.env.CONTACT_FROM_EMAIL;
 
   if (!apiKey || !from) {
-    console.error("Contact form submission received but RESEND_API_KEY or CONTACT_FROM_EMAIL is not configured.");
-    return NextResponse.json(
-      { ok: false, error: "We could not send your enquiry right now. Please try again shortly or email us directly." },
-      { status: 503 }
-    );
+    console.error("Contact enquiry stored, but RESEND_API_KEY or CONTACT_FROM_EMAIL is not configured, so no notification email was sent.");
+    return NextResponse.json({ ok: true });
   }
 
   try {
     const resend = new Resend(apiKey);
     const typeLabel = TYPE_LABELS[type] ?? type;
 
-    const { error } = await resend.emails.send({
+    const { error: emailError } = await resend.emails.send({
       from,
       to,
       replyTo: email,
@@ -83,20 +103,12 @@ export async function POST(req: Request) {
         .join("\n")
     });
 
-    if (error) {
-      console.error("Resend error:", error);
-      return NextResponse.json(
-        { ok: false, error: "We could not send your enquiry right now. Please try again shortly or email us directly." },
-        { status: 502 }
-      );
+    if (emailError) {
+      console.error("Resend error (enquiry was still stored):", emailError);
     }
-
-    return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("Contact form send failed:", err);
-    return NextResponse.json(
-      { ok: false, error: "We could not send your enquiry right now. Please try again shortly or email us directly." },
-      { status: 500 }
-    );
+    console.error("Contact notification email failed (enquiry was still stored):", err);
   }
+
+  return NextResponse.json({ ok: true });
 }

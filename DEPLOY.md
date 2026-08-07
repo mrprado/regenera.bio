@@ -48,15 +48,19 @@ Add these in Site configuration → Environment variables. Values come from
 
 | Variable | Required | Notes |
 |---|---|---|
-| `RESEND_API_KEY` | Yes, for the contact form to send | From your Resend dashboard. |
-| `CONTACT_FROM_EMAIL` | Yes | Must be an address on a domain verified in Resend, e.g. `"Regenera Advisory <no-reply@regenera.bio>"`. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project API URL. Project: "Regenera.bio" (`xbgrtjcslbnnvvhwqcye`). |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes | Supabase publishable key. Safe to expose to the browser; RLS on `contact_submissions` / `subscribers` only grants INSERT, no SELECT. |
+| `RESEND_API_KEY` | No, but no email without it | From your Resend dashboard. |
+| `CONTACT_FROM_EMAIL` | No, but no email without it | Must be an address on a domain verified in Resend, e.g. `"Regenera Advisory <no-reply@regenera.bio>"`. |
 | `CONTACT_TO_EMAIL` | No | Defaults to `info@regenera.bio` if unset. |
-| `BUTTONDOWN_API_KEY` | Yes, for the Field Notes subscribe form | From your Buttondown account settings. |
+| `BUTTONDOWN_API_KEY` | No, but no Buttondown sync without it | From your Buttondown account settings. |
 
-Without `RESEND_API_KEY` / `CONTACT_FROM_EMAIL`, the contact form still
-validates client-side but returns a graceful "could not send right now" error
-on submit rather than crashing. Same for `BUTTONDOWN_API_KEY` and the
-subscribe form.
+Supabase is the source of truth for both forms: a submission only fails if
+the Supabase insert fails. Without `RESEND_API_KEY` / `CONTACT_FROM_EMAIL`,
+the contact form still succeeds (the enquiry is stored) and just skips the
+notification email, logging why server-side. Same for `BUTTONDOWN_API_KEY`
+and the subscribe form. Without the two `NEXT_PUBLIC_SUPABASE_*` variables,
+both forms fail outright, since there is nowhere to store the submission.
 
 Domain verification in Resend (required before `CONTACT_FROM_EMAIL` will
 actually deliver): Resend dashboard → Domains → add `regenera.bio` → add the
