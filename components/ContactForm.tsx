@@ -67,7 +67,7 @@ export default function ContactForm() {
       }
 
       setStatus({
-        msg: "Enquiry received. Every message is read personally, and we reply where there is a genuine fit. Thank you.",
+        msg: "Thank you for your inquiry. We'll be in touch.",
         ok: true
       });
       setSubmitted(true);
