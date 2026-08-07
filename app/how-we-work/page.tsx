@@ -38,19 +38,18 @@ export default function HowWeWorkPage() {
             Three phases, <em>every engagement.</em>
           </h2>
           <p className="lede r d1" style={{ marginBottom: "3rem" }}>
-            Regenera leads and coordinates multidisciplinary project teams across development,
-            infrastructure, capital, land, and real estate.
+            Regenera coordinates multidisciplinary teams across land, energy, infrastructure,
+            real estate, and capital to advance complex projects from opportunity to execution.
           </p>
           <div className="phase-g r d2">
             <div className="phase">
               <div className="ph-k">Phase I</div>
               <div className="ph-t">Systemic Diagnosis</div>
               <div className="ph-b">
-                We map the full ecosystem of a place or project across seven layers before
-                making capital, technology, or development decisions. The goal is to identify
-                constraints, dependencies, and leverage points where a focused intervention can
-                create cascading benefits. Our tools include ecosystem layer mapping and a Five
-                Capitals lens covering financial, natural, human, social, and built capital.
+                We map the full ecosystem of a place or project across seven interconnected
+                layers before capital, technology, or development decisions are made. The
+                objective is to identify constraints, dependencies, and leverage points where
+                targeted interventions can create cascading value across the system.
               </div>
             </div>
             <div className="phase">
@@ -58,19 +57,22 @@ export default function HowWeWorkPage() {
               <div className="ph-t">Intervention Design</div>
               <div className="ph-b">
                 We align land, infrastructure, technology, governance, partnerships, and
-                commercial structure around the needs of the project and its wider system. The
-                goal is to create commercially viable interventions that strengthen long term
-                asset value, ecological performance, and community resilience.
+                commercial structures around the needs of the project and its wider system. The
+                objective is to develop commercially viable interventions that strengthen
+                long-term asset value, ecological performance, and community resilience.
               </div>
             </div>
             <div className="phase">
               <div className="ph-k">Phase III</div>
               <div className="ph-t">Capital Alignment</div>
               <div className="ph-b">
-                We prepare opportunities for review and connect them with investors, technical
-                partners, developers, and counterparties whose mandates align with the
-                project&apos;s scale, geography, structure, and purpose. The right capital, in
-                the right place, on the right terms.
+                <p style={{ marginBottom: "0.9rem" }}>
+                  We prepare opportunities for engagement and coordinate relationships between
+                  investors, developers, technical partners, and other counterparties whose
+                  mandates align with the project&apos;s scale, geography, structure, and
+                  objectives.
+                </p>
+                <p>The right capital, in the right place, on the right terms.</p>
               </div>
             </div>
           </div>
