@@ -1,7 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { LEAD_INTEREST_LABELS } from "@/lib/leadOptions";
+
+const LEAD_HANDOFF_KEY = "rg_lead_handoff";
 
 const PATHS = [
   { id: "investor", label: "Investor", sub: "Family office, institution, or impact fund" },
@@ -22,6 +25,32 @@ export default function ContactForm() {
     const p = searchParams.get("path");
     if (p && PATHS.some((x) => x.id === p)) setSelected(p);
   }, [searchParams]);
+
+  const emailRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+
+  // One-time handoff from the lead-qualification modal, read imperatively
+  // (not via defaultValue/state) so it never has to match server-rendered
+  // HTML during hydration. Consumed once, then cleared.
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(LEAD_HANDOFF_KEY);
+      if (!raw) return;
+      sessionStorage.removeItem(LEAD_HANDOFF_KEY);
+      const data = JSON.parse(raw) as { email?: string; interests?: string[] };
+      if (data.email && emailRef.current) {
+        emailRef.current.value = data.email;
+      }
+      if (data.interests?.length && messageRef.current) {
+        const labels = data.interests.map((i) => LEAD_INTEREST_LABELS[i]).filter(Boolean);
+        if (labels.length) {
+          messageRef.current.value = `Interested in: ${labels.join(", ")}.\n\n`;
+        }
+      }
+    } catch {
+      // Malformed or unavailable storage: prefill is a convenience, not required.
+    }
+  }, []);
 
   const [pending, setPending] = useState(false);
 
@@ -127,7 +156,7 @@ export default function ContactForm() {
         <div className="fgr">
           <div className="fg">
             <label htmlFor="f-email">Email</label>
-            <input id="f-email" name="email" type="email" required autoComplete="email" disabled={submitted || pending} />
+            <input ref={emailRef} id="f-email" name="email" type="email" required autoComplete="email" disabled={submitted || pending} />
           </div>
           <div className="fg">
             <label htmlFor="f-type">I am a</label>
@@ -154,6 +183,7 @@ export default function ContactForm() {
         <div className="fg">
           <label htmlFor="f-msg">Brief context</label>
           <textarea
+            ref={messageRef}
             id="f-msg"
             name="message"
             required

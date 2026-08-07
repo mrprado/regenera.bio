@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import ScrollReveal from "@/components/ScrollReveal";
 import LegalModalProvider from "@/components/LegalModalProvider";
+import LeadModal from "@/components/LeadModal";
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
@@ -92,6 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
           <CookieBanner />
           <ScrollReveal />
+          <LeadModal />
         </LegalModalProvider>
       </body>
     </html>

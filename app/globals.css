@@ -137,6 +137,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 /* ── cards, grids ── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+.phase-g{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
 .card{background:#fff;border:1px solid var(--line);border-radius:2px;padding:2rem}
 .card .ct{font-family:var(--serif);font-size:1.3rem;font-weight:500;margin-bottom:0.7rem}
 .card .cb{font-size:14px;font-weight:300;color:var(--t-mid);line-height:1.75}
@@ -281,6 +282,37 @@ footer{background:var(--night);border-top:1px solid rgba(201,168,76,0.07);paddin
 #ck p{font-size:11px;font-weight:300;color:rgba(214,231,203,0.5);line-height:1.6;max-width:660px;margin:0}
 #ck strong{font-weight:500;color:rgba(214,231,203,0.72)}
 
+/* ── lead modal ── */
+.lm-backdrop{position:fixed;inset:0;z-index:950;background:rgba(6,10,7,0.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;transition:opacity .35s ease}
+.lm-backdrop.lm-open{opacity:1}
+.lm-box{display:grid;grid-template-columns:1fr 1fr;max-width:920px;width:100%;max-height:88vh;background:var(--parchment);border:1px solid var(--line);border-radius:2px;overflow:hidden;position:relative;opacity:0;transform:translateY(14px);transition:opacity .35s ease,transform .35s ease}
+.lm-backdrop.lm-open .lm-box{opacity:1;transform:none}
+.lm-close{position:absolute;top:14px;right:14px;z-index:2;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);background:rgba(6,10,7,0.5);backdrop-filter:blur(4px);color:#fff;font-size:19px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}
+.lm-close:hover{background:rgba(6,10,7,0.75)}
+.lm-image{position:relative;min-height:460px;background:var(--moss)}
+.lm-image-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,9,0.04),rgba(8,12,9,0.3));pointer-events:none}
+.lm-form-col{padding:2.6rem;overflow-y:auto;max-height:88vh}
+.lm-heading{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:0.7rem}
+.lm-body{font-size:14.5px;font-weight:300;color:var(--t-mid);line-height:1.75;margin-bottom:1.8rem;max-width:420px}
+.lm-interests{margin:1.2rem 0 1.6rem}
+.lm-interests-label{display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--t-soft);margin-bottom:0.7rem}
+.lm-check-grid{display:flex;flex-direction:column;gap:8px}
+.lm-check{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;font-weight:300;color:var(--t-mid);line-height:1.5;cursor:pointer}
+.lm-check input{width:auto;margin-top:2px;accent-color:var(--gold)}
+.lm-field-err{margin-top:6px;font-size:12px;font-weight:400;color:#8c4a2a}
+.lm-error{margin-top:0.4rem;margin-bottom:0.8rem;font-size:13px;font-weight:400;color:#8c4a2a;line-height:1.6}
+.lm-actions{margin-top:1.6rem;display:flex;flex-direction:column;gap:0.8rem;align-items:center}
+.lm-not-now{background:none;border:none;padding:4px;font-size:11.5px;font-weight:500;letter-spacing:0.06em;color:var(--t-soft);text-decoration:underline;cursor:pointer}
+.lm-not-now:hover{color:var(--ink)}
+@media(max-width:760px){
+  .lm-backdrop{padding:0.9rem}
+  .lm-box{grid-template-columns:1fr;max-height:calc(100vh - 1.8rem);overflow-y:auto}
+  .lm-image{min-height:0;height:38vw;max-height:190px}
+  .lm-form-col{padding:1.7rem 1.5rem 1.8rem;max-height:none;overflow-y:visible}
+  .lm-heading{font-size:1.55rem}
+  .lm-body{max-width:none}
+}
+
 /* ── responsive ── */
 @media(max-width:1080px){#orb{opacity:0.25}}
 /* Nav switches to the hamburger menu earlier than the general content
@@ -311,7 +343,6 @@ footer{background:var(--night);border-top:1px solid rgba(201,168,76,0.07);paddin
   .hcta .btn{justify-content:center}
   .sub-bar{padding:1.8rem 1.4rem}
 }
-.phase-g{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
 /* ── photography ── */
 .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
 figure.ph{margin:0;border-radius:2px;overflow:hidden;background:var(--forest)}
