@@ -202,21 +202,21 @@ entry must be genuinely researched (WebSearch/WebFetch) and verified against a p
 or institutional source, same bar as a live weekly pick. Do not skip verification to
 move faster; report the honest verified count plainly rather than padding it.
 
-**Status**: 32 entries exist in `lib/fieldNotes.ts` (22 original + a 10-entry batch
-covering July-October 2024, each with real sources verified via WebFetch against
-primary/institutional documents, not secondhand aggregation). All 32 were re-tagged
-onto the current 8-category taxonomy through both taxonomy changes; the original 22
-were **not** independently re-fact-checked in either pass (only their metadata
-changed), since the task was retagging, not re-verifying already-approved copy.
-`content/field-notes/editorial-state.json` has the current per-category counts and a
-`knownGaps` list — Waste & Circular Materials is currently the thinnest category (2
-entries). November-December 2024 and all of 2025-2026 have no retrospective coverage
-yet. Remaining work, in order:
-1. Research and write further historical batches (next: fill November-December 2024,
-   then 2025, then 2026). Work in verified batches per `WEEKLY_EDITORIAL_PROMPT.md`'s
+**Status**: 40 entries exist in `lib/fieldNotes.ts` (22 original + an 18-entry
+historical batch: 10 covering July-October 2024, 8 covering May-December 2025, each
+with real sources verified via WebFetch against primary/institutional documents, not
+secondhand aggregation). All 40 were re-tagged onto the current 8-category taxonomy
+through both taxonomy changes; the original 22 were **not** independently
+re-fact-checked in either pass (only their metadata changed), since the task was
+retagging, not re-verifying already-approved copy. `content/field-notes/
+editorial-state.json` has the current per-category counts and a `knownGaps` list.
+November-December 2024, January-April 2025, and all of 2026 still have no dedicated
+retrospective research pass. Remaining work, in order:
+1. Research and write further historical batches (next: fill the remaining 2025 gaps,
+   then 2026). Work in verified batches per `WEEKLY_EDITORIAL_PROMPT.md`'s
    historical-backfill steps, don't attempt a huge unsupervised pass — "complete 2025
    and 2026" was requested but at the ~44-52/year directional density that's roughly
-   80-100 more entries, genuinely multi-session work, not something to rush or pad.
+   80-100 entries total, genuinely multi-session work, not something to rush or pad.
 2. `npm run build` + `npx next lint` clean after each batch (stop dev server first).
 3. Mobile/desktop QA on the archive UI per batch — this codebase has a known history of
    responsive-CSS cascade bugs (see below), check new content at 375px specifically.
