@@ -257,10 +257,41 @@ On 2026-08-08 the user provided a large "Master Operating Blueprint" prompt aski
 major commercial expansion of the site: four new service practice pages, ~12 sector
 pages, counterparty pages, productized diagnostics, segmented forms, a real CRM, lead
 qualification/routing, scheduling, campaign landing pages, redirects, legal/SEO/
-accessibility audits, and completion documentation. This is a large, mostly unstarted
-initiative layered on top of the (already large) Field Notes work above. Two governing
-decisions so far, both explicit and both supersede earlier text in the blueprint prompt
-itself where they conflict:
+accessibility audits, and completion documentation. The full source document exists at
+`C:\Users\KM\OneDrive\Desktop\Regenera.bio\operating-blueprint\
+Regenera_Master_Operating_Blueprint_2026_FINAL_V3.pdf` (82 pages, 38 numbered sections
+plus appendices A-F, marked CONFIDENTIAL throughout, extracted via `pdftotext -layout`
+since `pdftoppm`/poppler isn't installed in this environment and the Read tool's PDF
+support depends on it). This document is the actual source of truth for the commercial
+buildout, both mega-prompts received in chat were partial elaborations of it, always
+prefer the PDF over a re-paraphrased prompt if the two ever seem to disagree, except
+where the user has separately confirmed a deliberate override. This is a large, mostly
+unstarted initiative layered on top of the (already large) Field Notes work above. The
+document contains extensive genuinely-confidential internal detail, illustrative fee
+ranges ($5k-$100k+ depending on engagement, explicitly "planning assumptions, not
+approved published pricing"), prospecting/outbound targets, cold email templates
+addressed from "Alan," monthly KPI targets, org/drive folder structures, a REG-xxx
+document numbering scheme, and a full internal document library index. **None of that
+belongs on the public site or in any public-facing doc**, only the sections that
+describe public-facing architecture, copy, and standards do.
+
+**Unresolved contradiction, needs the user's explicit call before CRM implementation
+proceeds**: the source document (sections 26 and 41) explicitly says *"Use one real
+external CRM as the system of record... a flexible relationship CRM such as Attio is a
+strong default; HubSpot is also suitable... Do not build a custom CRM inside the
+website."* This directly contradicts a separate, very detailed instruction the user
+typed directly in chat the same session (49 sections specifying an internal
+Supabase-based CRM/AI operating system, explicitly *"Do not integrate HubSpot, Attio,
+Salesforce... Instead, build a... Regenera CRM... using the existing Supabase
+database"*). `docs/crm/CRM_ARCHITECTURE.md`, `DATA_MODEL.md`, and `SECURITY_MODEL.md`
+were already written assuming the internal-Supabase direction, before this contradiction
+was discovered by reading the full PDF. Those docs are still valid *if* internal-Supabase
+is confirmed as the actual direction, but do not proceed to implement them (or start
+external-CRM integration work either) until the user has explicitly resolved which
+instruction wins. Don't silently pick one, this determines weeks of divergent work.
+
+Two other governing decisions, both explicit and both supersede earlier text in the
+first blueprint prompt itself where they conflict:
 
 1. **No external CRM.** The blueprint's own section 19 initially named Attio/HubSpot as
    preferred. The user then explicitly overrode this with a second, more detailed prompt:
