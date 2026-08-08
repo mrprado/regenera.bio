@@ -1,35 +1,34 @@
 {
   "_comment": "Internal editorial tracking, not rendered anywhere. Prevents mechanical repetition in the ongoing weekly workflow described in WEEKLY_EDITORIAL_PROMPT.md. Hand-seeded from the state of lib/fieldNotes.ts at the taxonomy rearchitecture; a future editorial run should update this file as part of its own publish step, not just read it.",
   "lastPublished": "2026-08-08",
-  "lastCategory": "Real Estate & Built Environment",
+  "lastCategory": "Energy",
   "recentCategories": [
-    "Land & Regenerative Agriculture",
-    "Energy",
-    "Energy",
-    "Waste & Circular Materials",
-    "Land & Regenerative Agriculture",
     "Land & Regenerative Agriculture",
     "Water Systems",
     "Orbital & Environmental Intelligence",
-    "Real Estate & Built Environment"
+    "Real Estate & Built Environment",
+    "Capital Markets & Real Assets",
+    "Energy",
+    "Energy",
+    "Energy"
   ],
   "recentTopics": [
-    "US battery storage installations record 2025 (ACP/Wood Mackenzie)",
-    "Solar cell AD/CVD duties on Cambodia/Malaysia/Thailand/Vietnam",
-    "Microsoft/Gaia ProjectCo waste-to-energy carbon capture offtake",
-    "Nuveen's first major institutional farmland REIT",
     "USDA REAP funding freeze and conditional release",
     "El Paso's direct-to-distribution water reuse plant groundbreaking",
     "NISAR dual-band radar satellite launch (NASA/ISRO)",
-    "CBRE's $1.2B acquisition of Pearce Services (digital/power infrastructure)"
+    "CBRE's $1.2B acquisition of Pearce Services (digital/power infrastructure)",
+    "Mercuria/Silvania's carbon-credit prepayment structure for Amazon protection",
+    "FERC Order 1920-B affirming transmission planning rule",
+    "Atlantic Shores offshore wind OREC termination",
+    "Meyer Burger's Colorado solar cell plant cancellation"
   ],
   "nextPreferredWindow": "Not scheduled. No autonomous publishing is configured for this site; the next entry should be selected and published manually (or by an explicitly authorized run) per WEEKLY_EDITORIAL_PROMPT.md.",
   "monthlyCount": {
-    "2026-08": 26
+    "2026-08": 29
   },
   "categoryCountsToDate": {
-    "Capital Markets & Real Assets": 6,
-    "Energy": 7,
+    "Capital Markets & Real Assets": 7,
+    "Energy": 10,
     "Waste & Circular Materials": 4,
     "Water Systems": 5,
     "Land & Regenerative Agriculture": 8,
@@ -38,8 +37,9 @@
     "Orbital & Environmental Intelligence": 5
   },
   "knownGaps": [
-    "Food Systems & Community Health and Waste & Circular Materials are now the thinnest categories (4 entries each) against their ~4-6/year directional targets.",
-    "Historical archive (archiveDate-tagged entries) now covers 25 distinct months: all of July-December 2024, and February, March, May, July, August, September, October, November, and December 2025. January, April, and June 2025 still have no dedicated retrospective piece. All of 2026 has not been retrospectively researched at all.",
-    "The 2025-12 energy-storage entry uses only ACP/Wood Mackenzie's figures (18.9 GW, 52%); a competing SEIA/Benchmark Mineral Intelligence report gave different figures (57.6 GWh, 30%) for what may be a different scope. Do not blend the two reports' numbers in a future piece without resolving why they diverge."
+    "Historical retrospective coverage (archiveDate-tagged entries) is now CONTINUOUS across all 18 months from July 2024 through December 2025, no monthly gaps remain in that window. All of 2026 has not been retrospectively researched at all, that is the entire remaining scope for 'complete the historical archive.'",
+    "Food Systems & Community Health and Waste & Circular Materials are the thinnest categories (4 entries each) against their ~4-6/year directional targets. Energy is now the heaviest at 10, mostly because several genuinely distinct, well-sourced Energy stories existed in the same months, this was not forced, but future batches should lean toward other categories where the evidence supports it.",
+    "The 2025-12 energy-storage entry uses only ACP/Wood Mackenzie's figures (18.9 GW, 52%); a competing SEIA/Benchmark Mineral Intelligence report gave different figures (57.6 GWh, 30%) for what may be a different scope. Do not blend the two reports' numbers in a future piece without resolving why they diverge.",
+    "A prior version of this file and CLAUDE.md incorrectly claimed 'all of July-December 2024' was covered before August 2024 actually had an entry, that was a real documentation error, now corrected. Always verify claimed coverage against an actual query of lib/fieldNotes.ts (e.g. archiveDate distinct values), don't just trust the running narrative."
   ]
 }
