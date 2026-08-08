@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import type { Counterparty } from "@/lib/counterparties";
+import SegmentedIntakeForm from "@/components/SegmentedIntakeForm";
 
 export default function CounterpartyPage({ c }: { c: Counterparty }) {
   return (
@@ -70,6 +72,24 @@ export default function CounterpartyPage({ c }: { c: Counterparty }) {
           <Link href={c.ctaPath} className="btn btn-gold">
             {c.ctaLabel} <span className="arr">&rarr;</span>
           </Link>
+        </div>
+      </section>
+
+      <section className="sec sec-n" id="intake-form">
+        <div className="w">
+          <div className="ey lt r">
+            <div className="ey-b"></div>
+            <span>{c.ctaLabel}</span>
+          </div>
+          <p className="lede r d1" style={{ maxWidth: 640, marginBottom: "2.4rem" }}>
+            A submission here does not guarantee a meeting or the acceptance of a mandate. We
+            review every submission and follow up where there is a credible fit.
+          </p>
+          <div style={{ maxWidth: 640 }} className="r d1">
+            <Suspense fallback={null}>
+              <SegmentedIntakeForm type={c.intakeType} />
+            </Suspense>
+          </div>
         </div>
       </section>
     </div>

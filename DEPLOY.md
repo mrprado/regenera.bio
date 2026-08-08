@@ -54,13 +54,17 @@ Add these in Site configuration → Environment variables. Values come from
 | `CONTACT_FROM_EMAIL` | No, but no email without it | Must be an address on a domain verified in Resend, e.g. `"Regenera Advisory <no-reply@regenera.bio>"`. |
 | `CONTACT_TO_EMAIL` | No | Defaults to `info@regenera.bio` if unset. |
 | `BUTTONDOWN_API_KEY` | No, but no Buttondown sync without it | From your Buttondown account settings. |
+| `SUPABASE_SERVICE_ROLE_KEY` | No, but no CRM ingestion without it | Supabase dashboard → Project Settings → API → `service_role` secret. Server-side only, never exposed to the browser. Without it, the contact form, lead modal, and the four `/for-*` segmented intake forms still succeed and store the raw submission, they just skip creating the corresponding CRM records (organization/contact/opportunity/project or capital mandate), logging why server-side. See `docs/crm/SECURITY_MODEL.md`. |
 
-Supabase is the source of truth for both forms: a submission only fails if
-the Supabase insert fails. Without `RESEND_API_KEY` / `CONTACT_FROM_EMAIL`,
-the contact form still succeeds (the enquiry is stored) and just skips the
-notification email, logging why server-side. Same for `BUTTONDOWN_API_KEY`
-and the subscribe form. Without the two `NEXT_PUBLIC_SUPABASE_*` variables,
-both forms fail outright, since there is nowhere to store the submission.
+Supabase is the source of truth for every form: a submission only fails if
+the Supabase insert into the relevant public table (`contact_submissions`,
+`lead_intake`, or `segmented_intake`) fails. Without `RESEND_API_KEY` /
+`CONTACT_FROM_EMAIL`, the contact form still succeeds (the enquiry is
+stored) and just skips the notification email, logging why server-side.
+Same for `BUTTONDOWN_API_KEY` and the subscribe form, and for
+`SUPABASE_SERVICE_ROLE_KEY` and CRM ingestion. Without the two
+`NEXT_PUBLIC_SUPABASE_*` variables, every form fails outright, since there
+is nowhere to store the submission.
 
 Domain verification in Resend (required before `CONTACT_FROM_EMAIL` will
 actually deliver): Resend dashboard → Domains → add `regenera.bio` → add the

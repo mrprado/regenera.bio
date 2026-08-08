@@ -1,5 +1,8 @@
+import type { IntakeType } from "./intakeFields";
+
 export interface Counterparty {
   slug: string;
+  intakeType: IntakeType;
   navLabel: string;
   headline: string;
   headlineEm: string;
@@ -16,6 +19,7 @@ export interface Counterparty {
 export const COUNTERPARTIES: Counterparty[] = [
   {
     slug: "for-developers",
+    intakeType: "developer",
     navLabel: "For Developers",
     headline: "Move complex projects from",
     headlineEm: "opportunity to execution.",
@@ -34,10 +38,11 @@ export const COUNTERPARTIES: Counterparty[] = [
     ],
     bestOffer: "The Project Readiness Diagnostic identifies what is actually missing before your project can credibly advance, a readiness score, gap analysis, risk register, documentation gaps, priority workstreams, a capital pathway, and a 90-day plan.",
     ctaLabel: "Submit a Project",
-    ctaPath: "/contact?path=developer"
+    ctaPath: "#intake-form"
   },
   {
     slug: "for-investors",
+    intakeType: "investor",
     navLabel: "For Investors",
     headline: "Better context before",
     headlineEm: "capital is committed.",
@@ -55,10 +60,11 @@ export const COUNTERPARTIES: Counterparty[] = [
     ],
     bestOffer: "We start with a mandate conversation, sectors, geography, stage, ticket, structure, and exclusions, before any project discussion, so that any introduction that follows is actually relevant to what you're trying to do.",
     ctaLabel: "Discuss Your Mandate",
-    ctaPath: "/contact?path=investor"
+    ctaPath: "#intake-form"
   },
   {
     slug: "for-landowners",
+    intakeType: "landowner",
     navLabel: "For Landowners",
     headline: "Understand what your land can",
     headlineEm: "support before deciding what to build.",
@@ -76,10 +82,11 @@ export const COUNTERPARTIES: Counterparty[] = [
     ],
     bestOffer: "The Land & Systems Diagnostic evaluates the site, water, access, energy, ecology, market context, infrastructure, and capital implications together, producing a site map, resource constraints, credible scenarios, an opportunity map, and next-step plan.",
     ctaLabel: "Assess My Land",
-    ctaPath: "/contact?path=realestate"
+    ctaPath: "#intake-form"
   },
   {
     slug: "for-operators",
+    intakeType: "operator",
     navLabel: "For Operators",
     headline: "Treat the place as",
     headlineEm: "one operating system.",
@@ -97,7 +104,7 @@ export const COUNTERPARTIES: Counterparty[] = [
     ],
     bestOffer: "The Regenerative Asset Review finds the highest-leverage interventions in an existing asset or place, a system baseline, performance constraints, an intervention map, the economic and operational implications, and a staged roadmap.",
     ctaLabel: "Discuss Your Site",
-    ctaPath: "/contact?path=operator"
+    ctaPath: "#intake-form"
   }
 ];
 
