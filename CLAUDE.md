@@ -379,19 +379,37 @@ without live browser QA, worth a visual check when tooling allows); sitemap exte
 to all new routes. No existing URLs were renamed or removed, so no redirect matrix
 entries are needed for this batch. All of the above builds and lints clean.
 
-**Still not started**: segmented forms beyond the two that already exist and are
-CRM-wired (contact form, lead modal), the blueprint's fuller per-audience structured
-forms (developer/investor/landowner/operator, each with project/mandate/land/site
-specific fields per Appendix D's field dictionary) do not exist yet, `for-*` pages
-currently route to the general contact form. Campaign landing page template exists as
-a spec (`docs/commercial/CAMPAIGN_LANDING_PAGE_TEMPLATE.md`) but no `/campaign/[slug]`
-route is built. UTM capture and analytics events from Appendix A10 (CTA click, page
-view by type, form start, scheduling initiation, etc.) are not implemented, only page
-views and form submission success/failure are tracked today. No scheduling tool
-exists. Deeper accessibility/Core Web Vitals/legal audit (Appendix A11) has not had a
-dedicated pass, only spot-checks (build/lint clean, no em-dashes, metadata present)
-during this batch, live browser QA at mobile widths still hasn't happened this entire
-initiative, the environment has lacked that tooling throughout. Three required docs
+**Update, 2026-08-08 (later still)**: segmented forms now exist. `lib/intakeFields.ts`
+defines structured per-audience fields, `components/SegmentedIntakeForm.tsx` (with a
+honeypot anti-spam field) renders inline on each `/for-*` page and posts to
+`app/api/intake/route.ts`, which writes to a new `segmented_intake` table
+(`supabase/migrations/20260808202433_create_segmented_intake.sql`, same anon-insert
+pattern as the other public tables, plus a staff-select policy) and then calls
+`ingestSegmentedLead()` in `lib/crm/ingest.ts` (developer/landowner/operator fill
+`projects`, investor fills `capital_mandates`). UTM parameters are now captured on
+this path, closing a real gap noted in `LEAD_SCHEMA.md`. Verified end-to-end against
+production Supabase for all four intake types (test rows inserted then deleted); the
+CRM-ingestion half is code-complete and schema-verified but not live-tested, this
+environment has no `SUPABASE_SERVICE_ROLE_KEY` configured locally, so ingestion
+no-ops safely by design rather than running, same as the contact/lead path from the
+prior batch. `DEPLOY.md` now documents this variable; it must be set in Netlify for
+either ingestion path to actually run in production.
+
+Sector, counterparty, and diagnostic pages now carry Service JSON-LD, matching the
+existing Field Notes Article-schema pattern. No redirect matrix is needed (still no
+URLs renamed/removed this entire initiative).
+
+**Still not started**: campaign landing page template exists as a spec
+(`docs/commercial/CAMPAIGN_LANDING_PAGE_TEMPLATE.md`) but no `/campaign/[slug]` route
+is built. Most of Appendix A10's analytics events (CTA click, page view by type, form
+start vs. submit, scheduling initiation) are not implemented, only page views and
+form submission success/failure are tracked today. No scheduling tool exists. The
+older contact form and lead modal still have no anti-spam mechanism (the new
+segmented forms do); left alone deliberately rather than retrofitted as a side effect
+of this pass. Live browser QA at mobile widths, Core Web Vitals measurement, and
+color-contrast checks still haven't happened this entire initiative, the environment
+has lacked that tooling throughout, treat anything claimed clean here as build/lint/
+schema-clean, not visually verified. Three required docs
 now exist: `docs/commercial/WEBSITE_CONVERSION_SYSTEM.md`, `LEAD_SCHEMA.md`,
 `CAMPAIGN_LANDING_PAGE_TEMPLATE.md`. `REGENERATIVE_CLAIMS_STANDARD.md` and
 `SPECIALIST_DELIVERY_MODEL.md` were enriched with the fuller detail from sections
