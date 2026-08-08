@@ -333,19 +333,44 @@ matching `docs/crm/SECURITY_MODEL.md`. All CRM tables currently have 0 rows; no
 the RLS check until an admin manually inserts the first `staff` row** (there is no
 public/self signup path into `staff`, by design).
 
-**Not yet done, CRM side**: no CRM route (`/crm/*`) exists in the app yet, no
-auth-gated UI, no CRUD views/dashboard. The public-form-to-CRM one-way ingestion path
-(service-role, `contact_submissions`/`subscribers`/`lead_intake` → CRM records) is
-designed in `docs/crm/DATA_MODEL.md` but not implemented. The first `staff` row (to
-bootstrap admin access) hasn't been created — needs a real Supabase Auth user to link
-to, which needs a decision from the user about who that first admin account is before
-it's created. Gmail/WhatsApp integration, AI daily briefs, and scheduled jobs are
-Phase 2-4, explicitly not started.
+**Update, 2026-08-08 (later same day)**: the user confirmed the first `staff` admin
+account should be `alanprado@regenera.bio` and chose to proceed with the website
+buildout directly (no plan-first checkpoint). Since then, CRM-side: `/crm/login`
+(magic-link sign-in, `shouldCreateUser: false`, no public self-registration),
+`/auth/callback` (code exchange), and `/crm` (auth-gated dashboard showing
+organization/contact/opportunity/task counts and recent opportunities) all exist and
+build clean. `lib/crm/ingest.ts` + `lib/supabase/admin.ts` wire the contact form and
+lead modal into one-way CRM ingestion (organizations/contacts/opportunities/activities),
+service-role key server-side only, never blocks the public submission on failure.
+`activities.created_by` was relaxed to nullable (migration
+`20260808195327_allow_system_generated_activities`) so system-generated ingestion
+activities don't need a staff actor. **Still blocking**: no `staff` row exists yet.
+Creating one needs a real Supabase Auth user first, and there's no tool-based way to
+create that account without either the user creating it via the Supabase dashboard
+(Authentication → Users → Add user, for alanprado@regenera.bio) or a throwaway
+`shouldCreateUser: true` bootstrap, which was deliberately not done since it would have
+temporarily allowed anyone to self-create an Auth account. This is a real, still-open
+next step, not yet done, don't assume it's complete. Gmail/WhatsApp integration, AI
+daily briefs, and scheduled jobs are Phase 2-4, explicitly not started.
 
-**Explicitly not started (website side)**: the four service practice pages, sector
-page architecture, counterparty pages, productized diagnostics, segmented forms
-beyond the three that already exist, scheduling, campaign landing page template,
-redirect matrix, and the SEO/accessibility/legal audits the blueprint calls for. A
+**Explicitly not started (website side), as of 2026-08-08**: the four service practice
+pages (current `/services` still uses the old 3-tab energy/realestate/readiness/capital
+structure, not the blueprint's four practices), sector page architecture (12 pages),
+counterparty pages (`/for-developers`, `/for-investors`, `/for-landowners`,
+`/for-operators`), the four productized diagnostic pages, segmented forms beyond the
+two that already exist and are CRM-wired, nav/homepage restructuring (nav currently:
+How We Work / Services / Philosophy / Projects / Field Notes, not the blueprint's
+Approach / Services / Sectors / Projects / Field Notes / About / Contact; no `/about`
+page exists), Selected Work relabeling into Selected Mandates / Case Studies /
+Reference Projects, scheduling, campaign landing page template, redirect matrix, and
+the SEO/accessibility/legal audits. Three required docs now exist:
+`docs/commercial/WEBSITE_CONVERSION_SYSTEM.md`, `LEAD_SCHEMA.md`,
+`CAMPAIGN_LANDING_PAGE_TEMPLATE.md`. `REGENERATIVE_CLAIMS_STANDARD.md` and
+`SPECIALIST_DELIVERY_MODEL.md` were enriched with the fuller detail from sections
+36-38 (verbatim public statement language, the 9-point claim-logic checklist, the
+internal scorecard, the case study structure, the per-discipline table). This remains
+genuinely large, multi-session work, tracked as tasks #58-66 in this session's task
+list, continue from there rather than re-deriving scope from scratch. A
 separate "fuller blueprint document" for the *website* portion (sections 0-46 of the
 first prompt) was mentioned as forthcoming from the user but had not arrived as of
 this note, don't assume it exists somewhere unread, ask if it's still needed.
