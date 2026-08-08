@@ -353,18 +353,46 @@ temporarily allowed anyone to self-create an Auth account. This is a real, still
 next step, not yet done, don't assume it's complete. Gmail/WhatsApp integration, AI
 daily briefs, and scheduled jobs are Phase 2-4, explicitly not started.
 
-**Explicitly not started (website side), as of 2026-08-08**: the four service practice
-pages (current `/services` still uses the old 3-tab energy/realestate/readiness/capital
-structure, not the blueprint's four practices), sector page architecture (12 pages),
-counterparty pages (`/for-developers`, `/for-investors`, `/for-landowners`,
-`/for-operators`), the four productized diagnostic pages, segmented forms beyond the
-two that already exist and are CRM-wired, nav/homepage restructuring (nav currently:
-How We Work / Services / Philosophy / Projects / Field Notes, not the blueprint's
-Approach / Services / Sectors / Projects / Field Notes / About / Contact; no `/about`
-page exists), Selected Work relabeling into Selected Mandates / Case Studies /
-Reference Projects, scheduling, campaign landing page template, redirect matrix, and
-the SEO/accessibility/legal audits. Three required docs now exist:
-`docs/commercial/WEBSITE_CONVERSION_SYSTEM.md`, `LEAD_SCHEMA.md`,
+**Update, 2026-08-08 (later still)**: the website buildout landed in one large session.
+Done: Services page rebuilt around the four practices (`/services`, tab IDs
+`systems`/`readiness`/`assets`/`capital`); 12 sector pages (`lib/sectors.ts`,
+`/sectors`, `/sectors/[slug]`), distinct from the Field Notes 8-category taxonomy,
+each surfacing a relevant Field Note via the existing `FromFieldNotes` component; 4
+counterparty pages (`lib/counterparties.ts`, `/for-developers`, `/for-investors`,
+`/for-landowners`, `/for-operators`); 4 diagnostic pages (`lib/diagnostics.ts`,
+`/diagnostics/[slug]`, no fee figures published); nav now includes Sectors and About
+(kept How We Work/Services/Philosophy/Projects/Field Notes rather than removing
+indexed pages, kept the existing no-Contact-tab hard rule instead of adding the
+blueprint's Contact nav item); homepage doors now link to the four counterparty pages
+with the blueprint's exact "I Have a Project / I Own or Control Land / I Deploy
+Capital / I Operate a Place or Asset" framing, and the practice-areas section shows
+all four practices; new `/about` page (deliberately has no Leadership section with
+names/bios, no verified content exists for one, this is a placeholder gap per the
+blueprint's own "use internal placeholders when approved business information is
+missing" instruction, not something to invent); `/projects` relabeled to explicitly
+frame its content as Selected Mandates and explain how that differs from a Case Study
+or Reference Project (neither has a published example yet, existing project cards
+were not reclassified since they already read as genuine anonymized mandates); raised
+the nav's mobile breakpoint from 1120px to 1240px since there are now 7 links plus
+the CTA instead of 6 (see the comment in `globals.css`, this was a judgment call made
+without live browser QA, worth a visual check when tooling allows); sitemap extended
+to all new routes. No existing URLs were renamed or removed, so no redirect matrix
+entries are needed for this batch. All of the above builds and lints clean.
+
+**Still not started**: segmented forms beyond the two that already exist and are
+CRM-wired (contact form, lead modal), the blueprint's fuller per-audience structured
+forms (developer/investor/landowner/operator, each with project/mandate/land/site
+specific fields per Appendix D's field dictionary) do not exist yet, `for-*` pages
+currently route to the general contact form. Campaign landing page template exists as
+a spec (`docs/commercial/CAMPAIGN_LANDING_PAGE_TEMPLATE.md`) but no `/campaign/[slug]`
+route is built. UTM capture and analytics events from Appendix A10 (CTA click, page
+view by type, form start, scheduling initiation, etc.) are not implemented, only page
+views and form submission success/failure are tracked today. No scheduling tool
+exists. Deeper accessibility/Core Web Vitals/legal audit (Appendix A11) has not had a
+dedicated pass, only spot-checks (build/lint clean, no em-dashes, metadata present)
+during this batch, live browser QA at mobile widths still hasn't happened this entire
+initiative, the environment has lacked that tooling throughout. Three required docs
+now exist: `docs/commercial/WEBSITE_CONVERSION_SYSTEM.md`, `LEAD_SCHEMA.md`,
 `CAMPAIGN_LANDING_PAGE_TEMPLATE.md`. `REGENERATIVE_CLAIMS_STANDARD.md` and
 `SPECIALIST_DELIVERY_MODEL.md` were enriched with the fuller detail from sections
 36-38 (verbatim public statement language, the 9-point claim-logic checklist, the
