@@ -275,20 +275,16 @@ document numbering scheme, and a full internal document library index. **None of
 belongs on the public site or in any public-facing doc**, only the sections that
 describe public-facing architecture, copy, and standards do.
 
-**Unresolved contradiction, needs the user's explicit call before CRM implementation
-proceeds**: the source document (sections 26 and 41) explicitly says *"Use one real
-external CRM as the system of record... a flexible relationship CRM such as Attio is a
-strong default; HubSpot is also suitable... Do not build a custom CRM inside the
-website."* This directly contradicts a separate, very detailed instruction the user
-typed directly in chat the same session (49 sections specifying an internal
-Supabase-based CRM/AI operating system, explicitly *"Do not integrate HubSpot, Attio,
-Salesforce... Instead, build a... Regenera CRM... using the existing Supabase
-database"*). `docs/crm/CRM_ARCHITECTURE.md`, `DATA_MODEL.md`, and `SECURITY_MODEL.md`
-were already written assuming the internal-Supabase direction, before this contradiction
-was discovered by reading the full PDF. Those docs are still valid *if* internal-Supabase
-is confirmed as the actual direction, but do not proceed to implement them (or start
-external-CRM integration work either) until the user has explicitly resolved which
-instruction wins. Don't silently pick one, this determines weeks of divergent work.
+**CRM direction conflict, resolved 2026-08-08**: the source document (sections 26 and 41)
+explicitly says *"Use one real external CRM as the system of record... Attio is a strong
+default... Do not build a custom CRM inside the website,"* directly contradicting a
+separate, very detailed instruction the user typed directly in chat the same session (49
+sections specifying an internal Supabase-based CRM/AI operating system). Asked the user
+directly which one wins. **Answer: the chat instruction wins, build the internal
+Supabase CRM, not Attio/HubSpot.** Treat this as a deliberate, confirmed override of the
+PDF on this one point, don't revert to the document's external-CRM language later without
+a similarly explicit re-confirmation. `docs/crm/CRM_ARCHITECTURE.md`, `DATA_MODEL.md`,
+and `SECURITY_MODEL.md` are the confirmed design, proceed from them.
 
 Two other governing decisions, both explicit and both supersede earlier text in the
 first blueprint prompt itself where they conflict:
@@ -305,32 +301,50 @@ first blueprint prompt itself where they conflict:
    production Supabase auth/schema, live site navigation/routes/redirects, or requires
    external service credentials gets a checkpoint before being executed, not after.
 
-**Status as of 2026-08-08**: only the planning/documentation phase has happened.
-`docs/crm/CRM_ARCHITECTURE.md`, `docs/crm/DATA_MODEL.md`, and
-`docs/crm/SECURITY_MODEL.md` describe a proposed Phase 1 CRM schema and security model
-(Supabase Auth restricted to an admin-created `staff` allowlist, RLS on every CRM table,
-no anon access at all, service-role used only for a one-way ingestion path from the
-existing three public form tables into CRM records). **None of this has been applied to
-the database.** No migration has run, no Auth users exist beyond the zero already
-present, no CRM route exists in the app yet. `docs/commercial/
-REGENERATIVE_CLAIMS_STANDARD.md` and `docs/commercial/SPECIALIST_DELIVERY_MODEL.md` are
-written and are real, standing rules (not proposals) for any service/sector/case-study
-copy written from here on, cross-reference them before writing that copy.
+**Status as of 2026-08-08**: Phase 1 CRM schema is now live in production Supabase
+(project `xbgrtjcslbnnvvhwqcye`). Applied via two migrations, mirrored locally at
+`supabase/migrations/20260808192256_create_crm_phase1_core_schema.sql` and
+`supabase/migrations/20260808192617_fix_crm_set_updated_at_search_path.sql` (the two
+earlier form-table migrations, `create_contact_and_subscriber_forms` and
+`create_lead_intake`, predate this local-mirroring convention and were never
+backfilled — local mirroring starts here going forward). Tables created: `staff`,
+`organizations`, `contacts`, `opportunities`, `projects`, `project_dependencies`,
+`regenerative_function_records`, `capital_mandates`, `partners`, `introductions`,
+`activities`, `tasks`, `notes` — matching `docs/crm/DATA_MODEL.md` exactly. RLS is
+enabled on every one of them; `get_advisors(type: security)` returns zero lint
+findings after a follow-up fix pinned `crm_set_updated_at`'s `search_path`. Baseline
+policy on every CRM table: `EXISTS (SELECT 1 FROM staff WHERE staff.id = auth.uid()
+AND staff.is_active)`, so nothing is readable or writable without a real, active
+Supabase Auth session tied to an admin-created `staff` row — no anon access anywhere,
+matching `docs/crm/SECURITY_MODEL.md`. All CRM tables currently have 0 rows; no
+`staff` row exists yet, meaning **no one, including an authenticated user, can pass
+the RLS check until an admin manually inserts the first `staff` row** (there is no
+public/self signup path into `staff`, by design).
 
-**Explicitly not started**: the four service practice pages, sector page architecture,
-counterparty pages, productized diagnostics, segmented forms beyond the three that
-already exist, any actual CRM schema/RLS/auth in production, scheduling, campaign
-landing page template, redirect matrix, and the SEO/accessibility/legal audits the
-blueprint calls for. A separate "fuller blueprint document" for the *website* portion
-(sections 0-46 of the first prompt) was mentioned as forthcoming from the user but had
-not arrived as of this note, don't assume it exists somewhere unread, ask if it's still
-needed.
+**Not yet done, CRM side**: no CRM route (`/crm/*`) exists in the app yet, no
+auth-gated UI, no CRUD views/dashboard. The public-form-to-CRM one-way ingestion path
+(service-role, `contact_submissions`/`subscribers`/`lead_intake` → CRM records) is
+designed in `docs/crm/DATA_MODEL.md` but not implemented. The first `staff` row (to
+bootstrap admin access) hasn't been created — needs a real Supabase Auth user to link
+to, which needs a decision from the user about who that first admin account is before
+it's created. Gmail/WhatsApp integration, AI daily briefs, and scheduled jobs are
+Phase 2-4, explicitly not started.
 
-**Before doing more here**: confirm with the user before running any Supabase migration
-that adds Auth/RLS/CRM tables to the production project, and before starting website IA
-changes (new nav, new routes, redirects) that could affect already-indexed URLs. Docs,
-copy standards, and other file-only work can continue without asking each time,
-consistent with the phasing decision above.
+**Explicitly not started (website side)**: the four service practice pages, sector
+page architecture, counterparty pages, productized diagnostics, segmented forms
+beyond the three that already exist, scheduling, campaign landing page template,
+redirect matrix, and the SEO/accessibility/legal audits the blueprint calls for. A
+separate "fuller blueprint document" for the *website* portion (sections 0-46 of the
+first prompt) was mentioned as forthcoming from the user but had not arrived as of
+this note, don't assume it exists somewhere unread, ask if it's still needed.
+
+**Before doing more here**: the CRM schema itself is now applied, so the next
+Supabase-touching steps (creating the first `staff` row, wiring the public-form
+ingestion path, adding a `/crm` auth-gated route) still each cross the
+production-auth/schema line and should be confirmed before executing, per the
+phasing decision below. Website IA changes (new nav, new routes, redirects) that
+could affect already-indexed URLs likewise need confirmation first. Docs, copy
+standards, and other file-only work can continue without asking each time.
 
 ## Known recurring bug pattern — CSS cascade
 This codebase previously shipped a real mobile bug (`.phase-g` grid) caused by a class
@@ -397,3 +411,6 @@ a mobile screenshot report from the user.
   mechanism-grounded); found and fixed one real financial-precision issue (Farmland
   LP/Microsoft entry implied a disclosed investment amount that was actually
   undisclosed, only the fund's own target was public).
+- Phase 1 internal CRM schema (13 tables, RLS on all, zero security advisor findings)
+  applied to production Supabase per the confirmed internal-CRM direction (see
+  "Commercial platform / CRM buildout" above).
