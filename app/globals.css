@@ -396,3 +396,5 @@ figure.svc-ph .cap-c a{color:inherit;text-decoration:none}
 .imgband .cap .ct1{font-family:var(--serif);font-size:1.05rem;font-style:italic;color:var(--cream)}
 .imgband .cap .ct2{font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(214,231,203,0.45)}
 @media(max-width:700px){.imgband img{aspect-ratio:4/3}}
+.crm-shell{background:#fff;min-height:70vh}
+.crm-card{border:1px solid var(--line);border-radius:4px;padding:16px;text-align:center}

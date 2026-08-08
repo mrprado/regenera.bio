@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { ingestLead } from "@/lib/crm/ingest";
 
 export const runtime = "nodejs";
 
@@ -49,6 +50,15 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+
+  await ingestLead({
+    source: "lead_modal",
+    email,
+    clientType,
+    interests,
+    pagePath,
+    referrer
+  });
 
   return NextResponse.json({ ok: true });
 }

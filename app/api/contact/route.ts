@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
+import { ingestLead } from "@/lib/crm/ingest";
 
 export const runtime = "nodejs";
 
@@ -71,6 +72,18 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+
+  // Best-effort, one-way ingestion into the internal CRM. Never fails the
+  // enquiry itself (errors are caught inside ingestLead); awaited so it
+  // completes before this serverless invocation ends.
+  await ingestLead({
+    source: "contact_form",
+    name,
+    email,
+    organization: org || null,
+    message,
+    clientType: type
+  });
 
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL || "info@regenera.bio";

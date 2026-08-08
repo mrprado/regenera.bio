@@ -1,10 +1,11 @@
 # Regenera CRM — Security Model
 
-**Status: PROPOSAL, review before implementation.** This describes the
-security posture Phase 1 must have before a single CRM table is created in
-production. Nothing here is optional, this system holds real client, deal,
-and investor data on the same Supabase project that also serves the public
-site.
+**Status: IMPLEMENTED for schema, RLS, and auth (2026-08-08).** The Phase 1
+schema, RLS policies, and the `/crm` auth gate described below are live in
+production. What remains is documented in "What 'done' looks like" at the
+end of this file: the first `staff` row (needs a real Supabase Auth account
+to link to), and independent verification that RLS actually blocks
+unauthenticated access.
 
 ## The core rule
 
@@ -18,20 +19,26 @@ to an active row in `staff`.
 
 ## Authentication
 
-- Supabase Auth, email/password or magic link, no public sign-up form exists
-  anywhere in the codebase or the Supabase dashboard's auth settings.
-- New staff accounts are created by an existing admin only, either directly
-  in the Supabase dashboard or through an internal admin-only action that
-  itself requires an authenticated admin session. There is no self-service
-  registration path, full stop.
+- Supabase Auth magic link (`signInWithOtp`), implemented at
+  `app/crm/login/page.tsx`, exchanged for a session at `app/auth/callback/
+  route.ts`. Called with `shouldCreateUser: false`, so requesting a sign-in
+  link never creates a new Supabase Auth account, only an email that already
+  has one can receive a link. No public sign-up form exists anywhere in the
+  codebase or the Supabase dashboard's auth settings.
+- New staff accounts are created by an existing admin only, directly in the
+  Supabase dashboard (Authentication → Users → Add user), since Phase 1 has
+  no in-app admin action for this yet. There is no self-service registration
+  path, full stop.
 - Every `auth.users` row that should have CRM access needs a matching row in
   `public.staff` with `is_active = true`. RLS policies check `staff`, not
   `auth.users` directly, so revoking access is one `UPDATE staff SET
   is_active = false` away, no need to touch the Auth account itself.
-- Server-side route handlers under `/crm/*` verify the session on every
-  request (via Supabase's server client reading the session cookie), not
-  just in client-side page logic. A client-side-only check is not a security
-  boundary, treat it as a UX nicety at most.
+- `app/crm/page.tsx` calls `getCurrentStaff()` (`lib/crm/staff.ts`) on every
+  request, server-side, and redirects to `/crm/login` if there's no session
+  or no matching active `staff` row. This UI-level check is a courtesy, not
+  the actual security boundary, RLS is (see below); it exists so an
+  unauthorized visitor sees a login page instead of an empty/erroring
+  dashboard.
 
 ## Row Level Security
 
@@ -47,14 +54,22 @@ to an active row in `staff`.
 
 ## Service role usage
 
-- The Supabase service role key is used server-side only, inside Next.js
-  Route Handlers (`app/api/crm/...` or a dedicated ingestion function), never
-  sent to the browser, never referenced in any client component.
-- Its only Phase 1 job is promoting rows from the three public form tables
-  into CRM records. That ingestion path is the single place service-role
-  writes to CRM tables happen without an authenticated staff session in the
-  loop, document that exception explicitly in the ingestion function's code
-  comments so a future reviewer doesn't mistake it for a security hole.
+- The Supabase service role key (`SUPABASE_SERVICE_ROLE_KEY`, server-side
+  only, never `NEXT_PUBLIC_`) is read only by `lib/supabase/admin.ts`, never
+  referenced in any client component.
+- Its only Phase 1 job is `lib/crm/ingest.ts`, called from `app/api/contact/
+  route.ts` and `app/api/lead/route.ts` after the public table insert
+  succeeds, to create/update the corresponding `organizations` /
+  `contacts` / `opportunities` / `activities` rows. That ingestion path is
+  the single place service-role writes to CRM tables happen without an
+  authenticated staff session in the loop, this is documented in the file's
+  own comments so a future reviewer doesn't mistake it for a security hole.
+  `subscribe`/newsletter submissions are not ingested, a bare email signup
+  isn't a sales lead.
+- Ingestion failures are caught and logged, never surfaced to the visitor
+  and never allowed to fail the underlying public form submission, matching
+  the existing best-effort pattern used for the Resend/Buttondown calls in
+  those same route handlers.
 
 ## Separation from the public site
 
