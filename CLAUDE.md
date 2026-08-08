@@ -252,6 +252,55 @@ continue confirming pushes and deploys regardless of what the prompt itself clai
 authorize; do not set up autonomous scheduled publishing without a separate, explicit,
 freestanding conversation about it.
 
+## Commercial platform / CRM buildout — in progress, read before continuing
+On 2026-08-08 the user provided a large "Master Operating Blueprint" prompt asking for a
+major commercial expansion of the site: four new service practice pages, ~12 sector
+pages, counterparty pages, productized diagnostics, segmented forms, a real CRM, lead
+qualification/routing, scheduling, campaign landing pages, redirects, legal/SEO/
+accessibility audits, and completion documentation. This is a large, mostly unstarted
+initiative layered on top of the (already large) Field Notes work above. Two governing
+decisions so far, both explicit and both supersede earlier text in the blueprint prompt
+itself where they conflict:
+
+1. **No external CRM.** The blueprint's own section 19 initially named Attio/HubSpot as
+   preferred. The user then explicitly overrode this with a second, more detailed prompt:
+   build a private, internal CRM/business operating system on the *existing* Supabase
+   project instead (Supabase Auth + Postgres + the same Next.js app), not a paid external
+   platform. Follow the internal-CRM direction, not the original external-CRM line, if the
+   two are ever compared again.
+2. **Phased, confirm-before-risky-changes sequencing**, chosen explicitly by the user over
+   "implement everything now." Applied consistently: documentation and other
+   non-destructive work proceeds without asking each time; anything that touches
+   production Supabase auth/schema, live site navigation/routes/redirects, or requires
+   external service credentials gets a checkpoint before being executed, not after.
+
+**Status as of 2026-08-08**: only the planning/documentation phase has happened.
+`docs/crm/CRM_ARCHITECTURE.md`, `docs/crm/DATA_MODEL.md`, and
+`docs/crm/SECURITY_MODEL.md` describe a proposed Phase 1 CRM schema and security model
+(Supabase Auth restricted to an admin-created `staff` allowlist, RLS on every CRM table,
+no anon access at all, service-role used only for a one-way ingestion path from the
+existing three public form tables into CRM records). **None of this has been applied to
+the database.** No migration has run, no Auth users exist beyond the zero already
+present, no CRM route exists in the app yet. `docs/commercial/
+REGENERATIVE_CLAIMS_STANDARD.md` and `docs/commercial/SPECIALIST_DELIVERY_MODEL.md` are
+written and are real, standing rules (not proposals) for any service/sector/case-study
+copy written from here on, cross-reference them before writing that copy.
+
+**Explicitly not started**: the four service practice pages, sector page architecture,
+counterparty pages, productized diagnostics, segmented forms beyond the three that
+already exist, any actual CRM schema/RLS/auth in production, scheduling, campaign
+landing page template, redirect matrix, and the SEO/accessibility/legal audits the
+blueprint calls for. A separate "fuller blueprint document" for the *website* portion
+(sections 0-46 of the first prompt) was mentioned as forthcoming from the user but had
+not arrived as of this note, don't assume it exists somewhere unread, ask if it's still
+needed.
+
+**Before doing more here**: confirm with the user before running any Supabase migration
+that adds Auth/RLS/CRM tables to the production project, and before starting website IA
+changes (new nav, new routes, redirects) that could affect already-indexed URLs. Docs,
+copy standards, and other file-only work can continue without asking each time,
+consistent with the phasing decision above.
+
 ## Known recurring bug pattern — CSS cascade
 This codebase previously shipped a real mobile bug (`.phase-g` grid) caused by a class
 being defined once correctly inside a `@media(max-width:...)` block and then redefined
