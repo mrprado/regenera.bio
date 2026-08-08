@@ -21,8 +21,20 @@ export default function SectorPage({ params }: { params: { slug: string } }) {
   const sector = getSector(params.slug);
   if (!sector) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: sector.name,
+    name: `${sector.name} advisory, Regenera`,
+    description: sector.deck,
+    provider: { "@type": "Organization", name: "Regenera Advisory", url: "https://regenera.bio" },
+    areaServed: "Worldwide",
+    url: `https://regenera.bio/sectors/${sector.slug}`
+  };
+
   return (
     <div className="tabpg">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="th">
         <div className="w">
           <div className="ey lt">

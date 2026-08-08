@@ -4,8 +4,20 @@ import type { Counterparty } from "@/lib/counterparties";
 import SegmentedIntakeForm from "@/components/SegmentedIntakeForm";
 
 export default function CounterpartyPage({ c }: { c: Counterparty }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: c.navLabel,
+    name: `${c.headline} ${c.headlineEm}`,
+    description: c.deck,
+    provider: { "@type": "Organization", name: "Regenera Advisory", url: "https://regenera.bio" },
+    areaServed: "Worldwide",
+    url: `https://regenera.bio/${c.slug}`
+  };
+
   return (
     <div className="tabpg">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="th">
         <div className="w">
           <div className="ey lt">

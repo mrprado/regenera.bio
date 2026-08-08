@@ -18,6 +18,13 @@ export default function SegmentedIntakeForm({ type }: { type: IntakeType }) {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    if (String(formData.get("website") ?? "").trim()) {
+      // Honeypot filled in: silently pretend success, don't tip off the bot.
+      setStatus({ msg: "Thank you. We'll review and follow up.", ok: true });
+      setSubmitted(true);
+      return;
+    }
+
     const name = String(formData.get("name") ?? "").trim();
     const email = String(formData.get("email") ?? "").trim();
     const org = String(formData.get("org") ?? "").trim();
@@ -93,6 +100,12 @@ export default function SegmentedIntakeForm({ type }: { type: IntakeType }) {
 
   return (
     <form className="cform" onSubmit={handleSubmit} noValidate>
+      {/* Honeypot: hidden from sighted users and screen readers, real
+          submitters never fill this in. A bot that fills every field will. */}
+      <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}>
+        <label htmlFor="si-website">Website</label>
+        <input id="si-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="fgr">
         <div className="fg">
           <label htmlFor="si-name">Name</label>

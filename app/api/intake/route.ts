@@ -15,6 +15,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Malformed request." }, { status: 400 });
   }
 
+  // Honeypot: real submitters never fill this hidden field in. Silently
+  // report success so a bot doesn't learn to look elsewhere.
+  if (String(body.website ?? "").trim()) {
+    return NextResponse.json({ ok: true });
+  }
+
   const intakeType = String(body.intake_type ?? "").trim();
   const name = String(body.name ?? "").trim();
   const email = String(body.email ?? "").trim();

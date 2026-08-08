@@ -17,8 +17,20 @@ export default function DiagnosticPage({ params }: { params: { slug: string } })
   const d = getDiagnostic(params.slug);
   if (!d) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: d.name,
+    name: d.name,
+    description: d.deck,
+    provider: { "@type": "Organization", name: "Regenera Advisory", url: "https://regenera.bio" },
+    areaServed: "Worldwide",
+    url: `https://regenera.bio/diagnostics/${d.slug}`
+  };
+
   return (
     <div className="tabpg">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="th">
         <div className="w">
           <div className="ey lt">
