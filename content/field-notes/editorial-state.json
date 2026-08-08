@@ -1,44 +1,44 @@
 {
   "_comment": "Internal editorial tracking, not rendered anywhere. Prevents mechanical repetition in the ongoing weekly workflow described in WEEKLY_EDITORIAL_PROMPT.md. Hand-seeded from the state of lib/fieldNotes.ts at the taxonomy rearchitecture; a future editorial run should update this file as part of its own publish step, not just read it.",
   "lastPublished": "2026-08-08",
-  "lastCategory": "Energy",
+  "lastCategory": "Land & Regenerative Agriculture",
   "recentCategories": [
-    "Land & Regenerative Agriculture",
-    "Water Systems",
+    "Energy",
+    "Energy",
+    "Waste & Circular Materials",
     "Orbital & Environmental Intelligence",
-    "Real Estate & Built Environment",
+    "Food Systems & Community Health",
+    "Energy",
     "Capital Markets & Real Assets",
-    "Energy",
-    "Energy",
-    "Energy"
+    "Land & Regenerative Agriculture"
   ],
   "recentTopics": [
-    "USDA REAP funding freeze and conditional release",
-    "El Paso's direct-to-distribution water reuse plant groundbreaking",
-    "NISAR dual-band radar satellite launch (NASA/ISRO)",
-    "CBRE's $1.2B acquisition of Pearce Services (digital/power infrastructure)",
-    "Mercuria/Silvania's carbon-credit prepayment structure for Amazon protection",
-    "FERC Order 1920-B affirming transmission planning rule",
     "Atlantic Shores offshore wind OREC termination",
-    "Meyer Burger's Colorado solar cell plant cancellation"
+    "Meyer Burger's Colorado solar cell plant cancellation",
+    "2026 state EPR/right-to-repair/GHG-reporting laws taking effect January 1",
+    "MethaneSAT's posthumous global oil and gas methane emissions assessment",
+    "USDA Patrick Leahy Farm to School FY2026 record funding",
+    "FERC's targeted show-cause orders on large-load grid interconnection",
+    "CalSTRS's $2B anchor commitment to Nuveen's EPIC II infrastructure credit fund",
+    "EU CRCF carbon farming certification methodologies adopted"
   ],
   "nextPreferredWindow": "Not scheduled. No autonomous publishing is configured for this site; the next entry should be selected and published manually (or by an explicitly authorized run) per WEEKLY_EDITORIAL_PROMPT.md.",
   "monthlyCount": {
-    "2026-08": 29
+    "2026-08": 35
   },
   "categoryCountsToDate": {
-    "Capital Markets & Real Assets": 7,
-    "Energy": 10,
-    "Waste & Circular Materials": 4,
+    "Capital Markets & Real Assets": 8,
+    "Energy": 11,
+    "Waste & Circular Materials": 5,
     "Water Systems": 5,
-    "Land & Regenerative Agriculture": 8,
-    "Food Systems & Community Health": 4,
+    "Land & Regenerative Agriculture": 9,
+    "Food Systems & Community Health": 5,
     "Real Estate & Built Environment": 8,
-    "Orbital & Environmental Intelligence": 5
+    "Orbital & Environmental Intelligence": 6
   },
   "knownGaps": [
-    "Historical retrospective coverage (archiveDate-tagged entries) is now CONTINUOUS across all 18 months from July 2024 through December 2025, no monthly gaps remain in that window. All of 2026 has not been retrospectively researched at all, that is the entire remaining scope for 'complete the historical archive.'",
-    "Food Systems & Community Health and Waste & Circular Materials are the thinnest categories (4 entries each) against their ~4-6/year directional targets. Energy is now the heaviest at 10, mostly because several genuinely distinct, well-sourced Energy stories existed in the same months, this was not forced, but future batches should lean toward other categories where the evidence supports it.",
+    "Historical retrospective coverage (archiveDate-tagged entries) is CONTINUOUS across all 18 months from July 2024 through December 2025. For 2026, five months now have at least one entry (2026-01, 02, 04, 06, 07); 2026-03 and 2026-05 have no dedicated entry yet, and 2026-08 (the current month) is intentionally left for live/current coverage, not retrospective backfill. Remaining 2026 scope: fill 03 and 05, and continue adding entries as the year progresses, per WEEKLY_EDITORIAL_PROMPT.md's historical-backfill steps.",
+    "The 2026-01 entry originally risked a factual error: a secondary trade-media summary (Waste Dive) implied New York's commercial-organics-diversion threshold change took effect 1 January 2026, but the primary source (NY DEC's own landfill guidance PDF) confirms that specific change does not take effect until 1 January 2027. The published entry uses only the verified 25 December 2025 GHG-reporting law for New York and flags the organics-threshold date correctly in whatWeAreWatching. Treat this as a working example of why a secondary-source date claim always needs primary-source confirmation before publishing, not just a note about that one entry.",
     "The 2025-12 energy-storage entry uses only ACP/Wood Mackenzie's figures (18.9 GW, 52%); a competing SEIA/Benchmark Mineral Intelligence report gave different figures (57.6 GWh, 30%) for what may be a different scope. Do not blend the two reports' numbers in a future piece without resolving why they diverge.",
     "A prior version of this file and CLAUDE.md incorrectly claimed 'all of July-December 2024' was covered before August 2024 actually had an entry, that was a real documentation error, now corrected. Always verify claimed coverage against an actual query of lib/fieldNotes.ts (e.g. archiveDate distinct values), don't just trust the running narrative."
   ]

@@ -202,22 +202,34 @@ entry must be genuinely researched (WebSearch/WebFetch) and verified against a p
 or institutional source, same bar as a live weekly pick. Do not skip verification to
 move faster; report the honest verified count plainly rather than padding it.
 
-**Status**: 51 entries exist in `lib/fieldNotes.ts` (22 original + a 29-entry
+**Status**: 57 entries exist in `lib/fieldNotes.ts` (22 original + a 29-entry
 historical batch giving **continuous** monthly retrospective coverage across all 18
-months from July 2024 through December 2025, each with real sources verified via
-WebFetch against primary/institutional documents, not secondhand aggregation). All 51
-were re-tagged onto the current 8-category taxonomy through both taxonomy changes; the
-original 22 were **not** independently re-fact-checked in either pass (only their
-metadata changed), since the task was retagging, not re-verifying already-approved
-copy. `content/field-notes/editorial-state.json` has the current per-category counts
-and a `knownGaps` list, including a note that an earlier version of this status
-incorrectly claimed full 2024 coverage before August 2024 actually had an entry, a
-documentation error that is now fixed. **Always verify claimed month coverage against
-an actual query of `lib/fieldNotes.ts` (distinct `archiveDate` values) before writing
-a status claim, don't just trust the running narrative in this file.** All of 2026 is
-the entire remaining scope for "complete the historical archive." Remaining work, in
-order:
-1. Research and write further historical batches covering 2026. Work in verified
+months from July 2024 through December 2025, + a 6-entry batch starting the 2026
+backfill: 2026-01 (state EPR/right-to-repair/GHG-reporting laws), 2026-02 (MethaneSAT's
+posthumous global emissions assessment), 2026-04 (USDA Farm to School FY2026 record
+funding), 2026-06 (FERC large-load grid interconnection show-cause orders), 2026-07 x2
+(CalSTRS/Nuveen $2B EPIC II commitment, EU CRCF carbon farming certification
+methodologies), each with real sources verified via WebFetch against
+primary/institutional documents). All were re-tagged onto the current 8-category
+taxonomy through both taxonomy changes; the original 22 were **not** independently
+re-fact-checked in either pass (only their metadata changed), since the task was
+retagging, not re-verifying already-approved copy. `content/field-notes/
+editorial-state.json` has the current per-category counts and a `knownGaps` list,
+including a note that an earlier version of this status incorrectly claimed full 2024
+coverage before August 2024 actually had an entry, a documentation error that is now
+fixed, and a second, real near-miss caught during the 2026-01 entry's own drafting: a
+secondary source (Waste Dive) implied a New York organics-threshold change took effect
+1 January 2026, but the primary source (NY DEC's own PDF) confirms it's actually 1
+January 2027, caught by checking the primary source before publishing rather than
+trusting the trade-press summary. **Always verify claimed month coverage against an
+actual query of `lib/fieldNotes.ts` (distinct `archiveDate` values) before writing a
+status claim, don't just trust the running narrative in this file, and always confirm
+a secondary source's specific dates/figures against the primary source before
+publishing.** 2026-03 and 2026-05 still have no dedicated entry; that, plus continuing
+to add entries as the rest of 2026 unfolds, is the remaining scope for "complete the
+historical archive." Remaining work, in order:
+1. Research and write further historical batches covering the rest of 2026 (fill 03
+   and 05 first, then keep pace with the year as it progresses). Work in verified
    batches per `WEEKLY_EDITORIAL_PROMPT.md`'s historical-backfill steps, don't attempt
    a huge unsupervised pass — "complete 2025 and 2026" was requested but at the
    ~44-52/year directional density that's a lot more entries for 2026 alone, genuinely
