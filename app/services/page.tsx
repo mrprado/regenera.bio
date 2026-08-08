@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ServiceTabs from "@/components/ServiceTabs";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Regenerative Consulting, full stack: energy and infrastructure, real estate and land, project readiness, and capital introduction."
+    "Four practices, one method: Systems & Place Advisory, Development & Project Readiness, Real Assets & Infrastructure Advisory, and Capital Strategy & Alignment."
 };
 
-const VALID_TABS = ["energy", "realestate", "readiness", "capital"] as const;
+const VALID_TABS = ["systems", "readiness", "assets", "capital"] as const;
 type TabId = (typeof VALID_TABS)[number];
 
 export default function ServicesPage({
@@ -15,7 +16,7 @@ export default function ServicesPage({
 }: {
   searchParams: { tab?: string };
 }) {
-  const tab = VALID_TABS.includes(searchParams.tab as TabId) ? (searchParams.tab as TabId) : "energy";
+  const tab = VALID_TABS.includes(searchParams.tab as TabId) ? (searchParams.tab as TabId) : "systems";
 
   return (
     <div className="tabpg">
@@ -26,12 +27,13 @@ export default function ServicesPage({
             <span>Services</span>
           </div>
           <h1>
-            Regenerative Consulting, <em>full stack.</em>
+            Four practices, <em>one method.</em>
           </h1>
           <p className="lede">
-            Energy and infrastructure, real estate and land, project readiness, and capital
-            introduction. One discipline applied across four service lines, in the order a
-            project usually needs them.
+            Systems &amp; Place Advisory, Development &amp; Project Readiness, Real Assets &amp;
+            Infrastructure Advisory, and Capital Strategy &amp; Alignment, applied in the order a
+            project usually needs them. Applied across twelve sectors, see{" "}
+            <Link href="/sectors">Sectors</Link>.
           </p>
         </div>
       </div>
