@@ -85,3 +85,43 @@ This document and `REGENERATIVE_CLAIMS_STANDARD.md` work together: one keeps
 Regenera from overclaiming *what it does*, the other keeps it from
 overclaiming *what an intervention accomplishes*. A page can pass one check
 and fail the other, review copy against both before publishing.
+
+## Recommended Services-page integration statement (use verbatim)
+
+The Master Operating Blueprint (section 38) specifies this language for the
+Services page (and Approach/About where relevant):
+
+> "One point of coordination across a multidisciplinary project. Regenera
+> does not replace the engineers, scientists, designers, counsel, financial
+> professionals, or other specialists a project requires. We work across
+> those disciplines: defining the system, identifying dependencies and
+> constraints, sequencing the work, coordinating counterparties, and
+> translating findings into development and capital decisions."
+
+## Per-discipline relationship table (section 37)
+
+For technical sector pages that need to state the boundary explicitly
+rather than only in general terms:
+
+| Discipline | Regenera's relationship |
+| --- | --- |
+| Engineering / EPC | Frames readiness, coordinates interfaces, supports owner-side decisions; licensed engineers perform design and certification. |
+| Hydrology / environmental science | Integrates findings into project decisions; qualified specialists perform discipline-specific studies. |
+| Geology / mine engineering | Analyzes resource, land, water, energy, logistics, and capital context; qualified professionals perform reserves, mine design, geotechnical work, and technical sign-off. |
+| Architecture / planning | Coordinates system requirements and development strategy; architects/planners produce discipline-specific design and statutory work. |
+| Legal / permitting | Identifies legal/regulatory dependencies and coordinates workstreams; counsel provides legal advice. |
+| Investment decisions | Supports readiness, capital strategy, introductions, and context; investors make independent investment decisions. |
+| Aerospace engineering | Assesses terrestrial systems, resource dependencies, environmental context, and orbital-economy interfaces; aerospace specialists handle engineering. |
+
+## The desired first-impression sequence (section 38)
+
+The site should be designed so a sophisticated first-time visitor reaches
+these conclusions, roughly in this order: this is a sophisticated
+systems-oriented advisory platform; I understand exactly what problem they
+solve for someone like me; they are not pretending to replace the engineer,
+lawyer, fund manager, ecologist, or specialist; their methodology is
+repeatable, not merely philosophical; their regenerative claims are
+evidence-based rather than marketing language; their project examples and
+claims are clearly distinguished and supportable; there is an obvious next
+step. Use this as a review checklist against any new page, not just a
+description.

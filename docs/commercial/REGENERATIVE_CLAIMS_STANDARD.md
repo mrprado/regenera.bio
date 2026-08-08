@@ -96,3 +96,74 @@ diagnostic engagement pages, Selected Mandates, Case Studies, Field Notes
 (already covered, kept consistent here rather than duplicated), any project
 language used in outreach or proposals, marketing copy generally, and page
 metadata (titles/descriptions) wherever "regenerative" appears in them.
+
+## Public statement language (use verbatim where a page needs this)
+
+The Master Operating Blueprint (section 38) specifies exact language for
+stating this standard publicly. Use it verbatim rather than paraphrasing,
+so the public commitment stays precise across pages:
+
+> "We use regenerative carefully. The relevant question is what function is
+> actually restored or strengthened, soil, water cycles, biodiversity,
+> productive capacity, community resilience, local economic capability, or
+> another identifiable system function."
+>
+> "If the mechanism cannot be explained, we do not label the intervention
+> regenerative."
+
+Recommended Philosophy-page module (section 38):
+
+> "Regeneration is a functional claim, not a label. For Regenera, the
+> question is not whether a project uses regenerative language. The
+> question is what function is actually restored or strengthened, soil,
+> water cycles, biodiversity, productive capacity, community resilience,
+> local economic capability, or another identifiable part of the system. If
+> the mechanism cannot be explained and evidenced, we use a more precise
+> term."
+
+## Full required claim-logic checklist (section 36)
+
+Before publishing any regenerative claim, the underlying analysis (not
+necessarily all of it exposed to the reader) should be able to answer all
+nine of these:
+
+1. The baseline condition or degradation/problem being addressed.
+2. The specific function to be restored or strengthened.
+3. The intervention mechanism linking action to function.
+4. Measurable indicators or credible qualitative evidence.
+5. The time horizon over which improvement should occur.
+6. Trade-offs, rebound effects, displacement, or negative externalities.
+7. Who benefits and who bears costs or risk.
+8. Whether the improvement persists without continuously increasing
+   external inputs.
+9. That restoration, maintenance, mitigation, and regeneration are kept
+   distinct, not collapsed into one label.
+
+## Internal Regenerative Project Scorecard (not public-facing)
+
+Any project internally marked as regenerative should be scoreable against
+this table, backed by the `regenerative_function_records` CRM record, not
+just asserted:
+
+| Dimension | Question | Possible status |
+| --- | --- | --- |
+| Function | What is actually being restored or strengthened? | Clear / Partial / Unclear |
+| Mechanism | How does the intervention create the claimed improvement? | Demonstrated / Plausible / Speculative |
+| Evidence | What verifies change? | Measured / Proxy / Qualitative / None |
+| Durability | Will the improvement persist over time? | High / Medium / Low |
+| System effects | Does improvement in one area degrade another? | Positive / Mixed / Negative |
+| Distribution | Who benefits, who pays, who bears risk? | Balanced / Uneven / Unknown |
+| Commercial viability | Can the intervention operate economically? | Viable / Conditional / Not demonstrated |
+| Adaptive capacity | Can the system respond as conditions change? | Strong / Moderate / Weak |
+
+## Case study standard (use this structure for every Case Study)
+
+Context (what asset/place/project and why) → Constraint (what was actually
+preventing performance, readiness, financing, or execution) → System
+dependencies (land, water, energy, materials, institutions, community,
+infrastructure, capital) → Regenera role and specialist roles (exactly what
+Regenera did and did not do, which technical disciplines were required and
+how they were coordinated) → Intervention → Regenerative function (if
+called regenerative, which function was restored/strengthened and by what
+mechanism) → Evidence → Commercial implication → Status/outcome (measured,
+modeled, observed, or still to be verified).
