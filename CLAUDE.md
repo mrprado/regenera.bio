@@ -102,26 +102,47 @@ editing any article**:
 Do not re-derive a different taxonomy or workflow from scratch — these files are the
 source of truth.
 
-**Taxonomy history**: the site originally shipped a 7-system taxonomy (Land & Soil,
-Water, Energy & Waste, Food Systems, Community & Health, Built Environment, Orbital
-Intelligence). On 2026-08-08, on the user's **explicit, direct instruction** (confirmed
-via an interactive scope question after the user submitted a large "final authoritative
-specification" prompt for Field Notes, see "On large, autonomy-seeking prompts" below),
-this was fully replaced with a 13-category taxonomy: Capital Markets & Real Assets,
-Energy, Waste & Circular Materials, Water Systems, Land & Due Diligence, Regenerative
-Agriculture, Food Systems, Real Estate & Built Environment, Materials & Embodied
-Carbon, Mobility & Infrastructure, Natural Capital & Environmental Markets, Community &
-Human Health, Orbital & Environmental Intelligence. This is now the current, approved
-taxonomy — do not revert to the 7-system model or treat it as still current.
+**Taxonomy history**: this is the third taxonomy the site has used, all changes made
+2026-08-08 on the user's **explicit, direct instruction** each time (see "On large,
+autonomy-seeking prompts" below for how the first change was authorized). Original:
+a 7-system taxonomy (Land & Soil, Water, Energy & Waste, Food Systems, Community &
+Health, Built Environment, Orbital Intelligence). Then: a 13-category taxonomy (Capital
+Markets & Real Assets, Energy, Waste & Circular Materials, Water Systems, Land & Due
+Diligence, Regenerative Agriculture, Food Systems, Real Estate & Built Environment,
+Materials & Embodied Carbon, Mobility & Infrastructure, Natural Capital & Environmental
+Markets, Community & Human Health, Orbital & Environmental Intelligence). Then, the
+same day, condensed to the **current 8-category taxonomy** on the instruction "condense
+the long category-label to the best 7 or 8, energy should be separate than
+waste/circular":
 
-**Taxonomy** (`lib/fieldNotesTaxonomy.ts`): 13 categories (color-mapped via
-`CATEGORY_COLOR_VAR`, palette extended in `app/globals.css` with `--capital`, `--waste`,
-`--agri`, `--materials`, `--mobility`, `--natcap` alongside the original 7 hues, which
-were kept and reassigned to categories that map closely to the old systems), 9
-analytical lenses (added Markets & Supply Chains; renamed Capital & Markets → Capital &
-Finance and Policy & Standards → Policy & Regulation), 7 entry types (Field Note,
-Market Signal, Capital Note, Policy Note, Data Note, Case Study, Systems Brief), 7
-regions (unchanged).
+- Capital Markets & Real Assets (absorbed Natural Capital & Environmental Markets,
+  carbon/biodiversity/conservation finance is fundamentally a capital-markets story)
+- Energy (kept separate from waste per explicit instruction)
+- Waste & Circular Materials (kept separate from energy per explicit instruction)
+- Water Systems (unchanged)
+- Land & Regenerative Agriculture (merged Land & Due Diligence + Regenerative
+  Agriculture)
+- Food Systems & Community Health (merged Food Systems + Community & Human Health)
+- Real Estate & Built Environment (absorbed Materials & Embodied Carbon + Mobility &
+  Infrastructure)
+- Orbital & Environmental Intelligence (unchanged, kept distinct as Regenera's stated
+  differentiator)
+
+This is now the current, approved taxonomy — do not revert to the 7-system or
+13-category models or treat either as still current. If asked to change the taxonomy
+again, work from this 8-category list, not from either predecessor.
+
+**Taxonomy** (`lib/fieldNotesTaxonomy.ts`): 8 categories (color-mapped via
+`CATEGORY_COLOR_VAR` — `--capital`, `--gold` (Energy), `--waste`, `--water`, `--terra`
+(Land & Regenerative Agriculture), `--food` (Food Systems & Community Health),
+`--urban` (Real Estate & Built Environment), `--orbit`; the six extra hues added for
+the 13-category system's now-merged categories, `--agri`/`--materials`/`--mobility`/
+`--natcap`, were removed from `app/globals.css` as dead code, don't re-add them without
+a reason — `--human` was kept because the homepage's ecosystem map uses it independently
+of Field Notes), 9 analytical lenses (added Markets & Supply Chains; renamed Capital &
+Markets → Capital & Finance and Policy & Standards → Policy & Regulation), 7 entry
+types (Field Note, Market Signal, Capital Note, Policy Note, Data Note, Case Study,
+Systems Brief), 7 regions (unchanged).
 
 **Data model** (`lib/fieldNotes.ts`): every `FieldNote` carries `category` + `lens` +
 `entryType` (required), optional `secondaryCategory`, `region`, `tags`, plus a set of
@@ -130,11 +151,15 @@ optional analytical sections (`keySignal`, `whyItMatters`, `systemConnection`,
 optional `metaTitle`/`metaDescription`/`canonicalUrl` SEO overrides. Internal field
 names (`date`, `archiveDate`, `eventDate`, `body`, `img`, `imgAlt`, `systemConnection`)
 were deliberately **not** renamed to match the newer spec's field vocabulary
-(`datePublished`/`coverageDate`/`heroImage`/`heroAlt`/etc.) during the rearchitecture —
-they're already semantically identical and already correct, a pure rename would have
-been churn with real regression risk for zero user-visible benefit. All 31 posts (the
-original 22 plus the 9-entry July-December 2024 historical batch) were re-tagged onto
-the new categories; **no slugs changed**, so no URLs broke.
+(`datePublished`/`coverageDate`/`heroImage`/`heroAlt`/etc.) — they're already
+semantically identical and already correct, a pure rename would have been churn with
+real regression risk for zero user-visible benefit. All 32 posts have been re-tagged
+onto the current categories through both taxonomy changes; **no slugs changed**, so no
+URLs broke either time. When a post's old category and old secondary category both
+mapped to the same new merged category, the secondary was dropped rather than left
+duplicating the primary (e.g. the mass-timber post no longer carries a secondary
+category, since Materials and its old Real Estate secondary both became Real Estate &
+Built Environment).
 
 **Date model — load-bearing distinction, do not collapse it**: `date` is the true
 publication date (never backdated). `archiveDate` is the historical period a
@@ -177,19 +202,21 @@ entry must be genuinely researched (WebSearch/WebFetch) and verified against a p
 or institutional source, same bar as a live weekly pick. Do not skip verification to
 move faster; report the honest verified count plainly rather than padding it.
 
-**Status**: 31 entries exist in `lib/fieldNotes.ts` (22 original + a 9-entry batch
-covering July-December 2024, each with real sources verified via WebFetch against
-primary/institutional documents, not secondhand aggregation). All 31 were re-tagged
-onto the new 13-category taxonomy in the rearchitecture; the original 22 were **not**
-independently re-fact-checked in that pass (only their metadata changed), since the
-task was retagging, not re-verifying already-approved copy. `content/field-notes/
-editorial-state.json` has the current per-category counts and a `knownGaps` list —
-**Food Systems currently has zero primary-category entries**, the clearest gap.
-Remaining work, in order:
-1. Research and write further historical batches (next: fill 2025 and the rest of
-   2026, and specifically source real Food Systems developments). Work in verified
-   batches per `WEEKLY_EDITORIAL_PROMPT.md`'s historical-backfill steps, don't attempt
-   a huge unsupervised pass.
+**Status**: 32 entries exist in `lib/fieldNotes.ts` (22 original + a 10-entry batch
+covering July-October 2024, each with real sources verified via WebFetch against
+primary/institutional documents, not secondhand aggregation). All 32 were re-tagged
+onto the current 8-category taxonomy through both taxonomy changes; the original 22
+were **not** independently re-fact-checked in either pass (only their metadata
+changed), since the task was retagging, not re-verifying already-approved copy.
+`content/field-notes/editorial-state.json` has the current per-category counts and a
+`knownGaps` list — Waste & Circular Materials is currently the thinnest category (2
+entries). November-December 2024 and all of 2025-2026 have no retrospective coverage
+yet. Remaining work, in order:
+1. Research and write further historical batches (next: fill November-December 2024,
+   then 2025, then 2026). Work in verified batches per `WEEKLY_EDITORIAL_PROMPT.md`'s
+   historical-backfill steps, don't attempt a huge unsupervised pass — "complete 2025
+   and 2026" was requested but at the ~44-52/year directional density that's roughly
+   80-100 more entries, genuinely multi-session work, not something to rush or pad.
 2. `npm run build` + `npx next lint` clean after each batch (stop dev server first).
 3. Mobile/desktop QA on the archive UI per batch — this codebase has a known history of
    responsive-CSS cascade bugs (see below), check new content at 375px specifically.
@@ -277,6 +304,11 @@ a mobile screenshot report from the user.
 - Field Notes fully rebuilt: taxonomy-driven data model, filterable/year-grouped
   archive UI, upgraded article template, algorithmic related-posts, cross-linking from
   Services into Field Notes (`components/FromFieldNotes.tsx`).
-- Field Notes taxonomy rearchitected from 7 systems to 13 categories, 9 lenses added
-  (was 8), entry types added, all 31 posts re-tagged, no slugs/URLs changed (see
-  "Taxonomy history" above).
+- Field Notes taxonomy rearchitected from 7 systems to 13 categories, then condensed to
+  8 the same day, 9 lenses added (was 8), entry types added, all posts re-tagged twice,
+  no slugs/URLs changed either time (see "Taxonomy history" above).
+- Field Notes compliance audit against EDITORIAL_SYSTEM.md across every post (no
+  em-dashes, no prose semicolons, no banned hype language, "regenerative" always
+  mechanism-grounded); found and fixed one real financial-precision issue (Farmland
+  LP/Microsoft entry implied a disclosed investment amount that was actually
+  undisclosed, only the fund's own target was public).

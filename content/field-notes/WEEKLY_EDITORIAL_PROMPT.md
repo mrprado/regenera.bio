@@ -127,41 +127,46 @@ pick, there is no shortcut for retrospective analysis that skips sourcing.
 Work in verified batches, do not attempt to produce dozens of these in a
 single unsupervised pass.
 
-**Status as of the taxonomy rearchitecture** (see CLAUDE.md for the date):
-31 entries exist in `lib/fieldNotes.ts`, of which 9 carry `archiveDate` and
-are genuinely retrospective (July-December 2024, source-verified against
-primary/institutional sources), and 22 are the original pre-rebuild articles
-running monthly from January 2025 through August 2026 without an
-`archiveDate` (they are not falsely retrospective, but they also were not
-independently fact-checked against primary sources the way the 2024 batch
-was, since they predate that sourcing discipline).
+**Status as of the taxonomy condensation to 8 categories** (see CLAUDE.md
+for the date): 32 entries exist in `lib/fieldNotes.ts`, of which 10 carry
+`archiveDate` and are genuinely retrospective (July-October 2024,
+source-verified against primary/institutional sources), and 22 are the
+original pre-rebuild articles running monthly from January 2025 through
+August 2026 without an `archiveDate` (they are not falsely retrospective,
+but they also were not independently fact-checked against primary sources
+the way the 2024 batch was, since they predate that sourcing discipline).
+November and December 2024, and all of 2025 and 2026, have not yet had a
+dedicated retrospective research pass.
 
 Density guidance in this document's cadence section (~44-52 substantive
 entries per year, averaging roughly weekly) is directional for the *full*
 archive, including the historical period, not just the go-forward cadence.
 Applied literally to July 2024 through the present, that implies an archive
-meaningfully larger than 31 entries. Treat the 31 current entries as a
+meaningfully larger than 32 entries. Treat the current entries as a
 foundation, not a finished archive, more historical batches are expected
 work, not optional polish. Do not pad the count with weak stories to close
 the gap faster, a smaller honest archive is better than a larger padded one.
 
 Rough category balance to aim for across a full year (directional, not a
 quota, never force a weak article merely because a category is behind):
-Regenerative Agriculture ~7, Energy ~6, Capital Markets & Real Assets ~6,
-Water Systems ~4, Waste & Circular Materials ~4, Land & Due Diligence ~4,
-Food Systems ~4, Real Estate & Built Environment ~4, Natural Capital &
-Environmental Markets ~4, Orbital & Environmental Intelligence ~3,
-Materials & Embodied Carbon ~2, Community & Human Health ~2, Mobility &
-Infrastructure ~2.
+Land & Regenerative Agriculture ~9 (it absorbed two categories, so carries
+roughly double weight), Energy ~6, Capital Markets & Real Assets ~8 (also
+absorbed natural capital/environmental markets), Water Systems ~4, Waste &
+Circular Materials ~4, Food Systems & Community Health ~6, Real Estate &
+Built Environment ~8 (absorbed materials and mobility), Orbital &
+Environmental Intelligence ~3.
 
 Story threads to keep the archive coherent rather than a random pile
 (follow these only where the actual verified evidence supports them, do not
 force a thread the sources don't back):
 
-- **Regenerative Agriculture**: farming practice, then supply-chain
+- **Land & Regenerative Agriculture**: farming practice, then supply-chain
   concern, then resilience strategy, then natural-capital exposure, then
   transition-finance market, then productive real-asset strategy, then
-  measurable environmental and financial performance.
+  measurable environmental and financial performance. Land-diligence
+  developments (title, zoning, site selection) can run as their own
+  thread within this category without forcing an agriculture angle onto
+  every entry.
 - **Energy**: rapid deployment, then land constraints, then interconnection
   constraints, then storage integration, then grid bottlenecks, then
   industrial-load interaction, then energy availability shaping development
@@ -172,16 +177,26 @@ force a thread the sources don't back):
 - **Waste & Circular Materials**: disposal problem, then diversion, then
   material recovery, then energy/feedstock recovery, then circular
   industrial infrastructure.
-- **Natural Capital & Environmental Markets**: impact allocation, then
-  carbon, then biodiversity, then working landscapes, then institutional
-  real assets, then natural infrastructure.
-- **Orbital & Environmental Intelligence**: environmental observation, then
-  monitoring, then verification, then diligence, then ongoing asset
-  intelligence.
 - **Capital Markets & Real Assets**: track how structures evolve
   (farmland funds, natural-capital funds, transition finance,
   blended/catalytic capital, private credit), interpret what each structure
-  reveals about market maturity rather than just reporting totals.
+  reveals about market maturity rather than just reporting totals. Carbon,
+  biodiversity, and conservation-finance developments run as a thread
+  within this category: impact allocation, then carbon, then biodiversity,
+  then working landscapes, then institutional real assets.
+- **Real Estate & Built Environment**: sustainable/net-zero development as
+  its own thread, embodied-carbon material choices (timber, concrete,
+  steel) as a second thread within the category, and mobility/EV
+  infrastructure as a third, only merge them in a single article when a
+  specific development genuinely spans more than one.
+- **Food Systems & Community Health**: regional food infrastructure
+  (processing, cold chain, aggregation) as one thread, community and
+  public-health infrastructure as a second, the two intersect naturally
+  (energy reliability for clinics, food access) but don't need to be forced
+  together in every entry.
+- **Orbital & Environmental Intelligence**: environmental observation, then
+  monitoring, then verification, then diligence, then ongoing asset
+  intelligence.
 
 Steps for each batch:
 

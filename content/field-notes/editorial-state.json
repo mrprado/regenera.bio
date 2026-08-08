@@ -1,16 +1,16 @@
 {
   "_comment": "Internal editorial tracking, not rendered anywhere. Prevents mechanical repetition in the ongoing weekly workflow described in WEEKLY_EDITORIAL_PROMPT.md. Hand-seeded from the state of lib/fieldNotes.ts at the taxonomy rearchitecture; a future editorial run should update this file as part of its own publish step, not just read it.",
   "lastPublished": "2026-08-08",
-  "lastCategory": "Food Systems",
+  "lastCategory": "Food Systems & Community Health",
   "recentCategories": [
-    "Community & Human Health",
-    "Regenerative Agriculture",
-    "Natural Capital & Environmental Markets",
+    "Food Systems & Community Health",
+    "Land & Regenerative Agriculture",
+    "Capital Markets & Real Assets",
     "Capital Markets & Real Assets",
     "Energy",
     "Water Systems",
     "Orbital & Environmental Intelligence",
-    "Food Systems"
+    "Food Systems & Community Health"
   ],
   "recentTopics": [
     "Mission 300 institutional coordination in Africa",
@@ -27,23 +27,17 @@
     "2026-08": 11
   },
   "categoryCountsToDate": {
-    "Capital Markets & Real Assets": 3,
+    "Capital Markets & Real Assets": 5,
     "Energy": 5,
     "Waste & Circular Materials": 2,
     "Water Systems": 3,
-    "Land & Due Diligence": 2,
-    "Regenerative Agriculture": 3,
-    "Food Systems": 1,
-    "Real Estate & Built Environment": 4,
-    "Materials & Embodied Carbon": 1,
-    "Mobility & Infrastructure": 1,
-    "Natural Capital & Environmental Markets": 2,
-    "Community & Human Health": 2,
+    "Land & Regenerative Agriculture": 5,
+    "Food Systems & Community Health": 3,
+    "Real Estate & Built Environment": 6,
     "Orbital & Environmental Intelligence": 3
   },
   "knownGaps": [
-    "Food Systems now has one primary-category entry (USDA RFSI, October 2024). Still the thinnest category relative to its ~4/year directional target, prioritize it again next batch.",
-    "Materials & Embodied Carbon and Mobility & Infrastructure each have only 1 entry against a ~2/year directional target.",
-    "Historical archive (archiveDate-tagged entries) currently covers only July-December 2024. 2025 and all of 2026 have not been retrospectively researched against primary sources, those 22 entries were migrated from the pre-rearchitecture taxonomy without new fact-checking."
+    "Waste & Circular Materials is the thinnest category (2 entries) against its ~4/year directional target.",
+    "Historical archive (archiveDate-tagged entries) currently covers only July-October 2024. November-December 2024 and all of 2025 and 2026 have not been retrospectively researched against primary sources, those 22 non-archiveDate entries were migrated through two taxonomy changes without new fact-checking."
   ]
 }

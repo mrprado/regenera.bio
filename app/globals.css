@@ -7,7 +7,7 @@
   --t-mid:#4b5445; --t-soft:#7b8672; --t-pale:#a9b1a1;
   --gold:#c9a84c; --gold-dim:#8b7333;
   --terra:#b4693e; --water:#5a86a8; --food:#6f9459; --human:#a85a5a; --urban:#7d8894; --orbit:#8a76a8;
-  --capital:#3f4d63; --waste:#8c6f3d; --agri:#7d8a4a; --materials:#a0805c; --mobility:#4a7f8c; --natcap:#4f7a52;
+  --capital:#3f4d63; --waste:#8c6f3d;
   --line:rgba(38,50,31,0.13); --line-lt:rgba(201,168,76,0.1);
   --serif:var(--font-serif),Georgia,serif;
   --sans:var(--font-sans),system-ui,sans-serif;

@@ -5,11 +5,12 @@ or publishing Regenera Field Notes. It is self-contained: you should not need
 any external brief to produce a compliant article once you've read this file,
 `SOURCES.md`, and `WEEKLY_EDITORIAL_PROMPT.md`.
 
-**Taxonomy note**: this document describes the 13-category taxonomy adopted
-on explicit user direction, replacing an earlier 7-system model. See
-CLAUDE.md for the migration rationale and mapping if you're trying to
-understand why an older commit or an external brief references different
-category names.
+**Taxonomy note**: this document describes the 8-category taxonomy, the
+third taxonomy this site has used. It replaced a 13-category taxonomy the
+same day it was introduced, which had itself just replaced an original
+7-system model. All on explicit user direction. See CLAUDE.md for the full
+migration history and mapping if you're trying to understand why an older
+commit or an external brief references different category names.
 
 ## What Field Notes is
 
@@ -42,15 +43,22 @@ Defined in `lib/fieldNotesTaxonomy.ts`. Do not invent new category, lens, or
 entry-type strings inline, add them there first if the taxonomy genuinely
 needs to grow.
 
-**Primary category** (exactly one per article, required):
+**Primary category** (exactly one per article, required). Energy and Waste &
+Circular Materials are deliberately kept as separate categories, do not
+re-merge them:
 
 1. **Capital Markets & Real Assets**, infrastructure capital, project
    finance, private credit, institutional capital, pension funds, family
    offices, development finance, blended finance, transition finance,
-   underwriting, real-asset transactions.
+   underwriting, real-asset transactions, and natural capital / environmental
+   markets (carbon, biodiversity, and conservation finance instruments,
+   folded in here because they are fundamentally capital-markets stories,
+   distinguish them from land management with the lens, not a separate
+   category). Do not treat all nature projects as regenerative automatically.
 2. **Energy**, utility-scale and distributed solar, wind, battery storage,
    grids, transmission, interconnection, power markets, microgrids,
-   industrial energy, renewable fuels, EPC. Waste is not included here.
+   industrial energy, renewable fuels, EPC. Waste is not included here, even
+   waste-to-energy, that belongs to Waste & Circular Materials below.
 3. **Waste & Circular Materials**, waste-to-energy, municipal and industrial
    waste, organic waste, resource recovery, anaerobic digestion, recycling,
    circular materials, biochar, recovered feedstocks. Energy produced from
@@ -60,44 +68,39 @@ needs to grow.
    wastewater, reuse, irrigation, stormwater, desalination, agricultural and
    industrial water, hydrological risk. Core thesis: water is an
    underwriting variable.
-5. **Land & Due Diligence**, land acquisition, suitability, title, land-use
-   planning, site selection, environmental diligence, zoning, land value,
-   carrying capacity, landscape analysis. Regenerative agriculture is a
-   separate category, not folded in here.
-6. **Regenerative Agriculture**, soil health and biology, farmland,
-   transition finance, agricultural insurance, agroforestry, agrivoltaics,
+5. **Land & Regenerative Agriculture**, land acquisition, suitability,
+   title, land-use planning, site selection, environmental diligence,
+   zoning, carrying capacity, landscape analysis, and regenerative
+   agriculture itself: soil health and biology, farmland, transition
+   finance, agricultural insurance, agroforestry, agrivoltaics,
    regenerative grazing, crop systems, farmer economics, biological inputs,
    ag technology, nutrient management, soil carbon, farm energy and water.
-   Core thesis: soil is productive infrastructure.
-7. **Food Systems**, what happens beyond primary production: processing,
-   milling, storage, cold chain, logistics, aggregation, regional food
-   infrastructure, procurement, ingredient systems, food supply chains,
-   Scope 3 agricultural sourcing. Cross-references Regenerative Agriculture
-   frequently but stays distinct.
-8. **Real Estate & Built Environment**, regenerative development,
+   Core thesis: soil is productive infrastructure, and land diligence and
+   regenerative practice are usually the same underwriting question asked
+   from two ends.
+6. **Food Systems & Community Health**, what happens beyond primary
+   production, processing, milling, storage, cold chain, logistics,
+   aggregation, regional food infrastructure, procurement, ingredient
+   systems, food supply chains, Scope 3 agricultural sourcing, plus
+   public-health infrastructure, food and health, agriculture and health,
+   energy reliability for health facilities, environmental health, regional
+   resilience, rural economies, food access. Not a general wellness blog,
+   the health angle needs a structural, financeable, or operational
+   dimension, same test as everything else.
+7. **Real Estate & Built Environment**, regenerative development,
    sustainable real estate, master planning, districts, district energy and
    water, adaptive reuse, public realm, net-zero development, real-estate
-   resilience.
-9. **Materials & Embodied Carbon**, timber, mass timber, concrete, steel,
-   hemp, bamboo, agricultural fibers, low-carbon and circular construction
-   materials, embodied carbon, material supply chains. Kept separate from
-   Real Estate because materials have their own industrial and capital
-   systems.
-10. **Mobility & Infrastructure**, EV charging, transport infrastructure,
-    mobility systems, logistics infrastructure, ports, roads, rail,
-    infrastructure corridors, land-use implications of mobility.
-11. **Natural Capital & Environmental Markets**, biodiversity, ecosystem
-    services, restoration, forestry, carbon and biodiversity markets,
-    natural infrastructure, environmental credits, conservation finance. Do
-    not treat all nature projects as regenerative automatically.
-12. **Community & Human Health**, public-health infrastructure, food and
-    health, agriculture and health, energy reliability for health
-    facilities, environmental health, regional resilience, rural economies,
-    food access. Not a general wellness blog.
-13. **Orbital & Environmental Intelligence**, Earth observation, satellite
-    systems, remote sensing, environmental monitoring, groundwater
-    intelligence, land-use change, methane and wildfire detection,
-    agricultural and vegetation monitoring, MRV, asset intelligence.
+   resilience, plus embodied-carbon and material choices (timber, concrete,
+   steel, low-carbon and circular construction materials) and mobility and
+   transport infrastructure (EV charging, ports, roads, rail, logistics
+   corridors) insofar as they shape a place, since both are usually a
+   development or master-planning decision before they're anything else.
+8. **Orbital & Environmental Intelligence**, Earth observation, satellite
+   systems, remote sensing, environmental monitoring, groundwater
+   intelligence, land-use change, methane and wildfire detection,
+   agricultural and vegetation monitoring, MRV, asset intelligence. Kept
+   distinct because it's Regenera's stated differentiator, not a feature of
+   another category.
 
 **Secondary category** (optional, at most one): use when a development
 genuinely bridges two categories (e.g. agrivoltaics: Regenerative
