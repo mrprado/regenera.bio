@@ -112,7 +112,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .sec-d{background:var(--deep)}
 .sec-n{background:var(--night)}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:end;margin-bottom:56px}
-.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.1);border-radius:2px;overflow:hidden}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.1);border-radius:2px;overflow:hidden}
+@media(max-width:1280px){.pillars{grid-template-columns:repeat(2,1fr)}}
 .pillar{background:var(--deep);padding:2.4rem 2rem;text-align:left;border:none;transition:background .3s;display:flex;flex-direction:column;height:100%;text-decoration:none}
 .pillar:hover{background:var(--forest)}
 .pillar .pn{font-family:var(--serif);font-size:0.95rem;font-style:italic;color:var(--gold-dim);margin-bottom:1.1rem}
@@ -133,7 +134,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .eco-c .en{font-size:12px;font-weight:500;color:rgba(239,233,220,0.85);line-height:1.35}
 .eco-c .ex{font-size:10px;font-weight:300;color:rgba(214,231,203,0.35);margin-top:5px;line-height:1.5}
 .mand{display:flex;flex-wrap:wrap;gap:10px}
-.mand span{font-size:11px;font-weight:500;letter-spacing:0.06em;color:var(--t-soft);border:1px solid var(--line);border-radius:20px;padding:7px 16px;background:rgba(255,255,255,0.4)}
+.mand span,.mand a{font-size:11px;font-weight:500;letter-spacing:0.06em;color:var(--t-soft);border:1px solid var(--line);border-radius:20px;padding:7px 16px;background:rgba(255,255,255,0.4);text-decoration:none;display:inline-block;transition:color .2s,border-color .2s}
+.mand a:hover{color:var(--gold-dim);border-color:var(--gold-dim)}
 
 /* ── cards, grids ── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
@@ -344,9 +346,11 @@ footer{background:var(--night);border-top:1px solid rgba(201,168,76,0.07);paddin
 /* ── responsive ── */
 @media(max-width:1080px){#orb{opacity:0.25}}
 /* Nav switches to the hamburger menu earlier than the general content
-   breakpoint below: at 960px the six nav items plus the CTA no longer fit
-   on one line and wrap, so the desktop nav needs to be gone before that. */
-@media(max-width:1120px){
+   breakpoint below: with eight items now on the desktop nav (seven links
+   plus the CTA, up from six when this breakpoint was first set), the wrap
+   point moved wider too, so this threshold was raised from 1120px to keep
+   the same safety margin. Recheck this number if nav items change again. */
+@media(max-width:1240px){
   nav{padding:0 1.4rem}
   .nav-links{display:none}
   .hbg{display:flex}

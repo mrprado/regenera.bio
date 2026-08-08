@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { STARS } from "@/lib/stars";
+import { SECTORS } from "@/lib/sectors";
 
 export default function HomePage() {
   return (
@@ -68,50 +69,50 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="doors" role="navigation" aria-label="Choose your path">
-            <Link href="/contact?path=investor" className="door">
+            <Link href="/for-developers" className="door">
               <div className="dl">01</div>
-              <div className="dt">For Investors</div>
-              <div className="dd">
-                Family offices, institutions, and impact investors seeking selectively sourced
-                opportunities across energy, infrastructure, real estate, and natural assets.
-              </div>
-              <span className="da">
-                Explore Opportunities <span className="arr">&rarr;</span>
-              </span>
-            </Link>
-            <Link href="/contact?path=developer" className="door">
-              <div className="dl">02</div>
-              <div className="dt">For Developers</div>
+              <div className="dt">I Have a Project</div>
               <div className="dd">
                 Developers and project sponsors advancing solar, waste to energy, and
                 infrastructure opportunities toward investment readiness, institutional capital,
                 and delivery.
               </div>
               <span className="da">
-                Advance a Project <span className="arr">&rarr;</span>
+                Submit a Project <span className="arr">&rarr;</span>
               </span>
             </Link>
-            <Link href="/contact?path=realestate" className="door">
-              <div className="dl">03</div>
-              <div className="dt">For Real Estate and Land</div>
+            <Link href="/for-landowners" className="door">
+              <div className="dl">02</div>
+              <div className="dt">I Own or Control Land</div>
               <div className="dd">
                 Landowners and developers seeking to unlock long term value through site
                 strategy, infrastructure integration, regenerative planning, and capital
                 structuring.
               </div>
               <span className="da">
-                Structure an Asset <span className="arr">&rarr;</span>
+                Assess My Land <span className="arr">&rarr;</span>
               </span>
             </Link>
-            <Link href="/contact?path=operator" className="door">
+            <Link href="/for-investors" className="door">
+              <div className="dl">03</div>
+              <div className="dt">I Deploy Capital</div>
+              <div className="dd">
+                Family offices, institutions, and impact investors seeking selectively sourced
+                opportunities across energy, infrastructure, real estate, and natural assets.
+              </div>
+              <span className="da">
+                Discuss Your Mandate <span className="arr">&rarr;</span>
+              </span>
+            </Link>
+            <Link href="/for-operators" className="door">
               <div className="dl">04</div>
-              <div className="dt">For Places and Operators</div>
+              <div className="dt">I Operate a Place or Asset</div>
               <div className="dd">
                 Municipalities, operators, and landholders developing resilient systems across
                 energy, waste, water, food, and the built environment.
               </div>
               <span className="da">
-                Explore a Partnership <span className="arr">&rarr;</span>
+                Discuss Your Site <span className="arr">&rarr;</span>
               </span>
             </Link>
           </div>
@@ -145,7 +146,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* THREE PRACTICE AREAS */}
+      {/* FOUR PRACTICES */}
       <section className="sec">
         <div className="w">
           <div className="split r">
@@ -155,26 +156,26 @@ export default function HomePage() {
                 <span>Regenerative Consulting</span>
               </div>
               <h2 className="h2">
-                One practice, full stack.
+                One method.
                 <br />
-                <em>Three ways we deliver it.</em>
+                <em>Four practices.</em>
               </h2>
             </div>
             <p style={{ fontSize: 14.5, fontWeight: 300, color: "var(--t-mid)", lineHeight: 1.82 }}>
-              Regenerative Consulting is the discipline behind everything we do. Energy,
-              infrastructure, and real estate. Project readiness. Capital introduction. Three
-              practice areas, the same method applied to capital flows, physical land, and the
-              readiness work that makes both investable.
+              Understand the place. Map the system. Design the intervention. Align the capital.
+              The same method, applied across systems diagnosis, project readiness, real assets
+              and infrastructure, and capital strategy, in the order a project usually needs
+              them.
             </p>
           </div>
           <div className="pillars plt r d1">
-            <Link href="/how-we-work" className="pillar">
+            <Link href="/services?tab=systems" className="pillar">
               <div className="pn">Practice I</div>
-              <div className="pt">Energy, Infrastructure &amp; Real Estate</div>
+              <div className="pt">Systems &amp; Place Advisory</div>
               <div className="pb">
-                Systemic diagnosis, intervention design, and capital alignment across solar,
-                waste to energy, land, and the built environment. We find the leverage points
-                where one well placed intervention regenerates multiple systems at once.
+                Systemic diagnosis and place-based intelligence across land, infrastructure,
+                ecology, and governance. We find the leverage points where one well placed
+                intervention regenerates multiple systems at once.
               </div>
               <span className="pl">
                 Explore the method <span className="arr">&rarr;</span>
@@ -182,7 +183,7 @@ export default function HomePage() {
             </Link>
             <Link href="/services?tab=readiness" className="pillar">
               <div className="pn">Practice II</div>
-              <div className="pt">Project Readiness</div>
+              <div className="pt">Development &amp; Project Readiness</div>
               <div className="pb">
                 Preparing projects, portfolios, and places for institutional capital.
                 Documentation, structure, diagnostics, and an assessment that shows what a
@@ -192,13 +193,24 @@ export default function HomePage() {
                 Get ready <span className="arr">&rarr;</span>
               </span>
             </Link>
-            <Link href="/services?tab=capital" className="pillar">
+            <Link href="/services?tab=assets" className="pillar">
               <div className="pn">Practice III</div>
-              <div className="pt">Capital Introduction</div>
+              <div className="pt">Real Assets &amp; Infrastructure Advisory</div>
               <div className="pb">
-                Connecting infrastructure and real estate projects with institutional capital
-                whose mandate matches their scale, geography, and purpose. Solar, waste to
-                energy, land, and regenerative real estate.
+                Sector-specific advisory across twelve sectors, from energy and waste to land,
+                agriculture, real estate, materials, and environmental intelligence.
+              </div>
+              <span className="pl">
+                Explore sectors <span className="arr">&rarr;</span>
+              </span>
+            </Link>
+            <Link href="/services?tab=capital" className="pillar">
+              <div className="pn">Practice IV</div>
+              <div className="pt">Capital Strategy &amp; Alignment</div>
+              <div className="pb">
+                Capital readiness, mandate matching, and strategic introductions where lawful,
+                connecting prepared projects with institutional capital whose mandate genuinely
+                fits.
               </div>
               <span className="pl">
                 See the services <span className="arr">&rarr;</span>
@@ -352,17 +364,11 @@ export default function HomePage() {
             <span>Where We Work</span>
           </div>
           <div className="mand r d1" aria-label="Sectors">
-            <span>Utility Scale Solar</span>
-            <span>Waste to Energy</span>
-            <span>Regenerative Real Estate</span>
-            <span>Land Structuring</span>
-            <span>Regenerative Agriculture</span>
-            <span>Agri Industrial Zones</span>
-            <span>Water Infrastructure</span>
-            <span>Net Zero Districts</span>
-            <span>EV Charging Infrastructure</span>
-            <span>Carbon and Environmental Markets</span>
-            <span>Environmental Intelligence</span>
+            {SECTORS.map((s) => (
+              <Link key={s.slug} href={`/sectors/${s.slug}`}>
+                {s.name}
+              </Link>
+            ))}
           </div>
         </div>
       </section>
