@@ -1,45 +1,45 @@
 {
   "_comment": "Internal editorial tracking, not rendered anywhere. Prevents mechanical repetition in the ongoing weekly workflow described in WEEKLY_EDITORIAL_PROMPT.md. Hand-seeded from the state of lib/fieldNotes.ts at the taxonomy rearchitecture; a future editorial run should update this file as part of its own publish step, not just read it.",
   "lastPublished": "2026-08-08",
-  "lastCategory": "Land & Regenerative Agriculture",
+  "lastCategory": "Real Estate & Built Environment",
   "recentCategories": [
-    "Food Systems & Community Health",
-    "Waste & Circular Materials",
-    "Capital Markets & Real Assets",
-    "Real Estate & Built Environment",
     "Land & Regenerative Agriculture",
     "Energy",
     "Energy",
     "Waste & Circular Materials",
-    "Land & Regenerative Agriculture"
+    "Land & Regenerative Agriculture",
+    "Land & Regenerative Agriculture",
+    "Water Systems",
+    "Orbital & Environmental Intelligence",
+    "Real Estate & Built Environment"
   ],
   "recentTopics": [
-    "EU revised Waste Framework Directive textile EPR",
-    "Brookfield Global Transition Fund II record close",
-    "GRESB 2025 Real Estate Benchmark record participation",
-    "USDA Regenerative Pilot Program ($700M)",
     "US battery storage installations record 2025 (ACP/Wood Mackenzie)",
     "Solar cell AD/CVD duties on Cambodia/Malaysia/Thailand/Vietnam",
     "Microsoft/Gaia ProjectCo waste-to-energy carbon capture offtake",
-    "Nuveen's first major institutional farmland REIT"
+    "Nuveen's first major institutional farmland REIT",
+    "USDA REAP funding freeze and conditional release",
+    "El Paso's direct-to-distribution water reuse plant groundbreaking",
+    "NISAR dual-band radar satellite launch (NASA/ISRO)",
+    "CBRE's $1.2B acquisition of Pearce Services (digital/power infrastructure)"
   ],
   "nextPreferredWindow": "Not scheduled. No autonomous publishing is configured for this site; the next entry should be selected and published manually (or by an explicitly authorized run) per WEEKLY_EDITORIAL_PROMPT.md.",
   "monthlyCount": {
-    "2026-08": 22
+    "2026-08": 26
   },
   "categoryCountsToDate": {
     "Capital Markets & Real Assets": 6,
     "Energy": 7,
     "Waste & Circular Materials": 4,
-    "Water Systems": 4,
-    "Land & Regenerative Agriculture": 7,
+    "Water Systems": 5,
+    "Land & Regenerative Agriculture": 8,
     "Food Systems & Community Health": 4,
-    "Real Estate & Built Environment": 7,
-    "Orbital & Environmental Intelligence": 4
+    "Real Estate & Built Environment": 8,
+    "Orbital & Environmental Intelligence": 5
   },
   "knownGaps": [
-    "Water Systems, Food Systems & Community Health, and Orbital & Environmental Intelligence are now the thinnest categories (4 entries each) against their ~4/year (Water, Food&Health) or ~3/year (Orbital) directional targets, meaning Orbital is proportionally the fullest despite the same raw count.",
-    "Historical archive (archiveDate-tagged entries) now covers July-December 2024 (all months) and May, June/July, August, September, October, and December 2025. January-April 2025 and November 2025 still have no dedicated retrospective piece. All of 2026 has not been retrospectively researched at all.",
+    "Food Systems & Community Health and Waste & Circular Materials are now the thinnest categories (4 entries each) against their ~4-6/year directional targets.",
+    "Historical archive (archiveDate-tagged entries) now covers 25 distinct months: all of July-December 2024, and February, March, May, July, August, September, October, November, and December 2025. January, April, and June 2025 still have no dedicated retrospective piece. All of 2026 has not been retrospectively researched at all.",
     "The 2025-12 energy-storage entry uses only ACP/Wood Mackenzie's figures (18.9 GW, 52%); a competing SEIA/Benchmark Mineral Intelligence report gave different figures (57.6 GWh, 30%) for what may be a different scope. Do not blend the two reports' numbers in a future piece without resolving why they diverge."
   ]
 }

@@ -202,16 +202,17 @@ entry must be genuinely researched (WebSearch/WebFetch) and verified against a p
 or institutional source, same bar as a live weekly pick. Do not skip verification to
 move faster; report the honest verified count plainly rather than padding it.
 
-**Status**: 43 entries exist in `lib/fieldNotes.ts` (22 original + a 21-entry
-historical batch spanning July-December 2024 in full, plus May, June/July, August,
-September, October, and December 2025, each with real sources verified via WebFetch
-against primary/institutional documents, not secondhand aggregation). All 43 were
-re-tagged onto the current 8-category taxonomy through both taxonomy changes; the
-original 22 were **not** independently re-fact-checked in either pass (only their
-metadata changed), since the task was retagging, not re-verifying already-approved
-copy. `content/field-notes/editorial-state.json` has the current per-category counts
-and a `knownGaps` list. January-April 2025, November 2025, and all of 2026 still have
-no dedicated retrospective research pass. Remaining work, in order:
+**Status**: 47 entries exist in `lib/fieldNotes.ts` (22 original + a 25-entry
+historical batch spanning 25 distinct months: all of July-December 2024, plus
+February, March, May, July, August, September, October, November, and December 2025,
+each with real sources verified via WebFetch against primary/institutional documents,
+not secondhand aggregation). All 47 were re-tagged onto the current 8-category
+taxonomy through both taxonomy changes; the original 22 were **not** independently
+re-fact-checked in either pass (only their metadata changed), since the task was
+retagging, not re-verifying already-approved copy. `content/field-notes/
+editorial-state.json` has the current per-category counts and a `knownGaps` list.
+January, April, and June 2025, and all of 2026, still have no dedicated retrospective
+research pass. Remaining work, in order:
 1. Research and write further historical batches (next: fill the remaining 2025 gaps,
    then 2026). Work in verified batches per `WEEKLY_EDITORIAL_PROMPT.md`'s
    historical-backfill steps, don't attempt a huge unsupervised pass — "complete 2025
