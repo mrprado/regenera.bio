@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { getLatestBySystem } from "@/lib/fieldNotes";
-import type { SystemName } from "@/lib/fieldNotesTaxonomy";
+import { getLatestByCategory } from "@/lib/fieldNotes";
+import type { CategoryName } from "@/lib/fieldNotesTaxonomy";
 
-/** Small, restrained teaser for the latest Field Note in a given system.
+/** Small, restrained teaser for the latest Field Note in a given category.
  *  Renders nothing if there isn't one yet, so it's safe to drop into any
  *  page without a fallback check at the call site. */
-export default function FromFieldNotes({ system }: { system: SystemName }) {
-  const post = getLatestBySystem(system);
+export default function FromFieldNotes({ category }: { category: CategoryName }) {
+  const post = getLatestByCategory(category);
   if (!post) return null;
 
   return (

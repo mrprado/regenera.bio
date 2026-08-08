@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { POSTS, getRelatedPosts, displayDate, isRetrospective } from "@/lib/fieldNotes";
-import { SYSTEM_COLOR_VAR } from "@/lib/fieldNotesTaxonomy";
+import { CATEGORY_COLOR_VAR } from "@/lib/fieldNotesTaxonomy";
 import FieldNoteCard from "@/components/FieldNoteCard";
 
 export function generateStaticParams() {
@@ -50,7 +50,7 @@ export default function FieldNotePage({ params }: { params: { slug: string } }) 
       name: "Regenera Advisory",
       url: "https://regenera.bio"
     },
-    about: post.system,
+    about: post.category,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `https://regenera.bio/field-notes/${post.slug}`
@@ -67,9 +67,9 @@ export default function FieldNotePage({ params }: { params: { slug: string } }) 
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
               <span
                 aria-hidden="true"
-                style={{ width: 6, height: 6, borderRadius: "50%", background: `var(${SYSTEM_COLOR_VAR[post.system]})`, display: "inline-block" }}
+                style={{ width: 6, height: 6, borderRadius: "50%", background: `var(${CATEGORY_COLOR_VAR[post.category]})`, display: "inline-block" }}
               />
-              {post.system} &middot; {post.lens}
+              {post.entryType} &middot; {post.category} &middot; {post.lens}
             </span>
           </div>
           <h1>{post.title}</h1>

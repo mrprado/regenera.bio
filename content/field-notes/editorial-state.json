@@ -1,0 +1,49 @@
+{
+  "_comment": "Internal editorial tracking, not rendered anywhere. Prevents mechanical repetition in the ongoing weekly workflow described in WEEKLY_EDITORIAL_PROMPT.md. Hand-seeded from the state of lib/fieldNotes.ts at the taxonomy rearchitecture; a future editorial run should update this file as part of its own publish step, not just read it.",
+  "lastPublished": "2026-08-08",
+  "lastCategory": "Orbital & Environmental Intelligence",
+  "recentCategories": [
+    "Regenerative Agriculture",
+    "Community & Human Health",
+    "Regenerative Agriculture",
+    "Natural Capital & Environmental Markets",
+    "Capital Markets & Real Assets",
+    "Energy",
+    "Water Systems",
+    "Orbital & Environmental Intelligence"
+  ],
+  "recentTopics": [
+    "Farmland transition finance and soil carbon (Farmland LP / Microsoft)",
+    "Mission 300 institutional coordination in Africa",
+    "OP2B regenerative agriculture transition finance report",
+    "COP16 Cali Fund and biodiversity finance",
+    "COP29 New Collective Quantified Goal on climate finance",
+    "BNEF 2024 battery price survey",
+    "IFC performance-linked loan to Sabesp",
+    "Sentinel-1C/2C rebuilding Europe's Earth observation baseline"
+  ],
+  "nextPreferredWindow": "Not scheduled. No autonomous publishing is configured for this site; the next entry should be selected and published manually (or by an explicitly authorized run) per WEEKLY_EDITORIAL_PROMPT.md.",
+  "monthlyCount": {
+    "2026-08": 10
+  },
+  "categoryCountsToDate": {
+    "Capital Markets & Real Assets": 3,
+    "Energy": 5,
+    "Waste & Circular Materials": 2,
+    "Water Systems": 3,
+    "Land & Due Diligence": 2,
+    "Regenerative Agriculture": 3,
+    "Food Systems": 0,
+    "Real Estate & Built Environment": 4,
+    "Materials & Embodied Carbon": 1,
+    "Mobility & Infrastructure": 1,
+    "Natural Capital & Environmental Markets": 2,
+    "Community & Human Health": 2,
+    "Orbital & Environmental Intelligence": 3
+  },
+  "knownGaps": [
+    "Food Systems has zero primary-category entries (only appears as a secondary category twice). Highest-priority gap for the next batch.",
+    "Materials & Embodied Carbon and Mobility & Infrastructure each have only 1 entry against a ~2/year directional target.",
+    "Historical archive (archiveDate-tagged entries) currently covers only July-December 2024. 2025 and all of 2026 have not been retrospectively researched against primary sources, those 22 entries were migrated from the pre-rearchitecture taxonomy without new fact-checking."
+  ]
+}

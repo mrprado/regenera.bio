@@ -7,6 +7,7 @@
   --t-mid:#4b5445; --t-soft:#7b8672; --t-pale:#a9b1a1;
   --gold:#c9a84c; --gold-dim:#8b7333;
   --terra:#b4693e; --water:#5a86a8; --food:#6f9459; --human:#a85a5a; --urban:#7d8894; --orbit:#8a76a8;
+  --capital:#3f4d63; --waste:#8c6f3d; --agri:#7d8a4a; --materials:#a0805c; --mobility:#4a7f8c; --natcap:#4f7a52;
   --line:rgba(38,50,31,0.13); --line-lt:rgba(201,168,76,0.1);
   --serif:var(--font-serif),Georgia,serif;
   --sans:var(--font-sans),system-ui,sans-serif;
@@ -225,7 +226,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .jcard:hover{border-color:rgba(38,50,31,0.3)}
 .jcard img{width:100%;height:160px;object-fit:cover;display:block}
 .jcard .jbody{padding:1.3rem 1.4rem 1.5rem}
-.jcard .jmeta{display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:600;letter-spacing:0.11em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:0.7rem}
+.jmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:9px;font-weight:600;letter-spacing:0.11em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:0.7rem}
 .jcard .jtheme{color:var(--sage)}
 .jcard .jt{font-family:var(--serif);font-size:1.08rem;font-weight:500;line-height:1.26;margin-bottom:0.55rem}
 .jcard .jd{font-size:12px;font-weight:300;color:var(--t-mid);line-height:1.62;flex:1}

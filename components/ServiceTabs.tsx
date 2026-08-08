@@ -81,7 +81,7 @@ export default function ServiceTabs({ initial = "energy" as TabId }: { initial?:
               Discuss a Project <span className="arr">&rarr;</span>
             </Link>
           </div>
-          <FromFieldNotes system="Energy & Waste" />
+          <FromFieldNotes category="Energy" />
         </div>
       )}
 

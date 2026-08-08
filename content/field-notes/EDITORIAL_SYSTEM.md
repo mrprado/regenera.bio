@@ -2,127 +2,214 @@
 
 This is the standing reference for anyone (human or AI agent) writing, editing,
 or publishing Regenera Field Notes. It is self-contained: you should not need
-the original rebuild brief to produce a compliant article once you've read
-this file, `SOURCES.md`, and `WEEKLY_EDITORIAL_PROMPT.md`.
+any external brief to produce a compliant article once you've read this file,
+`SOURCES.md`, and `WEEKLY_EDITORIAL_PROMPT.md`.
+
+**Taxonomy note**: this document describes the 13-category taxonomy adopted
+on explicit user direction, replacing an earlier 7-system model. See
+CLAUDE.md for the migration rationale and mapping if you're trying to
+understand why an older commit or an external brief references different
+category names.
 
 ## What Field Notes is
 
 Field Notes is the intelligence and research layer of Regenera Advisory, not
 a news feed, blog, or marketing publication. Regenera operates where systems,
-capital, and place converge — land, soil, water, agriculture, food systems,
-renewable energy, waste, circular materials, real estate, infrastructure,
-natural capital, environmental markets, community systems, human health,
-Earth observation, environmental intelligence, project delivery, and capital
-strategy. Field Notes exists to demonstrate that these are not isolated
+capital, and place converge, land, infrastructure, development, agriculture,
+real assets, natural resources, communities, environmental systems, and
+capital. Field Notes exists to demonstrate that these are not isolated
 sectors: a solar project is a land story, a grid story, and often an
 agriculture story at once.
 
-**Editorial thesis test** — before writing anything, ask: *does this
-development change how a place, project, asset, infrastructure system, or
-living system should be understood, financed, designed, operated, or
-measured?* If yes, it's a candidate. If it's just "green news," it isn't.
+**Editorial thesis test**, before writing anything, ask: *does this
+development change how a place, project, asset, resource system,
+infrastructure system, or productive landscape should be understood,
+financed, designed, diligenced, developed, operated, or measured?* If yes,
+it's a candidate. If it's just "green news," it isn't.
 
-**Differentiation** — Regenera does not compete with RFSI on agriculture
-news, IEA on energy data, Infrastructure Investor on fund news, NASA on
-satellite science, or real-estate media on property news. The product is
-connecting the systems those outlets cover in isolation.
+**Differentiation**, Regenera does not compete with RFSI on agriculture news,
+IEA on energy data, Infrastructure Investor on fund news, NASA on satellite
+science, or real-estate media on property news. The product is connecting
+the systems those outlets cover in isolation. An agricultural story may also
+be a land, water, energy, finance, health, or infrastructure story. A solar
+development may also be a land, grid, water, or community story. That
+systems-level interpretation is the editorial product, not a replacement for
+sector-specific coverage.
 
 ## Taxonomy
 
-Defined in `lib/fieldNotesTaxonomy.ts`. Do not invent new category strings —
-add them there first if the taxonomy genuinely needs to grow.
+Defined in `lib/fieldNotesTaxonomy.ts`. Do not invent new category, lens, or
+entry-type strings inline, add them there first if the taxonomy genuinely
+needs to grow.
 
-**Primary system** (exactly one per article, required):
-Land & Soil · Water · Energy & Waste · Food Systems · Community & Health ·
-Built Environment · Orbital Intelligence
+**Primary category** (exactly one per article, required):
 
-**Secondary system** (optional, at most one): use when a development
-genuinely bridges two systems (e.g. agrivoltaics: Land & Soil primary,
-Energy & Waste secondary).
+1. **Capital Markets & Real Assets**, infrastructure capital, project
+   finance, private credit, institutional capital, pension funds, family
+   offices, development finance, blended finance, transition finance,
+   underwriting, real-asset transactions.
+2. **Energy**, utility-scale and distributed solar, wind, battery storage,
+   grids, transmission, interconnection, power markets, microgrids,
+   industrial energy, renewable fuels, EPC. Waste is not included here.
+3. **Waste & Circular Materials**, waste-to-energy, municipal and industrial
+   waste, organic waste, resource recovery, anaerobic digestion, recycling,
+   circular materials, biochar, recovered feedstocks. Energy produced from
+   waste may cross-reference Energy as a secondary category, but Waste
+   remains primary when the underlying system begins with waste/feedstock.
+4. **Water Systems**, groundwater, aquifers, watersheds, municipal water,
+   wastewater, reuse, irrigation, stormwater, desalination, agricultural and
+   industrial water, hydrological risk. Core thesis: water is an
+   underwriting variable.
+5. **Land & Due Diligence**, land acquisition, suitability, title, land-use
+   planning, site selection, environmental diligence, zoning, land value,
+   carrying capacity, landscape analysis. Regenerative agriculture is a
+   separate category, not folded in here.
+6. **Regenerative Agriculture**, soil health and biology, farmland,
+   transition finance, agricultural insurance, agroforestry, agrivoltaics,
+   regenerative grazing, crop systems, farmer economics, biological inputs,
+   ag technology, nutrient management, soil carbon, farm energy and water.
+   Core thesis: soil is productive infrastructure.
+7. **Food Systems**, what happens beyond primary production: processing,
+   milling, storage, cold chain, logistics, aggregation, regional food
+   infrastructure, procurement, ingredient systems, food supply chains,
+   Scope 3 agricultural sourcing. Cross-references Regenerative Agriculture
+   frequently but stays distinct.
+8. **Real Estate & Built Environment**, regenerative development,
+   sustainable real estate, master planning, districts, district energy and
+   water, adaptive reuse, public realm, net-zero development, real-estate
+   resilience.
+9. **Materials & Embodied Carbon**, timber, mass timber, concrete, steel,
+   hemp, bamboo, agricultural fibers, low-carbon and circular construction
+   materials, embodied carbon, material supply chains. Kept separate from
+   Real Estate because materials have their own industrial and capital
+   systems.
+10. **Mobility & Infrastructure**, EV charging, transport infrastructure,
+    mobility systems, logistics infrastructure, ports, roads, rail,
+    infrastructure corridors, land-use implications of mobility.
+11. **Natural Capital & Environmental Markets**, biodiversity, ecosystem
+    services, restoration, forestry, carbon and biodiversity markets,
+    natural infrastructure, environmental credits, conservation finance. Do
+    not treat all nature projects as regenerative automatically.
+12. **Community & Human Health**, public-health infrastructure, food and
+    health, agriculture and health, energy reliability for health
+    facilities, environmental health, regional resilience, rural economies,
+    food access. Not a general wellness blog.
+13. **Orbital & Environmental Intelligence**, Earth observation, satellite
+    systems, remote sensing, environmental monitoring, groundwater
+    intelligence, land-use change, methane and wildfire detection,
+    agricultural and vegetation monitoring, MRV, asset intelligence.
 
-**Analytical lens** (exactly one, required):
-Capital & Markets · Asset Economics · Project Delivery · Policy & Standards ·
-Technology & Infrastructure · Measurement & Verification · Resilience & Risk
-· Systems Design
+**Secondary category** (optional, at most one): use when a development
+genuinely bridges two categories (e.g. agrivoltaics: Regenerative
+Agriculture primary, Energy secondary).
 
-**Region** (optional): Global · North America · Latin America & Caribbean ·
-Europe · Africa · Asia-Pacific · Middle East, optionally refined with a
-`country` string. Geography is metadata, not primary navigation — never make
+**Analytical lens** (exactly one, required), tells the reader *how* Regenera
+is examining the development, distinct from *what system* it concerns:
+Capital & Finance, Asset Economics, Markets & Supply Chains, Project
+Delivery, Policy & Regulation, Technology & Infrastructure, Measurement &
+Verification, Resilience & Risk, Systems Design.
+
+**Entry type** (exactly one, required), see "Editorial formats" below.
+
+**Region** (optional): Global, North America, Latin America & Caribbean,
+Europe, Africa, Asia-Pacific, Middle East, optionally refined with a
+`country` string. Geography is metadata, not primary navigation, never make
 country filters visually dominant.
 
 **Tags** (optional, unlimited): support search and related-post scoring.
-Never display a full tag list to a reader; they're invisible plumbing.
+Never display a full tag list to a reader, they're invisible plumbing.
 
-## Article structure
+## Editorial formats (entry types)
 
-Not every heading needs to render on every article (readability wins), but
-the underlying logic should be present:
+Do not force every article into identical headings, that reads as
+formulaic and AI-generated. Use the same analytical rigor internally while
+allowing visible editorial variety across these seven formats:
 
-1. **The Signal** — what happened. Concrete: a transaction, a regulation, a
-   dataset, a scientific finding. Dates, currencies, no promotional language.
-2. **Why It Matters** — the structural significance (economics, asset
-   durability, operational risk, bankability, regulatory exposure), not a
-   restatement of the announcement.
-3. **The System Connection** — what adjacent physical systems this touches
-   and how (see examples in the taxonomy section of the original brief, or
-   just reason it through: agriculture touches soil/water/processing/energy/
-   food supply/health; solar touches land/grid/storage/industrial load/
-   water; waste touches feedstock/materials/energy/municipal systems/land
-   use; real estate touches water/mobility/energy/materials/community/
-   ecology).
-4. **Capital Implication** — what becomes more or less investable, where
-   risk moves, what capital structure might fit. See the compliance
-   constraints below — this section is analysis, never a recommendation.
-5. **Development Implication** — what changes for developers, asset owners,
-   municipalities, operators, landowners: permitting, land, water, feedstock,
-   grid, logistics, construction, offtake, community integration.
-6. **What We Are Watching** — 2-4 specific forward-looking indicators.
-7. **Sources reviewed** — see sourcing rules below. Every article needs one.
+- **Field Note**, major original Regenera thesis or structural analysis.
+  Typical length 800 to 1,500 words, occasionally deeper up to ~2,500.
+- **Market Signal**, a significant development worth interpreting but not a
+  full essay. 250 to 500 words.
+- **Capital Note**, a fund, financing structure, transaction, lending
+  product, institutional allocation, or investment vehicle. 400 to 800
+  words.
+- **Policy Note**, regulation, government policy, standard, legislation, or
+  permitting reform. 400 to 900 words.
+- **Data Note**, scientific research, market data, a performance study, a
+  new dataset, new empirical evidence. 400 to 800 words.
+- **Case Study**, a project, company, landscape, financing mechanism, or
+  implementation model, with lessons extracted. 700 to 1,300 words.
+- **Systems Brief**, the monthly synthesis. 1,500 to 3,000 words.
+
+Article structure should vary by format and subject rather than repeat a
+fixed template. A Capital Note might use "The transaction / What the
+structure tells us / Where risk sits / What we are watching." A Data Note
+might use "What the data shows / What it does not show / Why it matters for
+the asset / What evidence comes next." A Policy Note might use "What
+changed / Who is affected / What implementation changes / What remains
+unresolved." A Case Study might use "The model / How the system works / Who
+pays / Where value is created / Where the model could fail / What is
+transferable." A Field Note may use fully custom headings. Visible
+consistency belongs in sourcing, quality, typography, and metadata, not in
+rigid headings.
+
+Internally, every article should still be able to answer: what actually
+happened, what primary source verifies it, why is it significant, what
+category and secondary category are affected, what changes economically,
+operationally, and from a development and capital perspective, what remains
+unresolved, and what should be watched next. That internal discipline does
+not require exposing all of it as visible section headers on every piece.
 
 ## Data model
 
-`lib/fieldNotes.ts` — the `FieldNote` interface. Key fields beyond the
-obvious: `deck` (the teaser/dek), `archiveDate`/`eventDate` (retrospective
-research only — see below), `keySignal` through `whatWeAreWatching` map to
-the six structural sections above, `sources` is an array of `{label, url}`.
-All of the structured fields are optional so legacy or lighter posts can
-render without them; the article template only shows a section when its
-field is populated.
+`lib/fieldNotes.ts`, the `FieldNote` interface. Key fields beyond the
+obvious: `deck` (the teaser/dek), `entryType`, `category`/`secondaryCategory`,
+`archiveDate`/`eventDate` (retrospective research only, see below),
+`keySignal` through `whatWeAreWatching` map to the structural analysis an
+article should internally answer (see above), `sources` is an array of
+`{label, url}`. `metaTitle`/`metaDescription`/`canonicalUrl` are optional
+overrides for SEO, when absent the page falls back to `title`/`deck` and the
+default `/field-notes/[slug]` canonical. All of the structured fields beyond
+the required ones are optional so legacy or lighter posts can render without
+them, the article template only shows a section when its field is populated.
 
 ## Voice
 
-Informed, calm, precise, observational, commercially/technically/
-ecologically literate, independent, measured. Short declarative sentences
-are fine. Not activist, promotional, alarmist, generic-ESG, or
+Precise, analytical, measured, independent, globally aware, technically
+informed, commercially informed, environmentally informed. Short declarative
+sentences are fine. Not activist, promotional, alarmist, generic-ESG, or
 futuristic-breathless.
 
-Prefer: *"The more important constraint is…" / "From an underwriting
-perspective…" / "For developers, the relevant question is…" / "The economics
-change when…"*
+Prefer: *"The more important signal is…" / "The constraint sits
+elsewhere." / "For asset owners, the relevant question is…" / "The economics
+change when…" / "From a development perspective…" / "The financing structure
+matters because…" / "What appears to be a technology issue is also a land
+issue." / "The underlying asset remains…"*
 
-Avoid: *"This groundbreaking initiative…" / "This game-changing
-innovation…" / "This incredible milestone…"* — unless directly quoting a
-source, and quotations should be rare.
+Avoid: *"groundbreaking" / "game-changing" / "revolutionary" /
+"incredible" / "transformative"* unless genuinely justified or directly
+quoting a source, and quotations should be rare.
 
-No em-dashes or en-dashes anywhere (site-wide rule, not Field-Notes-specific
-— use commas or periods). No prose semicolons.
+No em-dashes or en-dashes anywhere (site-wide rule, not Field-Notes-specific,
+use commas or periods). No prose semicolons.
 
 ## Never do this
 
 - **Never fabricate.** No invented figures, transactions, quotes, sources,
   dates, or Regenera involvement in something Regenera wasn't involved in.
   If a claim can't be verified, don't publish it.
-- **Never blur financial terms.** *Target* (hoped-for raise) ≠ *commitment*
-  (formally committed) ≠ *first close* ≠ *final close* ≠ *AUM* ≠ *project
-  value* (estimated cost) ≠ *financing* (debt/equity/facility) ≠ *grant*
-  (non-repayable) ≠ *investment* (capital actually invested) ≠ *pipeline*
-  (opportunities under consideration) ≠ *deployed capital*.
+- **Never blur financial terms.** *Target* (hoped-for raise) is not
+  *commitment* (formally committed) is not *first close* is not *final
+  close* is not *AUM* is not *project value* (estimated cost) is not
+  *financing* (debt/equity/facility) is not *grant* (non-repayable) is not
+  *investment* (capital actually invested) is not *pipeline* (opportunities
+  under consideration) is not *deployed capital*. Do not describe a $1
+  billion target as a $1 billion fund if only $200 million has closed.
 - **Never call something regenerative without explaining the mechanism.**
-  Sustainability / ESG / nature-positive / climate-smart / organic /
-  low-carbon / circular are not automatically regenerative. Ask: what is
-  actually regenerating — soil, water systems, ecology, biodiversity,
-  community systems, productive capacity, economic resilience? If you can't
-  answer that, don't use the word.
+  Sustainability, ESG, nature-positive, climate-smart, organic, low-carbon,
+  and circular are not automatically regenerative. Ask what is actually
+  being restored or strengthened, soil function, ecological function, the
+  water cycle, biodiversity, productive capacity, community resilience,
+  local economic capacity. If you can't answer that, don't use the word.
 - **Never imply regulated financial activity.** Regenera is not a
   broker-dealer, investment adviser, underwriter, placement agent, fund
   manager, or asset manager, and does not hold or manage client or investor
@@ -133,12 +220,12 @@ No em-dashes or en-dashes anywhere (site-wide rule, not Field-Notes-specific
 - **Never weaken the Important Notice.** It stays verbatim wherever it
   appears (`components/Footer.tsx`, `components/LegalModalProvider.tsx`).
 - **Never backdate a publication.** `date` is the actual publication month,
-  always. Analyzing a 2025 event in an article published in 2026 is fine and
-  expected; claiming the article itself was published in 2025 is not.
+  always. Analyzing a 2024 event in an article published in 2026 is fine and
+  expected, claiming the article itself was published in 2024 is not.
 - **Never silently rewrite a material claim.** If a published article's
-  factual claims change materially, set `updatedDate` and show the "Updated"
-  notice. Typo fixes don't need this.
-- **No fluffy sustainability language** — "saving the planet," "greener
+  factual claims change materially, set `updatedDate` and show the
+  "Updated" notice. Typo fixes don't need this.
+- **No fluffy sustainability language**, "saving the planet," "greener
   future," "better world," "planet positive," "purpose-driven
   transformation," etc. never appear.
 
@@ -146,19 +233,22 @@ No em-dashes or en-dashes anywhere (site-wide rule, not Field-Notes-specific
 
 Full watchlist in `SOURCES.md`. Priority order when verifying a claim:
 
-1. **Primary** — governments, regulators, central banks, grid/system
+1. **Primary**, governments, regulators, central banks, grid/system
    operators, ministries, legislation, court decisions, company filings and
    official releases, MDBs/DFIs, standards bodies, scientific journals,
    universities, official datasets (World Bank, IFC, IEA, IRENA, FAO, IFAD,
    European Commission, EIB, EBRD, IDB, ADB, AfDB, Green Climate Fund, NASA,
    ESA, Copernicus, USGS, USDA, national regulators/agencies).
-2. **Institutional research** — WBCSD, PRI, TNFD, Forest Trends, The Nature
+2. **Institutional research**, WBCSD, PRI, TNFD, Forest Trends, The Nature
    Conservancy, WEF, recognized real-asset managers, universities.
-3. **Specialist trade media** — AgFunderNews, RFSI, PV Magazine, Utility
-   Dive, Recharge, Carbon Pulse, Infrastructure Investor, New Private
-   Markets.
-4. **Discovery only** — general news, newsletters, LinkedIn, social,
-   aggregators. Use these to *find* stories, then verify against tier 1-3.
+3. **Specialist trade media**, RFSI, AgFunderNews, Infrastructure Investor,
+   New Private Markets, Utility Dive, PV Magazine, Carbon Pulse, Recharge,
+   specialist real-estate and water publications.
+4. **Discovery only**, general news, newsletters, LinkedIn, social,
+   aggregators, including RFSI when used as a discovery tool rather than as
+   the primary source itself. Use these to *find* stories, then verify
+   against tier 1 to 3. Use original RFSI research or interviews directly
+   when RFSI itself is the primary source of that material.
 
 **Fact-check rule**: never publish a number sourced only from a secondary
 newsletter (fund size, first/final close, AUM, investment, project cost, MW,
@@ -176,8 +266,10 @@ Rules specific to this:
 - Set `archiveDate` (YYYY-MM, the period being analyzed) and, when known,
   `eventDate` (YYYY-MM-DD). `date` remains the true publication month.
 - Archive browsing sorts by `archiveDate` when present, `date` otherwise.
-  JSON-LD `datePublished` always uses `date` — never claim earlier
-  publication than actually happened.
+  JSON-LD `datePublished` always uses `date`, never claim earlier
+  publication than actually happened. The visible archive organizes
+  research chronologically by the historical period being analyzed, without
+  ever implying the page itself existed before it did.
 - Use hindsight explicitly and transparently: *"Viewed two years later, the
   more important signal was not the fund announcement itself but the type of
   institutional capital that subsequently entered the market."* Distinguish
@@ -191,31 +283,38 @@ Rules specific to this:
 ## Related posts
 
 Algorithmic (`getRelatedPosts` in `lib/fieldNotes.ts`), not "3 latest."
-Scored by shared primary system (+3), shared secondary/primary overlap (+2),
-shared lens (+1), shared tags (+1 each). Top 3, capped.
+Scored by shared primary category (+3), shared secondary/primary overlap
+(+2), shared lens (+1), shared tags (+1 each). Top 3, capped.
 
-## Content mix
+## Publication cadence and category rotation
 
-Roughly across a month: 2 capital-flow, 2 policy/regulation, 2
-asset-economics, 2 technology/infrastructure, 1 verification/data, 1
-project-delivery, 1 community/health, 1 systems-synthesis. Don't force these
-ratios rigidly if the actual developments that month don't support it, but
-don't publish three similar stories in a row either.
+See `WEEKLY_EDITORIAL_PROMPT.md` for the full ongoing weekly workflow. In
+brief: target roughly one substantive entry every 5 to 9 days (not a
+mechanical 7-day clock), avoid more than two consecutive posts from the same
+primary category, and aim for at least five different categories across any
+rolling eight-post window.
 
 ## Monthly Systems Brief
 
-At the end of each month, publish "The Regenera Systems Brief — [Month
-Year]" with the subtitle *"The developments shaping land, infrastructure,
-natural capital and real assets this month."* Structure: one short section
-per system (Land & Soil, Water, Energy & Waste, Food Systems, Community &
-Health, Built Environment, Orbital Intelligence), then Capital Flows, What
-Connects Them, What We Are Watching Next. This is the primary monthly
-newsletter anchor.
+Approximately once per month, publish "The Regenera Systems Brief, [Month
+Year]" as a Systems Brief entry. Structure: one short section per category
+that actually had significant developments that month (do not force an
+empty section merely because the taxonomy contains it), then Capital Flows,
+What Connects Them, What We Are Watching Next. This is the primary monthly
+newsletter anchor and may replace that week's normal entry.
 
 ## Cross-linking
 
 `components/FromFieldNotes.tsx` renders a single restrained "From Field
-Notes" module pointing to the latest post in a given system. It's currently
-placed on the Services page's Energy tab. Drop it into other pages the same
-way (`<FromFieldNotes system="Water" />` etc.) where it's genuinely relevant
-— sparingly, one per page, never a feed.
+Notes" module pointing to the latest post in a given category. It's
+currently placed on the Services page's Energy tab
+(`<FromFieldNotes category="Energy" />`). Drop it into other pages the same
+way where it's genuinely relevant, sparingly, one per page, never a feed.
+
+## Author and legal positioning
+
+Use "Regenera" as editorial author unless an actual named author is
+explicitly provided. Do not invent staff writers. Field Notes is
+informational research, never investment recommendations. Preserve
+Regenera's existing legal notice and practice-model positioning (see
+CLAUDE.md's compliance-copy rule) on every article.
