@@ -1,44 +1,45 @@
 {
   "_comment": "Internal editorial tracking, not rendered anywhere. Prevents mechanical repetition in the ongoing weekly workflow described in WEEKLY_EDITORIAL_PROMPT.md. Hand-seeded from the state of lib/fieldNotes.ts at the taxonomy rearchitecture; a future editorial run should update this file as part of its own publish step, not just read it.",
   "lastPublished": "2026-08-08",
-  "lastCategory": "Energy",
+  "lastCategory": "Land & Regenerative Agriculture",
   "recentCategories": [
-    "Water Systems",
-    "Orbital & Environmental Intelligence",
     "Food Systems & Community Health",
     "Waste & Circular Materials",
     "Capital Markets & Real Assets",
     "Real Estate & Built Environment",
     "Land & Regenerative Agriculture",
-    "Energy"
+    "Energy",
+    "Energy",
+    "Waste & Circular Materials",
+    "Land & Regenerative Agriculture"
   ],
   "recentTopics": [
-    "ACCIONA Casablanca desalination plant financial close (renewable-powered)",
-    "MethaneSAT loss of contact and mission end",
-    "FDA Food Traceability Rule compliance deadline extension",
     "EU revised Waste Framework Directive textile EPR",
     "Brookfield Global Transition Fund II record close",
     "GRESB 2025 Real Estate Benchmark record participation",
     "USDA Regenerative Pilot Program ($700M)",
-    "US battery storage installations record 2025 (ACP/Wood Mackenzie)"
+    "US battery storage installations record 2025 (ACP/Wood Mackenzie)",
+    "Solar cell AD/CVD duties on Cambodia/Malaysia/Thailand/Vietnam",
+    "Microsoft/Gaia ProjectCo waste-to-energy carbon capture offtake",
+    "Nuveen's first major institutional farmland REIT"
   ],
   "nextPreferredWindow": "Not scheduled. No autonomous publishing is configured for this site; the next entry should be selected and published manually (or by an explicitly authorized run) per WEEKLY_EDITORIAL_PROMPT.md.",
   "monthlyCount": {
-    "2026-08": 19
+    "2026-08": 22
   },
   "categoryCountsToDate": {
     "Capital Markets & Real Assets": 6,
-    "Energy": 6,
-    "Waste & Circular Materials": 3,
+    "Energy": 7,
+    "Waste & Circular Materials": 4,
     "Water Systems": 4,
-    "Land & Regenerative Agriculture": 6,
+    "Land & Regenerative Agriculture": 7,
     "Food Systems & Community Health": 4,
     "Real Estate & Built Environment": 7,
     "Orbital & Environmental Intelligence": 4
   },
   "knownGaps": [
-    "Waste & Circular Materials remains the thinnest category (3 entries) against its ~4/year directional target, though it's proportionally closer than before.",
-    "Historical archive (archiveDate-tagged entries) now covers July-October 2024 and May/June-December 2025 (8 of 12 2025 months still gap-filled only by non-retrospective entries: January-April 2025 and Q3 2025 outside the specific dates covered have no dedicated retrospective piece yet). November-December 2024 and all of 2026 have not been retrospectively researched at all.",
-    "The August 2025 energy-storage entry uses only ACP/Wood Mackenzie's figures (18.9 GW, 52%); a competing SEIA/Benchmark Mineral Intelligence report gave different figures (57.6 GWh, 30%) for what may be a different scope. Do not blend the two reports' numbers in a future piece without resolving why they diverge."
+    "Water Systems, Food Systems & Community Health, and Orbital & Environmental Intelligence are now the thinnest categories (4 entries each) against their ~4/year (Water, Food&Health) or ~3/year (Orbital) directional targets, meaning Orbital is proportionally the fullest despite the same raw count.",
+    "Historical archive (archiveDate-tagged entries) now covers July-December 2024 (all months) and May, June/July, August, September, October, and December 2025. January-April 2025 and November 2025 still have no dedicated retrospective piece. All of 2026 has not been retrospectively researched at all.",
+    "The 2025-12 energy-storage entry uses only ACP/Wood Mackenzie's figures (18.9 GW, 52%); a competing SEIA/Benchmark Mineral Intelligence report gave different figures (57.6 GWh, 30%) for what may be a different scope. Do not blend the two reports' numbers in a future piece without resolving why they diverge."
   ]
 }
