@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import FromFieldNotes from "@/components/FromFieldNotes";
 
 type TabId = "energy" | "realestate" | "readiness" | "capital";
 
@@ -80,6 +81,7 @@ export default function ServiceTabs({ initial = "energy" as TabId }: { initial?:
               Discuss a Project <span className="arr">&rarr;</span>
             </Link>
           </div>
+          <FromFieldNotes system="Energy & Waste" />
         </div>
       )}
 
