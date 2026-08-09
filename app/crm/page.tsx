@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentStaff } from "@/lib/crm/staff";
+import { checkStaffAccess } from "@/lib/crm/staff";
 import { createClient } from "@/lib/supabase/server";
 import SignOutButton from "./SignOutButton";
 
@@ -31,10 +31,16 @@ async function getRecentOpportunities() {
 }
 
 export default async function CrmDashboardPage() {
-  const staff = await getCurrentStaff();
-  if (!staff) {
+  const access = await checkStaffAccess();
+  if (access.state === "no_session") {
     redirect("/crm/login");
   }
+  if (access.state === "not_authorized") {
+    // Category E: a real Supabase Auth session exists (the magic link
+    // worked), but there's no matching active `staff` row for it.
+    redirect("/crm/login?error=not_authorized");
+  }
+  const staff = access.staff;
 
   const [counts, recent] = await Promise.all([getCounts(), getRecentOpportunities()]);
 

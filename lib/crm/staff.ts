@@ -7,18 +7,24 @@ export interface StaffRecord {
   role: "admin" | "staff";
 }
 
-// Returns the current active staff record, or null if there is no session,
-// or the session exists but has no matching active `staff` row. RLS already
+export type StaffCheckResult =
+  | { state: "authorized"; staff: StaffRecord }
+  | { state: "no_session" }
+  | { state: "not_authorized" };
+
+// Distinguishes "no session at all" from "session exists but no matching
+// active staff row" (diagnostic category E), so callers can redirect with a
+// specific reason instead of a generic bounce back to login. RLS already
 // enforces this at the database level for every CRM table; this helper is
 // for the UI (what to render, where to redirect), not the security boundary
 // itself, see docs/crm/SECURITY_MODEL.md.
-export async function getCurrentStaff(): Promise<StaffRecord | null> {
+export async function checkStaffAccess(): Promise<StaffCheckResult> {
   const supabase = createClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
 
-  if (!user) return null;
+  if (!user) return { state: "no_session" };
 
   const { data: staff } = await supabase
     .from("staff")
@@ -27,5 +33,13 @@ export async function getCurrentStaff(): Promise<StaffRecord | null> {
     .eq("is_active", true)
     .maybeSingle();
 
-  return staff ?? null;
+  if (!staff) return { state: "not_authorized" };
+  return { state: "authorized", staff };
+}
+
+// Convenience wrapper for callers that only need the staff record or null,
+// kept for anywhere a full StaffCheckResult would be unnecessary detail.
+export async function getCurrentStaff(): Promise<StaffRecord | null> {
+  const result = await checkStaffAccess();
+  return result.state === "authorized" ? result.staff : null;
 }

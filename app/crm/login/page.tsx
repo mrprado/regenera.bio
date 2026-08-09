@@ -1,36 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function CrmLoginPage() {
+const CALLBACK_ERROR_MESSAGES: Record<string, string> = {
+  callback_failed: "The sign-in link could not be verified (category D: redirect/callback error). It may have expired, already been used, or been opened in a different browser than the one that requested it.",
+  not_authorized: "That account is not registered as active staff (category E: authorization error)."
+};
+
+function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackError = searchParams.get("error");
+
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
+  const [category, setCategory] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("sending");
     setError("");
+    setCategory(null);
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/crm`,
-        // No public signup: only an email that already has a Supabase Auth
-        // account (created by an admin) can request a sign-in link.
-        shouldCreateUser: false
+    try {
+      const res = await fetch("/api/crm/request-magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() })
+      });
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.ok) {
+        setStatus("error");
+        setCategory(data?.category ?? "app_error");
+        setError(data?.error || "Something went wrong sending the sign-in link.");
+        return;
       }
-    });
 
-    if (authError) {
+      setStatus("sent");
+    } catch {
+      // fetch itself threw: network/app-level failure, category A, never
+      // reached the server route at all.
       setStatus("error");
-      setError(authError.message);
-      return;
+      setCategory("app_error");
+      setError("Could not reach the server. Check your connection and try again.");
     }
-
-    setStatus("sent");
   }
 
   return (
@@ -39,6 +54,12 @@ export default function CrmLoginPage() {
       <p style={{ fontSize: 14, color: "var(--t-mid)", marginBottom: 32 }}>
         Internal access only. Enter an active staff email to receive a one-time sign-in link.
       </p>
+
+      {callbackError && CALLBACK_ERROR_MESSAGES[callbackError] && (
+        <p style={{ fontSize: 13, color: "var(--terra)", marginBottom: 20 }}>
+          {CALLBACK_ERROR_MESSAGES[callbackError]}
+        </p>
+      )}
 
       {status === "sent" ? (
         <p style={{ fontSize: 14 }}>
@@ -71,10 +92,30 @@ export default function CrmLoginPage() {
             {status === "sending" ? "Sending..." : "Send sign-in link"}
           </button>
           {status === "error" && (
-            <p style={{ fontSize: 13, color: "var(--terra)", marginTop: 10 }}>{error}</p>
+            <div style={{ marginTop: 10 }}>
+              <p style={{ fontSize: 13, color: "var(--terra)" }}>{error}</p>
+              {category && (
+                <p style={{ fontSize: 11.5, color: "var(--t-mid)", marginTop: 4 }}>
+                  Diagnostic category:{" "}
+                  {category === "smtp_error"
+                    ? "C, SMTP authentication error (Supabase → email provider). Check custom SMTP credentials in the Supabase dashboard, this is not an app bug."
+                    : category === "auth_api_error"
+                    ? "B, Supabase Auth API error."
+                    : "A, browser/app error."}
+                </p>
+              )}
+            </div>
           )}
         </form>
       )}
     </div>
+  );
+}
+
+export default function CrmLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }
