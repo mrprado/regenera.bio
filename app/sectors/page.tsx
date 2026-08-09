@@ -18,13 +18,16 @@ export default function SectorsPage() {
             <span>Sectors</span>
           </div>
           <h1>
-            Twelve sectors, <em>one method.</em>
+            Real systems. <em>Interconnected markets.</em>
           </h1>
           <p className="lede">
-            Regenera&apos;s four practices apply the same systemic method across twelve
-            sectors. Energy and waste remain distinct. Land, regenerative agriculture,
-            and food systems remain distinct. Sectors cross-link constantly in practice,
-            they are not collapsed here for convenience.
+            Regenera works across the physical systems that shape land, infrastructure,
+            resource use, asset performance, and long-term development value.
+          </p>
+          <p style={{ fontSize: 14.5, fontWeight: 300, color: "var(--t-mid)", lineHeight: 1.82, marginTop: "1rem" }}>
+            Each sector is approached on its own terms, while recognizing the
+            dependencies that connect energy, water, land, materials, communities,
+            infrastructure, and capital.
           </p>
         </div>
       </div>
