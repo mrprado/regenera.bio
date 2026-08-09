@@ -83,23 +83,23 @@ export const MANDATE_CATEGORIES: MandateCategory[] = [
         path: "realestate"
       },
       {
-        type: "Agriculture & Energy",
+        type: "Regenerative Land & Energy",
         title: "Regenerative Agriculture & Energy Integration",
-        description: "A land-use model combining commercial renewable energy generation with working farmland, soil restoration, water stewardship, habitat, and diversified income for the landowner and operator.",
-        location: "Confidential",
-        scale: "~100 acres, 10+ MW",
-        stage: "Planning",
-        role: "Agricultural planning, mixed land-use strategy, renewable energy integration, and development coordination.",
+        description: "A development concept being explored within a broader Yucatán Peninsula pipeline, combining renewable energy generation with productive agriculture, soil restoration, water stewardship, habitat, and diversified land use.",
+        location: "Yucatán Peninsula, Mexico",
+        scale: "Development concept",
+        stage: "Agriculture + energy",
+        role: "Land-use strategy, regenerative development planning, renewable-energy integration, agricultural systems planning, project structuring, and development coordination.",
         path: "realestate"
       },
       {
         type: "Urban & Built Environment",
         title: "Energy Integrated District",
-        description: "A mixed-use district designed around on-site renewable generation, resource efficiency, and climate-responsive infrastructure supporting low-carbon operation, planned as one coordinated system rather than separate components.",
-        location: "Confidential",
-        scale: "Mixed-use district",
-        stage: "Master planning",
-        role: "Master planning, energy and infrastructure integration, and coordination across architecture and mobility.",
+        description: "A mixed-use development concept integrating on-site renewable energy, resource-efficient infrastructure, water, mobility, landscape, buildings, and public space within a coordinated district strategy.",
+        location: "Yucatán Peninsula, Mexico",
+        scale: "Mixed-use development concept",
+        stage: "District planning",
+        role: "Development strategy, land-use planning, energy and infrastructure integration, sustainability strategy, development programming, and coordination across relevant technical disciplines.",
         path: "realestate"
       },
       {
