@@ -360,6 +360,40 @@ auth is ever used, sign-in here is magic-link only. It's a Dashboard → Authent
 a quick optional hardening step, don't treat it as blocking. `/crm` should now be
 genuinely reachable end to end: `/crm/login` → magic link → `/crm` dashboard.
 
+**Correction, 2026-08-09: that "reachable end to end" claim above was wrong, three
+separate bugs had to be found and fixed before it was actually true.** In order:
+(1) Supabase's default email sender is unusable for real delivery, fixed by
+configuring custom SMTP with Resend, documented in `AUTH_DIAGNOSTIC.md`. (2) The
+Resend domain wasn't verified yet, a `550` error, fixed once the user completed DNS
+verification. (3) **The real, subtle one**: `staff`'s own RLS SELECT policy queried
+`staff` from inside itself (`EXISTS (SELECT 1 FROM staff WHERE staff.id = auth.uid()
+...)`, written directly on the `staff` table), which Postgres correctly detects as
+infinite recursion and rejects. Because all 13 other CRM tables' policies also query
+`staff` to check membership, this broke RLS on every CRM table at once, not just
+`staff`. It surfaced as: magic link sends fine, login succeeds (a real Supabase Auth
+session gets created, confirmed in `auth` logs), but `/crm` reports "not registered
+as active staff" even though the `staff` row is genuinely correct, because the
+staff-membership query itself was erroring, and `checkStaffAccess()` was silently
+treating any query error the same as "no matching row" (fixed alongside this, it now
+logs the real error). **Fix**: `SECURITY DEFINER` helper functions
+(`is_active_staff()`, `is_active_admin()`, `supabase/migrations/
+20260809070732_fix_staff_rls_infinite_recursion.sql` +
+`20260809070816_restrict_staff_check_function_execute.sql`) bypass RLS on their own
+internal query, so checking staff membership no longer re-triggers the policy it's
+called from. **If any future CRM table needs a staff-gated policy, use
+`is_active_staff()`/`is_active_admin()`, never write the inline `EXISTS (SELECT 1
+FROM staff ...)` pattern again**, full detail in `docs/crm/SECURITY_MODEL.md`. Also
+found along the way and worth keeping: Supabase's Redirect URLs allowlist needs
+wildcard entries (`https://regenera.bio/**`, `https://www.regenera.bio/**`), not
+exact-path entries, since production traffic legitimately comes from both the apex
+and `www` host and an unmatched exact redirect silently falls back to the Site URL
+(home page) instead of erroring, which looked identical to "the link does nothing."
+The RLS recursion fix is applied and verified at the database level (policies
+recreated, security advisors clean, staff row confirmed correct), but **has not yet
+been confirmed by an actual successful end-to-end login** since this specific fix,
+the prior "should work now" claim in this file turned out to be wrong once already,
+don't repeat that mistake, verify a real login before updating this note further.
+
 **Update, 2026-08-08 (later still)**: the website buildout landed in one large session.
 Done: Services page rebuilt around the four practices (`/services`, tab IDs
 `systems`/`readiness`/`assets`/`capital`); 12 sector pages (`lib/sectors.ts`,

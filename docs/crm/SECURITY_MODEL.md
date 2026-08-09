@@ -44,11 +44,29 @@ to an active row in `staff`.
 
 - RLS is enabled on every CRM table, no exceptions, before it is ever
   populated with real data.
-- The baseline policy on every CRM table: `USING (EXISTS (SELECT 1 FROM
-  staff WHERE staff.id = auth.uid() AND staff.is_active))`. Refine per-table
-  only if a genuine need for row-level restriction emerges (e.g. a future
-  "only the owner or an admin can see this mandate" rule), don't add
-  complexity the business doesn't need yet.
+- The baseline policy on every CRM table now calls `is_active_staff()` (a
+  `SECURITY DEFINER` SQL function, `supabase/migrations/
+  20260809070732_fix_staff_rls_infinite_recursion.sql`), not an inline
+  `EXISTS (SELECT 1 FROM staff ...)`. **This is load-bearing, not a style
+  choice.** The original inline version caused a real production outage:
+  `staff`'s own SELECT policy queried `staff` from inside itself, which
+  Postgres correctly rejects as infinite recursion, and because every other
+  CRM table's policy also queries `staff`, the recursion broke RLS on all
+  14 CRM tables at once, not just `staff`. The user-visible symptom was the
+  CRM login flow completing successfully (a real Supabase Auth session got
+  created) but then reporting "not registered as active staff" even though
+  the `staff` row was correct, because the staff-membership query itself
+  was erroring out, and the app's own error handling at the time silently
+  treated any query error the same as "no matching row." Both bugs are
+  fixed: `lib/crm/staff.ts`'s `checkStaffAccess()` now logs the actual
+  Supabase error instead of swallowing it, and the RLS policies use the
+  SECURITY DEFINER function, which bypasses RLS on its own internal query
+  so it never re-triggers the policy it's being called from. If a new
+  staff-gated table is added, use `is_active_staff()` (or `is_active_admin()`
+  for admin-only writes), never rewrite the inline EXISTS pattern.
+- Refine per-table only if a genuine need for row-level restriction emerges
+  (e.g. a future "only the owner or an admin can see this mandate" rule),
+  don't add complexity the business doesn't need yet.
 - Do not rely on hiding `/crm` from navigation as a security measure. RLS is
   the boundary. The UI hiding is a courtesy, not a control.
 
