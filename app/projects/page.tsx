@@ -5,7 +5,7 @@ import ProjectTabs from "@/components/ProjectTabs";
 export const metadata: Metadata = {
   title: "Selected Mandates",
   description:
-    "Current and recent Regenera engagements across energy, real estate and land, and waste infrastructure."
+    "Current and recent engagements across energy, real estate and land, and waste infrastructure."
 };
 
 export default function ProjectsPage() {
@@ -21,7 +21,7 @@ export default function ProjectsPage() {
             Active work, shared <em>selectively.</em>
           </h1>
           <p className="lede">
-            Current and recent Regenera engagements across real assets, infrastructure, and
+            Current and recent engagements across real assets, infrastructure, and
             development. Further detail is shared following an introductory discussion.
           </p>
         </div>
