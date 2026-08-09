@@ -26,12 +26,27 @@ export async function checkStaffAccess(): Promise<StaffCheckResult> {
 
   if (!user) return { state: "no_session" };
 
-  const { data: staff } = await supabase
+  const { data: staff, error } = await supabase
     .from("staff")
     .select("id, email, full_name, role")
     .eq("id", user.id)
     .eq("is_active", true)
     .maybeSingle();
+
+  if (error) {
+    // A real query/RLS error, not "no matching row" (that's `staff === null`
+    // with no error). Previously silently swallowed and treated the same as
+    // not_authorized, log it so a real failure is distinguishable from a
+    // genuinely inactive/missing staff row.
+    console.error("[crm-auth] staff lookup failed", {
+      userId: user.id,
+      email: user.email,
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint
+    });
+  }
 
   if (!staff) return { state: "not_authorized" };
   return { state: "authorized", staff };
