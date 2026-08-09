@@ -1,12 +1,23 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { ingestLead } from "@/lib/crm/ingest";
+import { sendNotificationEmail } from "@/lib/notify";
+import { LEAD_INTEREST_LABELS } from "@/lib/leadOptions";
 
 export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const CLIENT_TYPES = ["investor_family_office", "developer_sponsor", "landowner", "strategic_partner", "public_sector", "other"] as const;
+
+const CLIENT_TYPE_LABELS: Record<string, string> = {
+  investor_family_office: "Investor / Family Office",
+  developer_sponsor: "Developer / Project Sponsor",
+  landowner: "Landowner",
+  strategic_partner: "Strategic Partner",
+  public_sector: "Public Sector",
+  other: "Other"
+};
 
 const INTERESTS = ["investment_opportunities", "raising_capital", "advisory_services", "project_development", "partnerships"] as const;
 
@@ -59,6 +70,22 @@ export async function POST(req: Request) {
     pagePath,
     referrer
   });
+
+  const typeLabel = CLIENT_TYPE_LABELS[clientType] ?? clientType;
+  const interestLabels = interests.map((i) => LEAD_INTEREST_LABELS[i] ?? i);
+  await sendNotificationEmail(
+    `Regenera lead: ${email} (${typeLabel})`,
+    [
+      `Email: ${email}`,
+      `Type: ${typeLabel}`,
+      interestLabels.length ? `Interests: ${interestLabels.join(", ")}` : null,
+      pagePath ? `Page: ${pagePath}` : null,
+      referrer ? `Referrer: ${referrer}` : null
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    email
+  );
 
   return NextResponse.json({ ok: true });
 }

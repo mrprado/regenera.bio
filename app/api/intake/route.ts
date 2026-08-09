@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { ingestSegmentedLead } from "@/lib/crm/ingest";
+import { sendNotificationEmail } from "@/lib/notify";
+import { INTAKE_CONFIGS, type IntakeType } from "@/lib/intakeFields";
 
 export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const INTAKE_TYPES = ["developer", "investor", "landowner", "operator"] as const;
+
+const INTAKE_TYPE_LABELS: Record<IntakeType, string> = {
+  developer: "Developer",
+  investor: "Investor",
+  landowner: "Landowner",
+  operator: "Operator"
+};
 
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
@@ -98,6 +107,34 @@ export async function POST(req: Request) {
     referrer,
     service
   });
+
+  const typeLabel = INTAKE_TYPE_LABELS[intakeType as IntakeType];
+  const config = INTAKE_CONFIGS[intakeType as IntakeType];
+  const fieldLines = config.fields
+    .filter((f) => fields[f.name])
+    .map((f) => {
+      const raw = fields[f.name];
+      const optionLabel = f.options?.find((o) => o.value === raw)?.label;
+      return `${f.label}: ${optionLabel ?? raw}`;
+    });
+
+  await sendNotificationEmail(
+    `Regenera ${typeLabel.toLowerCase()} submission: ${name}${org ? ` (${org})` : ""}`,
+    [
+      `Name: ${name}`,
+      org ? `Organisation: ${org}` : null,
+      `Email: ${email}`,
+      phone ? `Phone: ${phone}` : null,
+      `Type: ${typeLabel}`,
+      "",
+      ...fieldLines,
+      message ? `\n${config.messageLabel}:\n${message}` : null
+    ]
+      .filter(Boolean)
+      .join("\n")
+      .trim(),
+    email
+  );
 
   return NextResponse.json({ ok: true });
 }

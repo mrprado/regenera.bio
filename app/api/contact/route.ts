@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
 import { ingestLead } from "@/lib/crm/ingest";
+import { sendNotificationEmail } from "@/lib/notify";
 
 export const runtime = "nodejs";
 
@@ -90,43 +90,14 @@ export async function POST(req: Request) {
     service
   });
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL || "info@regenera.bio";
-  const from = process.env.CONTACT_FROM_EMAIL;
-
-  if (!apiKey || !from) {
-    console.error("Contact enquiry stored, but RESEND_API_KEY or CONTACT_FROM_EMAIL is not configured, so no notification email was sent.");
-    return NextResponse.json({ ok: true });
-  }
-
-  try {
-    const resend = new Resend(apiKey);
-    const typeLabel = TYPE_LABELS[type] ?? type;
-
-    const { error: emailError } = await resend.emails.send({
-      from,
-      to,
-      replyTo: email,
-      subject: `Regenera enquiry: ${name}${org ? ` (${org})` : ""}`,
-      text: [
-        `Name: ${name}`,
-        org ? `Organisation: ${org}` : null,
-        `Email: ${email}`,
-        `Type: ${typeLabel}`,
-        "",
-        "Message:",
-        message
-      ]
-        .filter(Boolean)
-        .join("\n")
-    });
-
-    if (emailError) {
-      console.error("Resend error (enquiry was still stored):", emailError);
-    }
-  } catch (err) {
-    console.error("Contact notification email failed (enquiry was still stored):", err);
-  }
+  const typeLabel = TYPE_LABELS[type] ?? type;
+  await sendNotificationEmail(
+    `Regenera enquiry: ${name}${org ? ` (${org})` : ""}`,
+    [`Name: ${name}`, org ? `Organisation: ${org}` : null, `Email: ${email}`, `Type: ${typeLabel}`, "", "Message:", message]
+      .filter(Boolean)
+      .join("\n"),
+    email
+  );
 
   return NextResponse.json({ ok: true });
 }
