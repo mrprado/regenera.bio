@@ -2,21 +2,20 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { PROJECT_TABS, DEPLOYMENT_FOCUS, type ProjectCard } from "@/lib/projects";
+import { MANDATE_CATEGORIES, type MandateCard } from "@/lib/projects";
 
-function Gate({ card }: { card: ProjectCard }) {
+function Gate({ card }: { card: MandateCard }) {
   return (
     <div className="gate">
-      <span className="gtag">{card.tag}</span>
+      <span className="gtag">{card.type}</span>
       <div className="gt">{card.title}</div>
-      <div className="gm">{card.summary}</div>
-      {card.details.length > 0 && (
-        <div className="gd">
-          {card.details.map((d) => (
-            <span key={d}>{d}</span>
-          ))}
-        </div>
-      )}
+      <div className="gm">{card.description}</div>
+      <div className="gd">
+        <span>{card.location}</span>
+        <span>{card.scale}</span>
+        <span>{card.stage}</span>
+        {card.note && <span>{card.note}</span>}
+      </div>
       <div className="grole">{card.role}</div>
       <Link href={`/contact?path=${card.path}`} className="gdet">
         Details <span className="arr">&rarr;</span>
@@ -26,76 +25,35 @@ function Gate({ card }: { card: ProjectCard }) {
 }
 
 export default function ProjectTabs() {
-  const [active, setActive] = useState<(typeof PROJECT_TABS)[number]["id"]>("energy");
-  const tab = PROJECT_TABS.find((t) => t.id === active)!;
+  const [active, setActive] = useState<(typeof MANDATE_CATEGORIES)[number]["id"]>("energy");
+  const category = MANDATE_CATEGORIES.find((c) => c.id === active)!;
 
   return (
     <>
-      <div className="itabs" role="tablist" aria-label="Projects and partnerships">
-        {PROJECT_TABS.map((t) => (
+      <div className="itabs" role="tablist" aria-label="Mandate categories">
+        {MANDATE_CATEGORIES.map((c) => (
           <button
-            key={t.id}
-            className={"itab" + (active === t.id ? " on" : "")}
-            onClick={() => setActive(t.id)}
+            key={c.id}
+            className={"itab" + (active === c.id ? " on" : "")}
+            onClick={() => setActive(c.id)}
             role="tab"
-            aria-selected={active === t.id}
+            aria-selected={active === c.id}
           >
-            {t.label}
+            {c.label}
           </button>
         ))}
       </div>
 
       <div className="ipanel on" role="tabpanel">
         <div className="ptab-head">
-          <h3>{tab.heading}</h3>
-          {tab.intro.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
+          <h3>{category.heading}</h3>
+          <p>{category.intro}</p>
         </div>
 
-        {tab.cards.length > 0 && (
-          <div className="g3">
-            {tab.cards.map((c) => (
-              <Gate key={c.title} card={c} />
-            ))}
-          </div>
-        )}
-
-        {tab.extraCards && (
-          <div className="g2" style={{ marginTop: "1.6rem" }}>
-            {tab.extraCards.map((c) => (
-              <Gate key={c.title} card={c} />
-            ))}
-          </div>
-        )}
-
-        {tab.id === "waste" && (
-          <>
-            <div className="ey" style={{ marginTop: "2.8rem" }}>
-              <div className="ey-b"></div>
-              <span>Deployment Focus</span>
-            </div>
-            <div className="mini6">
-              {DEPLOYMENT_FOCUS.map((d) => (
-                <div key={d.title}>
-                  <strong>{d.title}</strong>
-                  <span>{d.copy}</span>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        
-
-        <div className="pship">
-          <p>
-            <strong style={{ fontWeight: 600, color: "var(--ink)" }}>{tab.partnershipLabel}</strong>{" "}
-            {tab.partnershipCopy}
-          </p>
-          <Link href={`/contact?path=${tab.ctaPath}`} className="btn btn-gold">
-            {tab.ctaLabel} <span className="arr">&rarr;</span>
-          </Link>
+        <div className="g3">
+          {category.cards.map((c) => (
+            <Gate key={c.title} card={c} />
+          ))}
         </div>
       </div>
     </>

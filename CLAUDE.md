@@ -508,6 +508,52 @@ a mobile screenshot report from the user.
   other credential.
 - Historical Field Notes backfill is mid-flight — see dedicated section above.
 
+## Selected Mandates page (`app/projects/page.tsx`), rearchitected 2026-08-09
+Rebuilt around one job only: showing actual current/recent Regenera engagements, not a
+second Services or Sectors page. Source of truth: `lib/projects.ts`
+(`MANDATE_CATEGORIES`). Three categories, not four: **Energy**, **Real Estate & Land**
+(renamed from "Real Estate"), **Waste Infrastructure**. **Capital Partnerships is
+deliberately not a filter here**, there are no standalone capital-only mandates
+distinct from the project mandates, capital work is folded into each card's role
+sentence instead (per explicit instruction not to force a filter without real content
+behind it). If genuine standalone capital mandates exist later, add the category back,
+don't force it preemptively.
+
+All content on this page was confirmed with the user before publishing, not assumed:
+the 5 Real Estate & Land cards were confirmed as real (all five kept); the Waste
+Infrastructure cards were built from the user's own direct account of real engagements
+(Global Waste-to-Resource Platform across India/Africa/Mexico/Indonesia/Poland/Armenia,
+India-specific development, an African healthcare-waste opportunity), not the
+placeholder names a prior draft prompt suggested. **Do not invent additional mandates
+or restore the old waste "methodology" content** (Waste as a Secured Resource,
+Technology Matched to the Waste Stream, Deployment Focus, etc., all removed, that's
+capability/sector content, not mandates, and duplicating it here was the original
+problem this rebuild fixed).
+
+Specific figures/claims to keep straight if this page is touched again: the
+Sub-Saharan Africa (2.1 GW) and Mexico (4 GW) energy figures are explicitly a
+**platform pipeline**, not Regenera-owned or fully-originated capacity, don't upgrade
+that language. The waste platform's roughly $5B opportunity estimate that the user
+mentioned during scoping was deliberately **left off the public card** on the user's
+own instruction (only usable with heavy caveating the compact card format doesn't have
+room for), don't add it back without that caveat. Individual counterparty names
+mentioned during scoping for the India waste mandate were deliberately not published
+(not yet approved for public use).
+
+Card format: type eyebrow, mandate name, 22-26 word factual description, a
+location/scale/stage metadata row (plus an optional `note` for something like a
+withheld location, used twice here: "Confidential" on two Real Estate cards whose
+precise location wasn't given), then a role sentence. **No "Regenera role:" label is
+rendered** (explicit instruction), the role sentence just appears on its own, this was
+already true in the component before this rebuild, verify it stays that way if the
+card markup changes again. CTA routing is intent-based via the existing
+`/contact?path=X` mechanism (`investor` for energy, `realestate` for land,
+`operator` for waste), already the pattern the component used, just re-pointed at the
+correct paths per mandate type. Per-category "partnership" paragraphs (e.g. "Energy
+partnerships. We engage with...") were removed entirely, replaced with one page-level
+final CTA. `DEPLOYMENT_FOCUS` and `CAPITAL_TABLE` (dead code, `CAPITAL_TABLE` was never
+even rendered) were deleted from `lib/projects.ts`.
+
 ## Resolved
 - Contact + subscribe + lead-intake forms write to Supabase as source of truth, then
   best-effort notify via Resend (`app/api/contact/route.ts`) and Buttondown

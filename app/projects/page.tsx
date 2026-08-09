@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ProjectTabs from "@/components/ProjectTabs";
 
 export const metadata: Metadata = {
   title: "Selected Mandates",
   description:
-    "Selected Regenera mandates, capital relationships, and partnership opportunities across energy, real estate, waste, and capital, presented on an anonymized basis."
+    "Current and recent Regenera engagements across energy, real estate and land, and waste infrastructure."
 };
 
 export default function ProjectsPage() {
@@ -20,20 +21,28 @@ export default function ProjectsPage() {
             Active work, shared <em>selectively.</em>
           </h1>
           <p className="lede">
-            The projects below are engagements Regenera has actually worked, presented on an
-            anonymized basis, further detail is shared following an introductory discussion and,
-            where appropriate, under confidentiality arrangements. This is distinct from a Case
-            Study (a fuller account of a completed engagement, published only with client
-            permission) and a Reference Project (an external project Regenera has studied but
-            was not engaged on, and would be labeled as such if published here). Neither of the
-            latter two categories has published examples yet, we don&apos;t publish either until
-            there is a real, permissioned example to show.
+            Current and recent Regenera engagements across real assets, infrastructure, and
+            development. Further detail is shared following an introductory discussion.
           </p>
         </div>
       </div>
       <section className="sec">
         <div className="w">
           <ProjectTabs />
+        </div>
+      </section>
+      <section className="sec sec-d">
+        <div className="w">
+          <div className="ey lt r">
+            <div className="ey-b"></div>
+            <span>Get Started</span>
+          </div>
+          <h2 className="h2 r d1" style={{ color: "var(--cream)", marginBottom: "1.6rem" }}>
+            Have a relevant <em style={{ color: "var(--mist)" }}>project or mandate?</em>
+          </h2>
+          <Link href="/contact?path=general&service=advisory" className="btn btn-gold">
+            Discuss an Opportunity <span className="arr">&rarr;</span>
+          </Link>
         </div>
       </section>
     </div>
