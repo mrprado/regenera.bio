@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { STARS } from "@/lib/stars";
 import { SECTORS } from "@/lib/sectors";
+import { PRACTICES } from "@/lib/practices";
 
 export default function HomePage() {
   return (
@@ -146,76 +147,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FOUR PRACTICES */}
+      {/* SIX PRACTICES */}
       <section className="sec">
         <div className="w">
           <div className="split r">
             <div>
               <div className="ey">
                 <div className="ey-b"></div>
-                <span>Regenerative Consulting</span>
+                <span>Services</span>
               </div>
               <h2 className="h2">
-                One method.
+                From strategy
                 <br />
-                <em>Four practices.</em>
+                <em>to execution.</em>
               </h2>
             </div>
             <p style={{ fontSize: 14.5, fontWeight: 300, color: "var(--t-mid)", lineHeight: 1.82 }}>
-              Understand the place. Map the system. Design the intervention. Align the capital.
-              The same method, applied across systems diagnosis, project readiness, real assets
-              and infrastructure, and capital strategy, in the order a project usually needs
-              them.
+              Regenera works across real assets and infrastructure, from early advisory and
+              capital strategy through project readiness, development, asset strategy, and
+              long-term intelligence.
             </p>
           </div>
           <div className="pillars plt r d1">
-            <Link href="/services?tab=systems" className="pillar">
-              <div className="pn">Practice I</div>
-              <div className="pt">Systems &amp; Place Advisory</div>
-              <div className="pb">
-                Systemic diagnosis and place-based intelligence across land, infrastructure,
-                ecology, and governance. We find the leverage points where one well placed
-                intervention regenerates multiple systems at once.
-              </div>
-              <span className="pl">
-                Explore the method <span className="arr">&rarr;</span>
-              </span>
-            </Link>
-            <Link href="/services?tab=readiness" className="pillar">
-              <div className="pn">Practice II</div>
-              <div className="pt">Development &amp; Project Readiness</div>
-              <div className="pb">
-                Preparing projects, portfolios, and places for institutional capital.
-                Documentation, structure, diagnostics, and an assessment that shows what a
-                project is really worth.
-              </div>
-              <span className="pl">
-                Get ready <span className="arr">&rarr;</span>
-              </span>
-            </Link>
-            <Link href="/services?tab=assets" className="pillar">
-              <div className="pn">Practice III</div>
-              <div className="pt">Real Assets &amp; Infrastructure Advisory</div>
-              <div className="pb">
-                Sector-specific advisory across twelve sectors, from energy and waste to land,
-                agriculture, real estate, materials, and environmental intelligence.
-              </div>
-              <span className="pl">
-                Explore sectors <span className="arr">&rarr;</span>
-              </span>
-            </Link>
-            <Link href="/services?tab=capital" className="pillar">
-              <div className="pn">Practice IV</div>
-              <div className="pt">Capital Strategy &amp; Alignment</div>
-              <div className="pb">
-                Capital readiness, mandate matching, and strategic introductions where lawful,
-                connecting prepared projects with institutional capital whose mandate genuinely
-                fits.
-              </div>
-              <span className="pl">
-                See the services <span className="arr">&rarr;</span>
-              </span>
-            </Link>
+            {PRACTICES.map((p, i) => (
+              <Link key={p.slug} href={`/services?tab=${p.slug}`} className="pillar">
+                <div className="pn">Practice {["I", "II", "III", "IV", "V", "VI"][i]}</div>
+                <div className="pt">{p.title}</div>
+                <div className="pb">{p.deck}</div>
+                <span className="pl">
+                  {p.ctas[0].label} <span className="arr">&rarr;</span>
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

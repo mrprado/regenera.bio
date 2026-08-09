@@ -58,8 +58,8 @@ one row with multiple tags/relationship records, not duplicated rows.
 
 `id`, `opportunity_name text not null`, `organization_id`, `primary_contact_id
 references contacts(id)`, `project_id references projects(id)` nullable,
-`service text` (one of the four practices, see
-`docs/commercial/SPECIALIST_DELIVERY_MODEL.md`), `engagement_type text` (which
+`service text` (one of the six practices' serviceValue, see
+`lib/practices.ts`), `engagement_type text` (which
 diagnostic or engagement), `sector text`, `geography text`, `stage text not
 null default 'target'` (see stage list below), `estimated_value numeric`,
 `probability smallint`, `weighted_value numeric generated always as

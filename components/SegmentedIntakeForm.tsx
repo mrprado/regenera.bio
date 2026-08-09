@@ -73,7 +73,8 @@ export default function SegmentedIntakeForm({ type }: { type: IntakeType }) {
           referrer: typeof document !== "undefined" ? document.referrer || null : null,
           utm_source: searchParams.get("utm_source"),
           utm_medium: searchParams.get("utm_medium"),
-          utm_campaign: searchParams.get("utm_campaign")
+          utm_campaign: searchParams.get("utm_campaign"),
+          service: searchParams.get("service")
         })
       });
       const data = await res.json().catch(() => null);

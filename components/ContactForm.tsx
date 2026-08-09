@@ -82,7 +82,7 @@ export default function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, org, email, type, message: msg, consent })
+        body: JSON.stringify({ name, org, email, type, message: msg, consent, service: searchParams.get("service") })
       });
       const data = await res.json().catch(() => null);
 

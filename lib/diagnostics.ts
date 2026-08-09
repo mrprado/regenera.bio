@@ -28,7 +28,7 @@ export const DIAGNOSTICS: Diagnostic[] = [
       "90-day plan"
     ],
     bestFor: "Energy, infrastructure, waste, and real estate developers with a project that isn't yet ready for the capital or partner conversation it needs.",
-    ctaPath: "/for-developers"
+    ctaPath: "/for-developers?service=project_readiness"
   },
   {
     slug: "land-systems-diagnostic",
@@ -45,7 +45,7 @@ export const DIAGNOSTICS: Diagnostic[] = [
       "Next-step plan"
     ],
     bestFor: "Family landowners, family offices, and developers deciding what a property should become before committing to one use.",
-    ctaPath: "/for-landowners"
+    ctaPath: "/for-landowners?service=asset_strategy"
   },
   {
     slug: "capital-readiness-review",
@@ -60,7 +60,7 @@ export const DIAGNOSTICS: Diagnostic[] = [
       "Preparation sequence"
     ],
     bestFor: "Sponsors weighing whether to start capital outreach now or address specific gaps first.",
-    ctaPath: "/for-developers"
+    ctaPath: "/for-developers?service=capital_partnerships"
   },
   {
     slug: "regenerative-asset-review",
@@ -75,7 +75,7 @@ export const DIAGNOSTICS: Diagnostic[] = [
       "Staged roadmap"
     ],
     bestFor: "Resorts, campuses, industrial estates, and agricultural operations looking for where a coordinated intervention would create the most value.",
-    ctaPath: "/for-operators"
+    ctaPath: "/for-operators?service=asset_strategy"
   }
 ];
 

@@ -34,6 +34,7 @@ export async function POST(req: Request) {
   const utmSource = typeof body.utm_source === "string" ? body.utm_source.slice(0, 200) : null;
   const utmMedium = typeof body.utm_medium === "string" ? body.utm_medium.slice(0, 200) : null;
   const utmCampaign = typeof body.utm_campaign === "string" ? body.utm_campaign.slice(0, 200) : null;
+  const service = typeof body.service === "string" ? body.service.trim() || null : null;
 
   if (!(INTAKE_TYPES as readonly string[]).includes(intakeType)) {
     return NextResponse.json({ ok: false, error: "Unrecognized submission type." }, { status: 400 });
@@ -94,7 +95,8 @@ export async function POST(req: Request) {
     utmMedium,
     utmCampaign,
     pagePath,
-    referrer
+    referrer,
+    service
   });
 
   return NextResponse.json({ ok: true });

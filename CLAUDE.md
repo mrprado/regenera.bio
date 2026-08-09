@@ -436,6 +436,37 @@ phasing decision below. Website IA changes (new nav, new routes, redirects) that
 could affect already-indexed URLs likewise need confirmation first. Docs, copy
 standards, and other file-only work can continue without asking each time.
 
+**Update, 2026-08-09: Services rearchitected from four practices to six.** The
+"four practices" language above and the old practice names (Systems & Place
+Advisory, Development & Project Readiness, Real Assets & Infrastructure Advisory,
+Capital Strategy & Alignment) are superseded, kept in the paragraphs above only as
+history of that batch, not current architecture. **Current, correct source of
+truth: `lib/practices.ts`.** Six practices, in this exact order, do not reorder or
+retitle without a technical reason: Advisory, Capital Partnerships, Project
+Readiness, Development, Asset Strategy, Intelligence. Services nav label stays
+"Services"; tab query param is `?tab=<slug>` using the practice's `slug` (e.g.
+`?tab=capital-partnerships`), not the old `systems`/`readiness`/`assets`/`capital`
+IDs. Headline is "From strategy to execution." (sentence case, matching every
+other h1 on the site, the request's all-caps presentation was emphasis in the
+prompt, not a literal styling change, since forcing raw uppercase text would be
+a typography change this rearchitecture was explicitly told not to make).
+
+CRM attribution: `opportunities.service` (already existed in the schema, unused
+until now) is populated end to end from a practice's CTA. CTAs to the four
+counterparty pages and to `/contact` append `?service=<serviceValue>`;
+`ContactForm.tsx`, `SegmentedIntakeForm.tsx`, both API routes, and both
+`ingestLead()`/`ingestSegmentedLead()` in `lib/crm/ingest.ts` all thread it
+through. No new Supabase schema was added for this, per explicit instruction to
+map into the existing taxonomy first (`opportunities.service`, plus the
+already-existing `LEAD_INTERESTS` in `lib/leadOptions.ts` for the contact
+form/lead modal's broader enquiry-type field, left untouched, different purpose).
+Verified via local POSTs against production Supabase (rows landed, then deleted).
+
+No dedicated intake destination exists for Advisory or Intelligence specifically,
+both route to `/contact?path=general` with the practice's `service` value
+attached, since neither maps to exactly one of the four counterparty pages. Flag
+this if a more specific destination is ever wanted for either.
+
 ## Known recurring bug pattern — CSS cascade
 This codebase previously shipped a real mobile bug (`.phase-g` grid) caused by a class
 being defined once correctly inside a `@media(max-width:...)` block and then redefined
@@ -504,3 +535,8 @@ a mobile screenshot report from the user.
 - Phase 1 internal CRM schema (13 tables, RLS on all, zero security advisor findings)
   applied to production Supabase per the confirmed internal-CRM direction (see
   "Commercial platform / CRM buildout" above).
+- Services rearchitected from four practices to six (Advisory, Capital
+  Partnerships, Project Readiness, Development, Asset Strategy, Intelligence),
+  `lib/practices.ts` is the source of truth, `opportunities.service` CRM
+  attribution wired end to end from every practice CTA (see "Commercial platform"
+  above).

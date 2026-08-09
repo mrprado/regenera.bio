@@ -20,6 +20,9 @@ export interface IngestLead {
   interests?: string[] | null;
   pagePath?: string | null;
   referrer?: string | null;
+  /** Which Services practice (lib/practices.ts serviceValue) the visitor's
+   *  CTA came from, if any. Stored in opportunities.service. */
+  service?: string | null;
 }
 
 function splitName(name: string | null | undefined): { first: string | null; last: string | null } {
@@ -104,6 +107,7 @@ export async function ingestLead(lead: IngestLead): Promise<void> {
       primary_contact_id: contactId,
       stage: "target",
       source: lead.source,
+      service: lead.service ?? null,
       notes: [lead.clientType, lead.interests?.join(", "), lead.message].filter(Boolean).join(" | ") || null
     });
     if (oppError) throw oppError;
@@ -134,6 +138,9 @@ export interface SegmentedLead {
   utmCampaign: string | null;
   pagePath: string | null;
   referrer: string | null;
+  /** Which Services practice (lib/practices.ts serviceValue) the visitor's
+   *  CTA came from, if any. Stored in opportunities.service. */
+  service: string | null;
 }
 
 const SEGMENTED_STAGE_MAP: Record<string, string> = {
@@ -199,6 +206,7 @@ export async function ingestSegmentedLead(lead: SegmentedLead): Promise<void> {
       primary_contact_id: contactId,
       stage: "target",
       source,
+      service: lead.service,
       campaign_id: lead.utmCampaign,
       notes: [utmSummary ? `UTM: ${utmSummary}` : null, lead.message].filter(Boolean).join(" | ") || null
     });

@@ -112,7 +112,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .sec-d{background:var(--deep)}
 .sec-n{background:var(--night)}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:end;margin-bottom:56px}
-.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.1);border-radius:2px;overflow:hidden}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.1);border-radius:2px;overflow:hidden}
 @media(max-width:1280px){.pillars{grid-template-columns:repeat(2,1fr)}}
 .pillar{background:var(--deep);padding:2.4rem 2rem;text-align:left;border:none;transition:background .3s;display:flex;flex-direction:column;height:100%;text-decoration:none}
 .pillar:hover{background:var(--forest)}
@@ -400,5 +400,13 @@ figure.svc-ph .cap-c a{color:inherit;text-decoration:none}
 .imgband .cap .ct1{font-family:var(--serif);font-size:1.05rem;font-style:italic;color:var(--cream)}
 .imgband .cap .ct2{font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(214,231,203,0.45)}
 @media(max-width:700px){.imgband img{aspect-ratio:4/3}}
+/* Six practice tabs don't fit one row at narrow widths without shrinking
+   the label text below a readable size, so this scrolls horizontally
+   instead of wrapping into an uneven multi-row block. */
+@media(max-width:760px){
+  .itabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .itabs::-webkit-scrollbar{display:none}
+  .itab{white-space:nowrap;flex:0 0 auto}
+}
 .crm-shell{background:#fff;min-height:70vh}
 .crm-card{border:1px solid var(--line);border-radius:4px;padding:16px;text-align:center}

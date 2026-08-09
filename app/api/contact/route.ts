@@ -31,6 +31,10 @@ export async function POST(req: Request) {
   const type = String(body.type ?? "general").trim();
   const message = String(body.message ?? "").trim();
   const consent = Boolean(body.consent);
+  // Which Services practice (see lib/practices.ts) the visitor's CTA came
+  // from, if any. Not stored on contact_submissions, only threaded into
+  // the CRM opportunity below.
+  const service = typeof body.service === "string" ? body.service.trim() || null : null;
 
   if (!name || !email || !message) {
     return NextResponse.json(
@@ -82,7 +86,8 @@ export async function POST(req: Request) {
     email,
     organization: org || null,
     message,
-    clientType: type
+    clientType: type,
+    service
   });
 
   const apiKey = process.env.RESEND_API_KEY;

@@ -22,8 +22,7 @@ of having qualified a specific audience and problem in the first place.
 2. **One paragraph of context**: why this is relevant now (the trigger),
    in the visitor's terms.
 3. **The single relevant offer**: one diagnostic or engagement type, not
-   a menu of four practices. Links to that offer's dedicated page once
-   diagnostic pages exist.
+   a menu of all six practices. Links to that offer's dedicated page.
 4. **One piece of evidence**: a relevant Field Note, Selected Mandate, or
    Case Study that supports relevance to this specific audience. Never
    fabricated, never a Reference Project presented as Regenera's own work
