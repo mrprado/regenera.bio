@@ -344,14 +344,21 @@ lead modal into one-way CRM ingestion (organizations/contacts/opportunities/acti
 service-role key server-side only, never blocks the public submission on failure.
 `activities.created_by` was relaxed to nullable (migration
 `20260808195327_allow_system_generated_activities`) so system-generated ingestion
-activities don't need a staff actor. **Still blocking**: no `staff` row exists yet.
-Creating one needs a real Supabase Auth user first, and there's no tool-based way to
-create that account without either the user creating it via the Supabase dashboard
-(Authentication → Users → Add user, for alanprado@regenera.bio) or a throwaway
-`shouldCreateUser: true` bootstrap, which was deliberately not done since it would have
-temporarily allowed anyone to self-create an Auth account. This is a real, still-open
-next step, not yet done, don't assume it's complete. Gmail/WhatsApp integration, AI
-daily briefs, and scheduled jobs are Phase 2-4, explicitly not started.
+activities don't need a staff actor. Gmail/WhatsApp integration, AI daily briefs, and
+scheduled jobs are Phase 2-4, explicitly not started.
+
+**Update, 2026-08-09**: the CRM is bootstrapped. The user created the Supabase Auth
+account for `alanprado@regenera.bio` via the dashboard; the matching `staff` row
+(`role: admin`, `is_active: true`, `id` matching the auth.users row) was inserted via
+`execute_sql` (RLS's own insert policy requires an existing active admin, so the very
+first row has to be created with elevated access, not through the app). Verified the
+row exists with the right role/active state. `get_advisors(type: security)` now shows
+one new WARN, "Leaked Password Protection Disabled", a general Supabase Auth setting
+(HaveIBeenPwned checking) unrelated to anything built here, only relevant if password
+auth is ever used, sign-in here is magic-link only. It's a Dashboard → Authentication
+→ Policies toggle, not something fixable via SQL/migration; mention it to the user as
+a quick optional hardening step, don't treat it as blocking. `/crm` should now be
+genuinely reachable end to end: `/crm/login` → magic link → `/crm` dashboard.
 
 **Update, 2026-08-08 (later still)**: the website buildout landed in one large session.
 Done: Services page rebuilt around the four practices (`/services`, tab IDs
