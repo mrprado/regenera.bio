@@ -388,11 +388,29 @@ wildcard entries (`https://regenera.bio/**`, `https://www.regenera.bio/**`), not
 exact-path entries, since production traffic legitimately comes from both the apex
 and `www` host and an unmatched exact redirect silently falls back to the Site URL
 (home page) instead of erroring, which looked identical to "the link does nothing."
-The RLS recursion fix is applied and verified at the database level (policies
-recreated, security advisors clean, staff row confirmed correct), but **has not yet
-been confirmed by an actual successful end-to-end login** since this specific fix,
-the prior "should work now" claim in this file turned out to be wrong once already,
-don't repeat that mistake, verify a real login before updating this note further.
+**Confirmed, same day**: the user completed a real end-to-end login after this fix
+and it worked, `/crm` is genuinely reachable now (login → magic link → callback →
+`/crm` dashboard). This is a real, user-confirmed result, not a repeat of the earlier
+premature "should work now" claim.
+
+**Open thread, 2026-08-09, unresolved as of this note**: form-submission
+notification emails (contact form, lead modal, all four `/for-*` segmented intake
+forms, see the "Email every form submission" commit `06b96c6`) are not arriving at
+`alanprado@regenera.bio`, even though the underlying Supabase rows save correctly
+(source of truth intact, this is purely a notification-delivery gap). Two
+candidate causes, not yet distinguished: (a) `RESEND_API_KEY`/`CONTACT_FROM_EMAIL`
+not actually set in Netlify's environment variables, so `lib/notify.ts` skips
+sending entirely (silent, logged only in Netlify's own function logs, which this
+session has no tool access to), or (b) `alanprado@regenera.bio` has no real inbound
+mail hosting (MX records), so Resend can report a successful send with nowhere real
+for it to land. The user was asked to check Resend's own dashboard → Logs/Emails
+for the most recent send attempts to distinguish the two (no attempts logged at
+all → cause (a); attempts logged but bounced/failed → cause (b); delivered → a
+different problem, spam filter or client-side). **That check had not been reported
+back as of this note.** `CONTACT_TO_EMAIL` must stay `alanprado@regenera.bio`, the
+user explicitly rejected redirecting notifications to a Gmail address instead when
+that was suggested. Pick this thread up by asking for the Resend Logs result before
+guessing at another fix.
 
 **Update, 2026-08-08 (later still)**: the website buildout landed in one large session.
 Done: Services page rebuilt around the four practices (`/services`, tab IDs
