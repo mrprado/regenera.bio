@@ -988,11 +988,39 @@ yet run or verified, same "trigger manually and check it actually landed before
 trusting the schedule" discipline that caught 3 real bugs in the extraction workflow
 last time — don't assume this one works cleanly on the first try either.
 
+**Phase 4f (done, 2026-08-11, same session): real hallucination caught in the first
+scheduled digest, fixed, digest rewritten as a twice-daily letter.** The first real
+digest email (delivered per Resend, confirmed by the user) contained 2 content-free
+filler claims and one genuinely bad one: `llama3.2:1b` echoed a fragment of its own
+extraction prompt ("...for Regenera, a regenerative infrastructure advisory") back as
+a "fact" about an unrelated source (KPLC's Kenyan eProcurement portal). All three
+lacked a real confidence value, which turned out to be the reliable tell. Fixed at two
+layers: `sanitizeExtractionResult()` now requires every claim to carry a valid numeric
+confidence and explicitly rejects the specific prompt-echo pattern; the shared prompt
+(same text duplicated across all 3 LLM providers) now explicitly separates
+instructions from content and tells the model an empty result is correct for
+content-free pages rather than implicitly pressuring it to invent something. The 3 bad
+rows were deleted from production only after the root cause was understood, not
+reflexively. Full incident writeup in `docs/intelligence-system/EXTRACTION.md`.
+
+Same session, user then asked for the digest to read as "a letter... as if it would
+from my assistant" covering morning and evening, not a bare technical log.
+`scripts/intel-digest.ts` rewritten with a greeting/natural-language summary/sign-off
+structure, still strictly factual (still explicitly states it's an activity summary,
+not an opportunity analysis — don't let a future edit upgrade that framing before real
+signal-generation code backs it). `.github/workflows/intel-digest.yml` now fires twice
+daily, 7am and 7pm US Eastern (pinned to EDT/UTC-4 — GitHub Actions cron is UTC-only
+with no DST awareness, so this will run an hour later than intended, 8am/8pm ET,
+during EST months unless manually adjusted around the November/March changeover,
+documented rather than silently wrong).
+
 **Status**: schema + agent registry (26, all `planned`) + generic collector + a real
 94-source registry (66 active) + a working, scheduled extraction pipeline (both
-deterministic adapters, now including real award/counterparty/capital facts, and the
-free Ollama LLM-escalation path, all proven against real data) + a built-but-unverified
-daily digest all exist. **47 real captured documents** sit in `intel_documents`, with
+deterministic adapters, now including real award/counterparty/capital facts, and a
+hardened Ollama LLM-escalation path, all proven against real data, including one real
+caught-and-fixed hallucination) + a working twice-daily letter-format digest, verified
+delivering (Resend-confirmed) once the 3 required secrets were actually set, all
+exist. **47 real captured documents** sit in `intel_documents`, with
 entities/relationships/evidence extracted from 5 of them so far via manual proofs
 plus the first scheduled-path run — the extraction workflow will keep working
 through the backlog daily from here on its own, no further manual intervention

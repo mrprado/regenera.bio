@@ -86,6 +86,35 @@ that wrote a genuine new entity + evidence row to production Supabase
 (verified via `execute_sql`, not assumed from a green checkmark). The
 `schedule:` trigger (`cron: "0 6 * * *"`, daily) is now enabled.
 
+## Real incident: LLM prompt-echo hallucination (2026-08-11)
+
+The first real scheduled digest email surfaced a genuine hallucination
+from the Ollama path, not a code bug. Two of three claims in that run
+were content-free filler (an entity's own name restated as its "claim",
+and a bare category label). The third was worse: `llama3.2:1b` echoed
+back a fragment of the EXTRACTION_PROMPT's own framing sentence
+("...for Regenera, a regenerative infrastructure advisory") as if it
+were a fact discovered in an unrelated source document (KPLC's
+eProcurement portal). All three shared one tell -- none carried a real
+confidence value.
+
+Fixed two ways:
+1. `sanitizeExtractionResult()` (`lib/intelligence/extract/types.ts`) now
+   requires every claim to carry a valid numeric confidence (0-1),
+   dropping any that don't, and rejects any entity/claim whose text
+   matches the specific prompt-echo pattern (`regenera` + `regenerative
+   infrastructure advisory` together) outright.
+2. The shared prompt (duplicated across `ollama.ts`/`anthropic.ts`/
+   `openai.ts`) is rewritten to explicitly separate "these are
+   instructions" from "this is content to extract from", require a
+   confidence number per claim, and explicitly tell the model that an
+   empty result is the *correct* answer for a content-free page
+   (navigation menus, login screens) rather than implicitly pressuring it
+   to invent something rather than return nothing.
+
+The 3 bad rows already written to production were deleted after the fix
+landed, not before diagnosing the actual root cause.
+
 ## Award-fact extraction (World Bank Procurement adapter)
 
 The most valuable fact type this system exists to surface — who was
