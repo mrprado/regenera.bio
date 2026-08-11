@@ -1,4 +1,5 @@
 import type { ExtractionResult } from "../types";
+import { sanitizeExtractionResult } from "../types";
 import type { LLMProvider } from "./types";
 
 // Optional, paid, OFF by default. Only becomes available if
@@ -49,13 +50,7 @@ export const openaiProvider: LLMProvider = {
       const data = await res.json();
       const raw = data.choices?.[0]?.message?.content ?? "{}";
       const parsed = JSON.parse(raw);
-      return {
-        entities: Array.isArray(parsed.entities) ? parsed.entities : [],
-        relationships: Array.isArray(parsed.relationships) ? parsed.relationships : [],
-        claims: Array.isArray(parsed.claims) ? parsed.claims : [],
-        confidence: 0.8,
-        extractedBy: `llm:openai:${MODEL}`
-      };
+      return sanitizeExtractionResult(parsed, `llm:openai:${MODEL}`, 0.8);
     } catch {
       return empty;
     }

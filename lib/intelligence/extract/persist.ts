@@ -23,7 +23,13 @@ export async function persistExtraction(documentId: string, result: ExtractionRe
 
   const entityIdByName = new Map<string, string>();
 
+  // Deterministic adapters always produce well-formed entities, but LLM
+  // output (lib/intelligence/extract/llm/*) is never guaranteed to match
+  // the requested JSON shape -- a small local model in particular can
+  // return an entity with a missing/null name. Skip rather than crash the
+  // whole batch over one bad record.
   for (const entity of result.entities) {
+    if (!entity?.name || typeof entity.name !== "string" || !entity.entityType) continue;
     const key = `${entity.entityType}:${entity.name.toLowerCase()}`;
     if (entityIdByName.has(key)) continue;
 
@@ -63,6 +69,7 @@ export async function persistExtraction(documentId: string, result: ExtractionRe
   const relationshipIdByKey = new Map<string, string>();
 
   for (const rel of result.relationships) {
+    if (!rel?.fromEntityName || !rel?.toEntityName || !rel?.relationshipType) continue;
     const fromId = await resolveEntityId(rel.fromEntityName);
     const toId = await resolveEntityId(rel.toEntityName);
     if (!fromId || !toId) continue;
@@ -80,6 +87,8 @@ export async function persistExtraction(documentId: string, result: ExtractionRe
   }
 
   for (const claim of result.claims) {
+    if (!claim?.claimText || typeof claim.claimText !== "string") continue;
+
     let entityId: string | null = null;
     let relationshipId: string | null = null;
 

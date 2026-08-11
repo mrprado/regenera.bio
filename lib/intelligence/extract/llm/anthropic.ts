@@ -1,4 +1,5 @@
 import type { ExtractionResult } from "../types";
+import { sanitizeExtractionResult } from "../types";
 import type { LLMProvider } from "./types";
 
 // Optional, paid, OFF by default. Only becomes available if
@@ -50,13 +51,7 @@ export const anthropicProvider: LLMProvider = {
       const data = await res.json();
       const raw = data.content?.[0]?.text ?? "{}";
       const parsed = JSON.parse(raw);
-      return {
-        entities: Array.isArray(parsed.entities) ? parsed.entities : [],
-        relationships: Array.isArray(parsed.relationships) ? parsed.relationships : [],
-        claims: Array.isArray(parsed.claims) ? parsed.claims : [],
-        confidence: 0.8,
-        extractedBy: `llm:anthropic:${MODEL}`
-      };
+      return sanitizeExtractionResult(parsed, `llm:anthropic:${MODEL}`, 0.8);
     } catch {
       return empty;
     }

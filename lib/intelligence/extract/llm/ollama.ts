@@ -1,4 +1,5 @@
 import type { ExtractionResult } from "../types";
+import { sanitizeExtractionResult } from "../types";
 import type { LLMProvider } from "./types";
 
 // Free, self-hosted extraction escalation path -- the spec's own
@@ -65,13 +66,7 @@ export const ollamaProvider: LLMProvider = {
 
       const data = await res.json();
       const parsed = JSON.parse(data.response ?? "{}");
-      return {
-        entities: Array.isArray(parsed.entities) ? parsed.entities : [],
-        relationships: Array.isArray(parsed.relationships) ? parsed.relationships : [],
-        claims: Array.isArray(parsed.claims) ? parsed.claims : [],
-        confidence: 0.6,
-        extractedBy: `llm:ollama:${model()}`
-      };
+      return sanitizeExtractionResult(parsed, `llm:ollama:${model()}`, 0.6);
     } catch {
       return empty;
     }
