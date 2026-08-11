@@ -9,14 +9,14 @@ import type { LLMProvider } from "./types";
 
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
 
-const EXTRACTION_PROMPT = (sourceLabel: string, text: string) => `You extract structured facts from intelligence-gathering source text for Regenera, a regenerative infrastructure advisory. Source: "${sourceLabel}".
+const EXTRACTION_PROMPT = (sourceLabel: string, text: string) => `You extract structured facts that appear IN THE TEXT below. This paragraph is instructions, not content -- never extract facts about these instructions, about "Regenera", or about the task itself, only about what the TEXT states.
 
-Extract only what the text actually states. Never invent organizations, people, amounts, or relationships not present in the text. If nothing extractable is present, return empty arrays.
+Extract only what the TEXT actually states. Never invent organizations, people, amounts, or relationships not present in it. Every claim needs a real confidence number (0 to 1) reflecting how directly the TEXT states it. A claim whose text is just an entity's own name restated is not a real claim -- omit it. If the TEXT has no real factual content (navigation menus, login pages, boilerplate), returning empty arrays is the correct answer, not a failure.
 
 Respond with ONLY valid JSON in this exact shape, no other text:
-{"entities":[{"entityType":"organization|person|fund|project|asset|regulator|jurisdiction","name":"...","aliases":[],"details":{}}],"relationships":[{"fromEntityName":"...","toEntityName":"...","relationshipType":"...","confidence":0.0}],"claims":[{"entityName":"...","claimText":"...","confidence":0.0}]}
+{"entities":[{"entityType":"organization|person|fund|project|asset|regulator|jurisdiction","name":"...","aliases":[],"details":{}}],"relationships":[{"fromEntityName":"...","toEntityName":"...","relationshipType":"...","confidence":0.0}],"claims":[{"entityName":"...","claimText":"a specific factual sentence from the TEXT, not a name or category label","confidence":0.0}]}
 
-TEXT:
+TEXT (source: "${sourceLabel}"):
 ${text.slice(0, 12000)}`;
 
 export const anthropicProvider: LLMProvider = {

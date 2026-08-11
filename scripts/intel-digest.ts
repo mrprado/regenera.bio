@@ -1,19 +1,28 @@
-// Run by .github/workflows/intel-digest.yml on a schedule (after the
-// extraction workflow has had time to run). Summarizes what actually
-// happened in the intelligence system since the last digest -- new
-// documents collected, new entities/relationships/evidence extracted,
-// changes detected -- and emails it via the same Resend integration the
-// site's own contact/lead forms use (lib/notify.ts).
+// Run by .github/workflows/intel-digest.yml twice daily (morning and
+// evening). Summarizes what actually happened in the intelligence system
+// since the last digest -- new documents collected, new entities/
+// relationships/evidence extracted, source changes detected -- as a
+// letter, and emails it via the same Resend integration the site's own
+// contact/lead forms use (lib/notify.ts).
 //
 // Deliberately does NOT claim to surface "opportunities" or "signals" --
 // no agent/prioritization code exists yet (see docs/intelligence-system/
 // ARCHITECTURE.md, intel_signals is unused). This is a factual activity
-// summary, not intelligence synthesis; don't let the subject line or
-// framing imply more than that until there's real signal-generation code
-// behind it.
+// summary, not intelligence synthesis; the letter says so plainly rather
+// than implying more analysis happened than actually did.
+//
+// REPORT_PERIOD env var ("morning" | "evening", default "morning") picks
+// the greeting/report_type; the two scheduled runs in the workflow set it
+// differently.
 
 import { createAdminClient } from "../lib/supabase/admin";
 import { sendNotificationEmail } from "../lib/notify";
+
+type Period = "morning" | "evening";
+
+function formatEvidenceLine(claimText: string): string {
+  return claimText.length > 220 ? `${claimText.slice(0, 217)}...` : claimText;
+}
 
 async function main() {
   const supabase = createAdminClient();
@@ -21,6 +30,11 @@ async function main() {
     console.error("SUPABASE_SERVICE_ROLE_KEY / NEXT_PUBLIC_SUPABASE_URL not configured, nothing to do.");
     process.exit(1);
   }
+
+  const period: Period = process.env.REPORT_PERIOD === "evening" ? "evening" : "morning";
+  const reportType = period === "evening" ? "daily_evening" : "daily_morning";
+  const greeting = period === "evening" ? "Good evening, Alan," : "Good morning, Alan,";
+  const subjectLabel = period === "evening" ? "evening briefing" : "morning briefing";
 
   const { data: lastReport } = await supabase.from("intel_reports").select("generated_at").order("generated_at", { ascending: false }).limit(1).maybeSingle();
 
@@ -31,47 +45,73 @@ async function main() {
     supabase.from("intel_documents").select("id, url, intel_sources(name)").gte("fetched_at", periodStart.toISOString()),
     supabase.from("intel_entities").select("entity_type, name").gte("created_at", periodStart.toISOString()),
     supabase.from("intel_entity_relationships").select("id, relationship_type").gte("created_at", periodStart.toISOString()),
-    supabase.from("intel_evidence").select("claim_text, confidence").gte("extracted_at", periodStart.toISOString()).order("confidence", { ascending: false }).limit(15),
+    supabase.from("intel_evidence").select("claim_text, confidence").gte("extracted_at", periodStart.toISOString()).order("confidence", { ascending: false }).limit(8),
     supabase.from("intel_changes").select("id, significance").gte("detected_at", periodStart.toISOString()),
     supabase.from("intel_sources").select("is_active")
   ]);
 
+  const docCount = documents.data?.length ?? 0;
+  const entityCount = entities.data?.length ?? 0;
+  const relCount = relationships.data?.length ?? 0;
+  const evidenceCount = evidence.data?.length ?? 0;
+  const changeCount = changes.data?.length ?? 0;
   const activeSources = (sources.data ?? []).filter((s) => s.is_active).length;
   const totalSources = sources.data?.length ?? 0;
 
-  const entityCountsByType = (entities.data ?? []).reduce<Record<string, number>>((acc, e) => {
-    acc[e.entity_type] = (acc[e.entity_type] ?? 0) + 1;
-    return acc;
-  }, {});
+  const uniqueSourceNames = Array.from(
+    new Set((documents.data ?? []).map((d) => (d as { intel_sources?: { name?: string } }).intel_sources?.name).filter((n): n is string => Boolean(n)))
+  );
 
-  const lines = [
-    `Regenera Intelligence OS -- activity digest`,
-    `${periodStart.toISOString().slice(0, 16).replace("T", " ")} to ${periodEnd.toISOString().slice(0, 16).replace("T", " ")} UTC`,
-    "",
-    `Source registry: ${activeSources} active / ${totalSources} total.`,
-    "",
-    `Documents collected: ${documents.data?.length ?? 0}`,
-    ...(documents.data ?? []).slice(0, 10).map((d) => `  - ${(d as { intel_sources?: { name?: string } }).intel_sources?.name ?? d.url}`),
-    ...((documents.data?.length ?? 0) > 10 ? [`  ...and ${(documents.data?.length ?? 0) - 10} more`] : []),
-    "",
-    `Entities extracted: ${entities.data?.length ?? 0}${Object.keys(entityCountsByType).length ? ` (${Object.entries(entityCountsByType).map(([t, c]) => `${c} ${t}`).join(", ")})` : ""}`,
-    `Relationships extracted: ${relationships.data?.length ?? 0}`,
-    `Evidence-cited claims: ${evidence.data?.length ?? 0}`,
-    ...(evidence.data ?? []).slice(0, 8).map((e) => `  - ${e.claim_text}`),
-    "",
-    `Source changes detected: ${changes.data?.length ?? 0}`,
-    "",
-    "This is a factual activity summary of what the collector and extraction pipeline did, not an analyzed opportunity report -- no agent/prioritization layer exists yet.",
-    "",
-    "Full detail: docs/intelligence-system/ in the repo, or query Supabase directly."
-  ];
+  const quiet = docCount === 0 && entityCount === 0 && evidenceCount === 0 && changeCount === 0;
 
-  const content = lines.join("\n");
+  const paragraphs: string[] = [greeting, ""];
+
+  if (quiet) {
+    paragraphs.push(
+      "Nothing new came through the intelligence system since your last briefing -- no documents collected, nothing extracted. That's expected right now: the collector itself isn't on a schedule yet, only extraction is, so new material only shows up here when someone runs a collection pass by hand.",
+      ""
+    );
+  } else {
+    const topLine =
+      docCount > 0
+        ? `The system captured ${docCount} document${docCount === 1 ? "" : "s"} since your last briefing${uniqueSourceNames.length ? `, across sources including ${uniqueSourceNames.slice(0, 5).join(", ")}${uniqueSourceNames.length > 5 ? `, and ${uniqueSourceNames.length - 5} more` : ""}` : ""}.`
+        : `No new documents were collected since your last briefing, but the extraction pipeline processed material already on hand.`;
+    paragraphs.push(topLine, "");
+
+    if (entityCount > 0 || evidenceCount > 0) {
+      paragraphs.push(
+        `That produced ${entityCount} new entit${entityCount === 1 ? "y" : "ies"} and ${evidenceCount} evidence-cited claim${evidenceCount === 1 ? "" : "s"}${relCount > 0 ? `, with ${relCount} new relationship${relCount === 1 ? "" : "s"} linking them` : ""} in the knowledge graph.`,
+        ""
+      );
+    }
+
+    if (evidenceCount > 0) {
+      paragraphs.push("A few of what came in:");
+      for (const e of (evidence.data ?? []).slice(0, 6)) {
+        paragraphs.push(`  - ${formatEvidenceLine(e.claim_text)}`);
+      }
+      paragraphs.push("");
+    }
+
+    if (changeCount > 0) {
+      paragraphs.push(`${changeCount} previously-tracked source${changeCount === 1 ? "" : "s"} showed real content changes since last check.`, "");
+    }
+  }
+
+  paragraphs.push(
+    `Source registry stands at ${activeSources} active out of ${totalSources} tracked.`,
+    "",
+    "A note on what this is: this is a factual summary of what the collector and extraction pipeline actually did, not an analyzed opportunity list -- there's no agent layer yet that prioritizes or interprets these facts for you. Full detail always lives in docs/intelligence-system/ in the repo, or I can query the database directly on request.",
+    "",
+    "-- Your Regenera Intelligence System"
+  );
+
+  const content = paragraphs.join("\n");
 
   const { data: report, error: reportError } = await supabase
     .from("intel_reports")
     .insert({
-      report_type: "daily_morning",
+      report_type: reportType,
       period_start: periodStart.toISOString().slice(0, 10),
       period_end: periodEnd.toISOString().slice(0, 10),
       content
@@ -84,7 +124,7 @@ async function main() {
     process.exit(1);
   }
 
-  const sent = await sendNotificationEmail(`Regenera Intelligence digest -- ${periodEnd.toISOString().slice(0, 10)}`, content);
+  const sent = await sendNotificationEmail(`Your ${subjectLabel} -- Regenera Intelligence, ${periodEnd.toISOString().slice(0, 10)}`, content);
 
   await supabase.from("intel_report_deliveries").insert({
     report_id: report.id,

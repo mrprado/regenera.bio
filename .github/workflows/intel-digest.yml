@@ -1,26 +1,41 @@
 name: Intelligence OS digest
 
-# Emails a factual activity summary (documents collected, entities/
+# Emails a letter-style activity summary (documents collected, entities/
 # relationships/evidence extracted, changes detected) since the last
 # digest, via the same Resend integration the site's contact/lead forms
-# use. Scheduled 30 minutes after the extraction workflow so there's
-# something to report, though the two run independently (GitHub Actions
-# has no built-in cross-workflow dependency).
+# use. Runs twice daily -- 7am and 7pm US Eastern -- per explicit
+# request. Independent of the extraction workflow (GitHub Actions has no
+# built-in cross-workflow dependency); the morning run is offset 30
+# minutes after extraction's own schedule so there's usually something
+# new to report, not because of any real ordering guarantee.
 #
-# Not yet run as of creation -- needs RESEND_API_KEY, CONTACT_FROM_EMAIL,
-# and CONTACT_TO_EMAIL added as repo secrets (Settings -> Secrets and
-# variables -> Actions). These are separate from Netlify's env vars even
-# if the values are the same, since GitHub Actions and Netlify don't
-# share environment configuration. Trigger a manual run
-# (workflow_dispatch) and confirm a real email arrives before trusting
-# the schedule to run unattended -- same discipline as
-# intel-extraction.yml, which needed 3 real fixes before its first
-# successful run.
+# US Eastern has no fixed UTC offset -- this is pinned to EDT (UTC-4,
+# in effect roughly March-November, including now). During EST months
+# (UTC-5) these will fire an hour later than intended (8am/8pm ET) until
+# manually adjusted -- a known, accepted limitation of GitHub Actions'
+# UTC-only cron, not a bug to silently work around.
+#
+# Verified 2026-08-11: a first real run revealed the small Ollama model
+# (llama3.2:1b) had hallucinated a self-referential "fact" by echoing the
+# extraction prompt's own framing text back as if it were content -- see
+# docs/intelligence-system/EXTRACTION.md and the sanitizeExtractionResult
+# hardening in lib/intelligence/extract/types.ts. Re-verify a real send
+# after this workflow's own changes before trusting the schedule.
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "Which greeting/report_type to use for a manual test run"
+        required: false
+        default: morning
+        type: choice
+        options:
+          - morning
+          - evening
   schedule:
-    - cron: "30 6 * * *"
+    - cron: "30 11 * * *" # ~7:00am ET (EDT, UTC-4)
+    - cron: "0 23 * * *" # 7:00pm ET (EDT, UTC-4)
 
 jobs:
   digest:
@@ -41,6 +56,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Determine report period
+        id: period
+        run: |
+          if [ "${{ github.event.schedule }}" = "0 23 * * *" ]; then
+            echo "period=evening" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ inputs.period }}" ]; then
+            echo "period=${{ inputs.period }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "period=morning" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Send digest
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -48,4 +74,5 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           CONTACT_FROM_EMAIL: ${{ secrets.CONTACT_FROM_EMAIL }}
           CONTACT_TO_EMAIL: ${{ secrets.CONTACT_TO_EMAIL }}
+          REPORT_PERIOD: ${{ steps.period.outputs.period }}
         run: npx tsx scripts/intel-digest.ts
