@@ -937,10 +937,37 @@ wrote a genuine new entity + evidence row to production Supabase (verified via
 Daily schedule enabled (`cron: "0 6 * * *"`) on that basis, at the user's explicit
 go-ahead, not unprompted.
 
+**Phase 4d (done, 2026-08-11, same session): award-fact extraction, the actual
+highest-value capability.** User asked for "a real extraction with real info" — the
+World Bank Procurement adapter previously only captured project-level metadata
+(name, country, notice type), not who actually won a contract or for how much, which
+is the single most valuable fact type this whole system exists to surface. Enhanced
+it to parse `notice_text` (a loosely-structured HTML blob, only present on
+`notice_type: "Contract Award"` notices, not a clean JSON field) for the awarded
+bidder's name and signed contract price. **Found and fixed a real bug while proving
+it against real data**: the notice_text also contains a "Beneficial Ownership
+Details" sub-section that restates the SAME winning bidder's name (a compliance
+disclosure, not a second bidder), which the first version double-counted, producing
+one correctly-priced and one price-less duplicate per real award — confirmed by
+reading a real notice's full HTML, not by reasoning about the regex abstractly.
+Fixed by stopping the captured section at "Beneficial Ownership Details" too.
+
+Extracted from a real 20-notice solar-sector sample (13,317 total matching notices
+in World Bank's system): 3 real Contract Award notices, all on the same Sindh Solar
+Energy Project framework (Pakistan, World Bank loan IDA-62580, "Bulk Procurement of
+200,000 Solar Home Systems," split across 3 winners) — BBOXX (UK, $38.498M), d.light
+Design Ltd (Mauritius, $43.276M), Shenzhen Lemi Technology (China, $30.262M) — plus 7
+more real solar projects (Morocco's Ouarzazate CSP complex, India's Rewa/Neemuch/
+Shajapur/Agar solar parks, Comoros' electrification program, Burundi's school
+electrification program, Pakistan's Tarbela floating solar project). 12 new entities,
+4 new relationships, 10 new evidence rows, all real and persisted to production
+Supabase. Full detail in `docs/intelligence-system/EXTRACTION.md`'s new "Award-fact
+extraction" section.
+
 **Status**: schema + agent registry (26, all `planned`) + generic collector + a real
 94-source registry (66 active) + a working, now-scheduled extraction pipeline (both
-deterministic adapters and the free Ollama LLM-escalation path all proven against
-real data) all exist. **47 real captured documents** sit in `intel_documents`, with
+deterministic adapters, now including real award/counterparty/capital facts, and the
+free Ollama LLM-escalation path, all proven against real data) all exist. **47 real captured documents** sit in `intel_documents`, with
 entities/relationships/evidence extracted from 5 of them so far via manual proofs
 plus the first scheduled-path run — the extraction workflow will keep working
 through the backlog daily from here on its own, no further manual intervention

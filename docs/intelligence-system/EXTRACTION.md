@@ -86,6 +86,53 @@ that wrote a genuine new entity + evidence row to production Supabase
 (verified via `execute_sql`, not assumed from a green checkmark). The
 `schedule:` trigger (`cron: "0 6 * * *"`, daily) is now enabled.
 
+## Award-fact extraction (World Bank Procurement adapter)
+
+The most valuable fact type this system exists to surface — who was
+actually awarded a contract, for how much — doesn't live in a clean JSON
+field on the World Bank Procurement API. It's inside `notice_text`, a
+loosely-structured HTML blob, only present on `notice_type: "Contract
+Award"` notices. The adapter (`worldBankProcurement.ts`) now parses this:
+finds the "Awarded Bidder(s):" section, extracts the winning
+organization's name and WB bidder ID, and pairs it with the "Signed
+Contract price" that follows.
+
+**A real bug was found and fixed while proving this against real data**:
+the section also contains a "Beneficial Ownership Details" sub-section
+that *restates the same winning bidder's name* (a compliance disclosure,
+not a second bidder) — the first version of the section-boundary regex
+didn't stop there, so it double-counted every real award (once correctly
+priced, once with no price attached, since the price list has only one
+real entry). Confirmed by inspecting a real notice's full `notice_text`
+(Sindh Solar Energy Project, Pakistan), not by reasoning about the regex
+in the abstract. Fixed by stopping the captured section at whichever
+comes first among "Beneficial Ownership Details", "Evaluated Bidder(s)",
+or "Rejected Bidder(s)".
+
+**Known limitation, not silently assumed away**: awarded names and prices
+are paired by their position within the section. This is correct for the
+common case (one notice, one winner) but would misattribute price to name
+in a genuinely multi-winner single notice — not yet observed in real data,
+but worth knowing if a future batch surfaces one.
+
+**Proven with real data**: extracted from a real 20-notice sample of
+World Bank solar-sector procurement (13,317 total matching notices in
+their system; 20 sampled). Found 3 real Contract Award notices, all on
+the same underlying framework agreement (Sindh Solar Energy Project,
+Pakistan, World Bank loan IDA-62580, "Bulk Procurement of 200,000 Solar
+Home Systems", split across 3 winners):
+- BBOXX (UK) — USD 38,498,000
+- d.light Design Ltd (Mauritius) — USD 43,276,000
+- Shenzhen Lemi Technology Development Co., Ltd (China) — USD 30,262,000
+
+Plus 7 more real solar projects captured as entities (Morocco's
+Ouarzazate CSP complex, India's Rewa/Neemuch/Shajapur/Agar solar parks,
+Comoros' island electrification program, Burundi's school
+electrification program, Pakistan's Tarbela floating solar project).
+12 new entities, 4 new relationships, 10 new evidence rows, all persisted
+to production Supabase and citation-traceable back to the real captured
+document.
+
 ## What's actually proven vs. designed-but-untested
 
 **Proven, with real data**: both schema-specific adapters, run against real
