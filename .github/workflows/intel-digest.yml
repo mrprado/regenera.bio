@@ -1,0 +1,51 @@
+name: Intelligence OS digest
+
+# Emails a factual activity summary (documents collected, entities/
+# relationships/evidence extracted, changes detected) since the last
+# digest, via the same Resend integration the site's contact/lead forms
+# use. Scheduled 30 minutes after the extraction workflow so there's
+# something to report, though the two run independently (GitHub Actions
+# has no built-in cross-workflow dependency).
+#
+# Not yet run as of creation -- needs RESEND_API_KEY, CONTACT_FROM_EMAIL,
+# and CONTACT_TO_EMAIL added as repo secrets (Settings -> Secrets and
+# variables -> Actions). These are separate from Netlify's env vars even
+# if the values are the same, since GitHub Actions and Netlify don't
+# share environment configuration. Trigger a manual run
+# (workflow_dispatch) and confirm a real email arrives before trusting
+# the schedule to run unattended -- same discipline as
+# intel-extraction.yml, which needed 3 real fixes before its first
+# successful run.
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "30 6 * * *"
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Same Node 22 requirement as intel-extraction.yml --
+          # @supabase/supabase-js's RealtimeClient needs native WebSocket
+          # support at createClient() time regardless of whether realtime
+          # features are used. Set directly this time since it's already
+          # a known, confirmed requirement, not rediscovered.
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send digest
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CONTACT_FROM_EMAIL: ${{ secrets.CONTACT_FROM_EMAIL }}
+          CONTACT_TO_EMAIL: ${{ secrets.CONTACT_TO_EMAIL }}
+        run: npx tsx scripts/intel-digest.ts
