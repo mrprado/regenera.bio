@@ -803,17 +803,59 @@ document/change row alongside the four from Phase 3b. Full detail in
 the same fetch-test-first check, don't skip it out of a false sense that .gov domains
 are automatically easy.
 
+**Phase 3d (done, 2026-08-11, same session, continued without stopping to ask per
+"next, no need to ask individually, finish phase completely"): Africa, India, GCC,
+mining/filings exchanges, and the global capital layer, all in one continuous push.**
+60 more real sources, same fetch-test-first discipline as every prior batch. Real
+finding to remember: **roughly 30% of every candidate in this round failed for a
+specific, individually-diagnosed technical reason, never a wrong URL** — HTTP 403
+(bot protection, by far the most common: NERSA, Nigeria's www subdomain quirks,
+DEWA, Ministry of Power India, Blackstone, Franco-Nevada, Wheaton Precious Metals,
+Royal Gold, British International Investment, LSE's lse.co.uk mirror), an EXPIRED
+TLS certificate (South Africa's own Department of Electricity and Energy site),
+a certificate for the WRONG domain (Saudi's renewable-energy eProcurement portal is
+actually white-labeled on Jaggaer's SaaS platform), a refused connection (Kenya's
+EPRA, India's GeM, UAE's Ministry of Energy and Infrastructure, Saudi's Ministry of
+Energy, Campden Wealth), and two sources that returned a healthy HTTP 200 while
+actually serving something useless — Etimad (Saudi procurement) and Abu Dhabi's own
+Government Procurement Gate both looked fine by status code alone but turned out to
+be a JS-rendered empty shell and a WAF rejection page respectively, caught only by
+checking the actual extracted text. **Lesson for any future batch: never trust a 200
+status code alone, always check what cheerio actually extracts.**
+
+GCC turned out to be the hardest region tested (2 of 8 candidates active — only Abu
+Dhabi's Department of Energy and the UAE's federal `u.ae` energy-entities page
+worked), despite being named "VERY HIGH" priority in the prompt. Ghana was the
+cleanest cluster (5 of 5 active). SEC EDGAR's Full-Text Search API is real and
+powerful (10,000+ hits on a test query, no key needed) but SEC requires a
+compliant `User-Agent` header identifying a real contact or it 403s — the
+collector's current generic UA (`lib/intelligence/collect.ts`) will need a one-line
+update before this source is actually usable, logged as a known gap, not fixed yet
+since no source is being collected on a schedule regardless.
+
+Also proved two more sources end to end (ADB, Family Office Exchange), on top of
+XM from Phase 3c, bringing real captured documents to 7.
+
+**Honest completion status against the full prompt, stated plainly so a future
+summary doesn't overclaim**: every category the prompt named now has real, verified
+coverage (multilaterals, 4 LATAM countries, 4 African countries, India, GCC, mining
+exchanges, ~12 asset managers, private banks, family-office gatekeepers, mining
+royalty companies, the DFI list). That is genuinely comprehensive, not just a P0
+sliver — but it is a first pass, not literal completion of the ~150+ individually
+named entities in the original prompt. Full remaining gap list (LATAM/Africa/GCC/Asia
+countries not yet reached, the ~20 named project-finance banks, ~13 named private
+banks beyond UBS/JPM, Europe beyond EIB/EBRD) is in `docs/intelligence-system/
+SOURCE_REGISTRY.md`, not repeated here — read that file before claiming the registry
+is "done," and update it rather than this section if another batch runs.
+
 **Status**: schema + agent registry (26, all `planned`) + generic collector + a real,
-verified 34-source registry (25 active, spanning P0 multilaterals and the LATAM
-government/regulatory layer) exist, with 5 real captured documents proving the
-pipeline works end to end, not just in theory. No scheduler wired up yet (needs
-`INTEL_COLLECTOR_SECRET` in Netlify plus a `pg_cron`/`pg_net` or GitHub Actions cron
-decision, both logged in `REQUIRED_FROM_ALAN.md`), no dashboard route, no
-extraction/agent code beyond the catalog entries, so nothing yet turns a captured
-document into an entity/claim/signal, only into a stored, hashed, change-tracked row.
-Next recommended batch per `SOURCE_REGISTRY.md`: Africa government/regulatory layer,
-before the much larger private-capital/asset-manager layer. This is intentionally
-being built in small, verified batches matching how the CRM and website work went,
-not as one giant unsupervised pass — don't attempt to jump ahead to later phases
-without picking this section back up first, and never seed a real `intel_sources` row
-without actually fetch-testing it first, per the pattern above.
+verified 94-source registry (67 active) exist, with 7 real captured documents proving
+the pipeline works end to end. No scheduler wired up yet (needs
+`INTEL_COLLECTOR_SECRET` in Netlify, a `pg_cron`/`pg_net` vs GitHub Actions decision,
+and the SEC User-Agent fix above), no dashboard route, no extraction/agent code
+beyond the catalog entries, so nothing yet turns a captured document into an
+entity/claim/signal, only into a stored, hashed, change-tracked row. This is
+intentionally being built in verified batches, not fabricated ones — never seed a
+real `intel_sources` row without actually fetch-testing it first (status code AND
+extracted text, not status code alone), per the pattern established across all four
+Phase 3 batches.
