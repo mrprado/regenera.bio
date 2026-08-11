@@ -746,13 +746,51 @@ none) — no fake "source" is left sitting in the registry pretending to be real
 `get_advisors(security)` re-checked clean (same two pre-existing accepted findings,
 nothing new) after this batch.
 
-**Status**: schema + agent registry + generic collector infrastructure exist. Zero
-rows in every `intel_*` table except `intel_agents` (26, all `planned`). No real
-source has been added, no scheduler is wired up yet, no dashboard route, no agent code
-beyond the catalog entry. `docs/intelligence-system/REQUIRED_FROM_ALAN.md` is current
-and names the one real blocker to further progress: a real prioritized source list
-from Alan, since building against an arbitrary source would be wasted work per the
-audit's own reasoning. This is intentionally being built in small, verified batches
-matching how the CRM and website work went, not as one giant unsupervised pass — don't
-attempt to jump ahead to later phases without picking this section back up first, and
-don't seed real `intel_sources` rows on a guess about what matters.
+**Phase 3b (done, 2026-08-11): real Priority-0 source registry seeded, no waiting for
+a manual list.** The user's follow-up prompt explicitly said not to wait for a
+hand-provided URL list and to discover/verify sources directly. Did real research, not
+guessing: WebSearch to find each institution's actual current URL, then WebFetch (and,
+where that 403'd, a direct Node `fetch` using the collector's own user agent) to
+confirm it's genuinely reachable before writing it to `intel_sources` — 15 rows total,
+10 `is_active = true` (World Bank Procurement Notices API, World Bank Documents &
+Reports API, World Bank Projects & Operations, World Bank PPI Database, IDB Open Data
+API, IDB Projects Dataset, UNDP Procurement Notices, UNGM, IFC Disclosure Portal, EBRD
+Client e-Procurement Portal), 5 `is_active = false` with a documented reason (IDB's
+main site, AfDB's entire domain family, and EIB's projects page all returned HTTP 403
+to every fetch method tried, likely Cloudflare/bot protection, not a wrong URL — noted
+per-row rather than silently dropped, since the Source Discovery Agent design in
+`ARCHITECTURE.md` calls for tracking collection feasibility, not just activating what
+works). Full detail and the queue for what's next: `docs/intelligence-system/
+SOURCE_REGISTRY.md`.
+
+**Then actually proved collection, not just reachability**: ran the exact fetch → strip
+HTML → SHA-256 hash logic from `lib/intelligence/collect.ts` against 4 of the newly
+active sources for real, inserted the resulting rows into `intel_documents` and
+`intel_changes` via `execute_sql` (still no local `SUPABASE_SERVICE_ROLE_KEY`, same gap
+as before, so the live route itself remains unexercised over HTTP pending a deploy).
+Re-fetched IFC's page a second time and got the identical content hash, confirming the
+"don't reprocess unchanged content" behavior the spec's own section 13 calls for
+actually holds. These are real seed documents now, not test data, and were not deleted.
+
+**The real scale of what's left, stated plainly**: the user's own prompt named roughly
+20 global asset managers, ~20 project-finance/private-credit banks, ~13 private banks,
+the whole family-office/UHNW ecosystem, and per-country government/regulator/
+procurement portals across 8+ LATAM countries, 13+ African countries, India, 6 GCC
+states, Europe, and 9+ Asian countries as the target universe (50-100 P1 sources).
+Fifteen real P0 sources is real, verified progress, not the finish line — don't let a
+future summary of this section imply the source registry is "done." `SOURCE_REGISTRY.md`
+recommends the LATAM government/regulatory layer as the next batch (Mexico/Brazil/
+Chile/Colombia, maps directly onto the existing Selected Mandates pipeline) before the
+private-capital/asset-manager layer, since government sources are more likely to be
+verifiable via API/structured data than JS-heavy investor-relations pages.
+
+**Status**: schema + agent registry (26, all `planned`) + generic collector + a real,
+verified 15-source P0 registry exist. No scheduler wired up yet (needs
+`INTEL_COLLECTOR_SECRET` in Netlify plus a `pg_cron`/`pg_net` or GitHub Actions cron
+decision, both logged in `REQUIRED_FROM_ALAN.md`), no dashboard route, no
+extraction/agent code beyond the catalog entries, so nothing yet turns a captured
+document into an entity/claim/signal, only into a stored, hashed, change-tracked row.
+This is intentionally being built in small, verified batches matching how the CRM and
+website work went, not as one giant unsupervised pass — don't attempt to jump ahead to
+later phases without picking this section back up first, and never seed a real
+`intel_sources` row without actually fetch-testing it first, per the pattern above.
