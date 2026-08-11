@@ -53,6 +53,18 @@ Two follow-up passes at the user's request ("run the collector for more real dat
 
 **Running total after Batch 4: 94 sources seeded, 65 active, 67 real captured documents, 62 entities, 26 relationships, 20 evidence-cited claims.**
 
+## Batch 5: conservation, regenerative agriculture, natural capital (2026-08-11, same session)
+
+Explicit gap named by the user: everything collected through Batch 4 is generic procurement/government/capital-market sources -- nothing on conservation, regenerative agriculture, carbon/biodiversity markets, or natural capital, despite that being core to Regenera's actual positioning. 9 real sources researched and fetch-verified the same way as every prior batch:
+
+**Active (8)**: GEF Projects Database (real per-country/topic project counts confirmed, e.g. Brazil 96 projects, Argentina 53), Gold Standard Impact Registry (carbon credits), Mirova Natural Capital (conservation/biodiversity investment platform, >1bn AUM target), FAO Climate Change Projects & Programmes, FAOSTAT, IFAD Projects and Programmes, Capitals Coalition (natural capital accounting, 370+ members), Biodiversity Credit Alliance (UNEP/UNDP-backed biodiversity credit market standards body).
+
+**Inactive (1)**: Verra Registry (`registry.verra.org`) -- world's largest voluntary carbon registry (3,886+ projects per their own reporting), but the registry app itself is a JS-rendered empty shell to a plain fetch, same pattern as several other registry-style sites this session. A public API reportedly exists (~5,000 project records, no auth) but the exact endpoint wasn't confirmed in this pass -- worth a dedicated follow-up.
+
+**Proven**: GEF's Projects Database was actually collected (real content captured and stored, not just reachability-tested).
+
+**Running total after Batch 5: 103 sources seeded, 73 active, 68 real captured documents.**
+
 ## What's explicitly NOT done yet — the rest of the prompt's ask
 
 The 2026-08-11 prompt's real scope is enormous: 20-30 P0 sources (roughly met) plus **50-100 P1 sources** spanning dozens of named global asset managers (BlackRock/GIP, Brookfield, KKR, Blackstone, etc.), ~20 named investment/project-finance banks, the family office/UHNW ecosystem and its gatekeepers, ~13 named private banks, and per-country government/regulatory/procurement portals across 8+ LATAM countries, 13+ African countries, India, 6 GCC states, Europe, and 9+ Asian countries — each with its own energy ministry, utility, regulator, PPP authority, and procurement portal to individually discover and verify. That is realistically several more full research batches of this same kind, not a gap to close in one pass. Doing it properly (real WebSearch + WebFetch verification per source, like the P0 batch above) rather than padding the registry with unverified guesses is the whole point of the "no fabrication" instruction the prompt itself included — so it's being paced, not skipped.

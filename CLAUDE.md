@@ -1014,13 +1014,48 @@ with no DST awareness, so this will run an hour later than intended, 8am/8pm ET,
 during EST months unless manually adjusted around the November/March changeover,
 documented rather than silently wrong).
 
-**Status**: schema + agent registry (26, all `planned`) + generic collector + a real
-94-source registry (66 active) + a working, scheduled extraction pipeline (both
-deterministic adapters, now including real award/counterparty/capital facts, and a
-hardened Ollama LLM-escalation path, all proven against real data, including one real
-caught-and-fixed hallucination) + a working twice-daily letter-format digest, verified
-delivering (Resend-confirmed) once the 3 required secrets were actually set, all
-exist. **47 real captured documents** sit in `intel_documents`, with
+**Phase 4g (done, 2026-08-11, same session): conservation/regenerative source gap
+closed, digest ranking fixed, collection scheduled.** After the digest fixes, the user
+directly named the real remaining gap: everything in the registry was generic
+procurement/government/capital-market content, nothing on conservation, regenerative
+agriculture, carbon/biodiversity markets, or natural capital -- despite that being
+core to Regenera's actual positioning. Seeded 9 more real, fetch-verified sources (GEF
+Projects Database, Gold Standard Impact Registry, Mirova Natural Capital, FAO climate
+projects, FAOSTAT, IFAD, Capitals Coalition, Biodiversity Credit Alliance; Verra
+Registry found and documented but deactivated, another JS-shell). Proved GEF's
+database produces real content (per-country/topic project counts). Registry now at
+103 sources, 73 active.
+
+Also fixed a real ranking bug the digest's own highlights section exposed: the $112M
+in real Sindh Solar contract awards (BBOXX/d.light/Shenzhen Lemi) sat at 0.85
+confidence, below the 0.9 given to every generic "Invitation for Bids" notice, so the
+most valuable facts in the whole registry were getting crowded out of the digest
+entirely. Bumped award facts to 0.95 (a signed transaction is a more certain fact than
+a bid announcement) and updated the already-inserted rows directly. And closed the
+real root cause behind the "there's no info here" complaint: collection was never
+scheduled, only extraction was, so nothing new ever flowed in for either to report on.
+`scripts/intel-collect.ts` + `.github/workflows/intel-collect.yml` now run the
+collector against all active sources daily at 05:30 UTC. Also fixed a related
+inefficiency this surfaced: the collector inserts a fresh document row every run
+regardless of whether content changed, so extraction's old "any recent document
+lacking evidence" queue would have silently re-processed identical unchanged content
+every day -- rewired to key off `intel_changes` instead (first captures + genuine
+content changes only). The digest itself now always includes a "highlights" section
+drawn from all-time top-confidence evidence, not just what changed since the last
+send, so a quiet cycle no longer produces an empty-feeling email -- confirmed working
+via a real triggered run (`19ddcaa`) that correctly led with the Sindh Solar awards.
+
+**Status**: schema + agent registry (26, all `planned`) + generic collector, now
+scheduled daily + a real 103-source registry (73 active), including real
+conservation/regenerative/natural-capital coverage, not just procurement/government +
+a working, scheduled extraction pipeline (deterministic adapters correctly ranking
+real transaction facts above boilerplate, plus a hardened Ollama LLM-escalation path)
++ a working twice-daily letter-format digest that stays substantive even on quiet
+cycles, verified delivering (Resend-confirmed) once the 3 required secrets were
+actually set, all exist. Still open: whether email is actually reaching the inbox vs.
+Resend reporting success but something filtering it downstream (the same open
+diagnostic thread from 2026-08-09, never fully resolved); no dashboard; no agent
+layer; no opportunity/signal engine; no WhatsApp. **47 real captured documents** sit in `intel_documents`, with
 entities/relationships/evidence extracted from 5 of them so far via manual proofs
 plus the first scheduled-path run — the extraction workflow will keep working
 through the backlog daily from here on its own, no further manual intervention
