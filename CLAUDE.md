@@ -784,13 +784,36 @@ Chile/Colombia, maps directly onto the existing Selected Mandates pipeline) befo
 private-capital/asset-manager layer, since government sources are more likely to be
 verifiable via API/structured data than JS-heavy investor-relations pages.
 
+**Phase 3c (done, 2026-08-11, same session): LATAM government/regulatory layer.** 19
+more sources across Mexico (SENER, CNE — the successor to CRE since 2025-03-18, don't
+use the old cre.gob.mx — CENACE, ComprasMX, SIE), Brazil (MME, ANEEL, ONS,
+Compras.gov.br), Chile (CNE Chile, SEA, Mercado Público), and Colombia (Ministerio de
+Minas y Energía, CREG, XM, Colombia Compra Eficiente/SECOP, ANLA), same research +
+fetch-test discipline as Phase 3b. Real finding worth keeping in mind for future
+batches: CENACE and SIE both returned HTTP 200 but an **empty body on plain fetch**
+(client-side-JS-rendered pages, cheerio finds nothing), so both were seeded active
+then flipped back to `is_active = false` once the collector test exposed this, rather
+than left active and silently producing useless empty captures. Coordinador Eléctrico
+Nacional (Chile) 403'd like the AfDB/EIB pattern; CAF failed TLS certificate
+verification entirely (their server's cert chain, not our tooling) under two
+independent methods. XM (Colombia) was actually collected end to end, a fifth real
+document/change row alongside the four from Phase 3b. Full detail in
+`docs/intelligence-system/SOURCE_REGISTRY.md`, which also states plainly that
+"government source" doesn't automatically mean "collectible" — every one still needs
+the same fetch-test-first check, don't skip it out of a false sense that .gov domains
+are automatically easy.
+
 **Status**: schema + agent registry (26, all `planned`) + generic collector + a real,
-verified 15-source P0 registry exist. No scheduler wired up yet (needs
+verified 34-source registry (25 active, spanning P0 multilaterals and the LATAM
+government/regulatory layer) exist, with 5 real captured documents proving the
+pipeline works end to end, not just in theory. No scheduler wired up yet (needs
 `INTEL_COLLECTOR_SECRET` in Netlify plus a `pg_cron`/`pg_net` or GitHub Actions cron
 decision, both logged in `REQUIRED_FROM_ALAN.md`), no dashboard route, no
 extraction/agent code beyond the catalog entries, so nothing yet turns a captured
 document into an entity/claim/signal, only into a stored, hashed, change-tracked row.
-This is intentionally being built in small, verified batches matching how the CRM and
-website work went, not as one giant unsupervised pass — don't attempt to jump ahead to
-later phases without picking this section back up first, and never seed a real
-`intel_sources` row without actually fetch-testing it first, per the pattern above.
+Next recommended batch per `SOURCE_REGISTRY.md`: Africa government/regulatory layer,
+before the much larger private-capital/asset-manager layer. This is intentionally
+being built in small, verified batches matching how the CRM and website work went,
+not as one giant unsupervised pass — don't attempt to jump ahead to later phases
+without picking this section back up first, and never seed a real `intel_sources` row
+without actually fetch-testing it first, per the pattern above.
