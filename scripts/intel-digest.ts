@@ -1,9 +1,19 @@
 // Run by .github/workflows/intel-digest.yml twice daily (morning and
-// evening). Summarizes what actually happened in the intelligence system
-// since the last digest -- new documents collected, new entities/
-// relationships/evidence extracted, source changes detected -- as a
-// letter, and emails it via the same Resend integration the site's own
-// contact/lead forms use (lib/notify.ts).
+// evening), after .github/workflows/intel-collect.yml and
+// intel-extraction.yml have had a chance to run. Summarizes what actually
+// happened in the intelligence system since the last digest -- new
+// documents collected, new entities/relationships/evidence extracted,
+// source changes detected -- as a letter, and emails it via the same
+// Resend integration the site's own contact/lead forms use
+// (lib/notify.ts).
+//
+// Always includes a "highlights" section drawn from the highest-
+// confidence evidence on record ALL-TIME, not just what changed since
+// the last briefing -- without this, a quiet period produces an email
+// with genuinely nothing in it, which is exactly what happened the first
+// time this ran on a schedule (confirmed: an empty "nothing new" email
+// with real, substantive facts sitting unmentioned in the database the
+// whole time).
 //
 // Deliberately does NOT claim to surface "opportunities" or "signals" --
 // no agent/prioritization code exists yet (see docs/intelligence-system/
@@ -41,13 +51,21 @@ async function main() {
   const periodStart = lastReport?.generated_at ? new Date(lastReport.generated_at) : new Date(Date.now() - 24 * 60 * 60 * 1000);
   const periodEnd = new Date();
 
-  const [documents, entities, relationships, evidence, changes, sources] = await Promise.all([
+  const [documents, entities, relationships, evidence, changes, sources, highlights] = await Promise.all([
     supabase.from("intel_documents").select("id, url, intel_sources(name)").gte("fetched_at", periodStart.toISOString()),
     supabase.from("intel_entities").select("entity_type, name").gte("created_at", periodStart.toISOString()),
     supabase.from("intel_entity_relationships").select("id, relationship_type").gte("created_at", periodStart.toISOString()),
     supabase.from("intel_evidence").select("claim_text, confidence").gte("extracted_at", periodStart.toISOString()).order("confidence", { ascending: false }).limit(8),
     supabase.from("intel_changes").select("id, significance").gte("detected_at", periodStart.toISOString()),
-    supabase.from("intel_sources").select("is_active")
+    supabase.from("intel_sources").select("is_active"),
+    // All-time highest-confidence claims, independent of the since-last-
+    // briefing window -- without this, a quiet period (no new collection/
+    // extraction) produces an email with genuinely nothing in it, which
+    // is exactly what happened in production the first time this ran on
+    // a schedule. This keeps every send substantive by drawing on what's
+    // actually accumulated in the knowledge graph, not just what changed
+    // in the last few hours.
+    supabase.from("intel_evidence").select("claim_text, confidence").order("confidence", { ascending: false }).order("extracted_at", { ascending: false }).limit(8)
   ]);
 
   const docCount = documents.data?.length ?? 0;
@@ -67,10 +85,7 @@ async function main() {
   const paragraphs: string[] = [greeting, ""];
 
   if (quiet) {
-    paragraphs.push(
-      "Nothing new came through the intelligence system since your last briefing -- no documents collected, nothing extracted. That's expected right now: the collector itself isn't on a schedule yet, only extraction is, so new material only shows up here when someone runs a collection pass by hand.",
-      ""
-    );
+    paragraphs.push("Nothing new came through the intelligence system since your last briefing -- no documents collected, nothing extracted this cycle.", "");
   } else {
     const topLine =
       docCount > 0
@@ -96,6 +111,17 @@ async function main() {
     if (changeCount > 0) {
       paragraphs.push(`${changeCount} previously-tracked source${changeCount === 1 ? "" : "s"} showed real content changes since last check.`, "");
     }
+  }
+
+  const alreadyShown = new Set((evidence.data ?? []).map((e) => e.claim_text));
+  const highlightRows = (highlights.data ?? []).filter((h) => !alreadyShown.has(h.claim_text)).slice(0, 5);
+
+  if (highlightRows.length > 0) {
+    paragraphs.push(quiet ? "In the meantime, here's what's already on record, for context:" : "Also worth keeping in view, from earlier captures still on record:");
+    for (const h of highlightRows) {
+      paragraphs.push(`  - ${formatEvidenceLine(h.claim_text)}`);
+    }
+    paragraphs.push("");
   }
 
   paragraphs.push(
