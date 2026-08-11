@@ -62,12 +62,29 @@ queued documents, then tears down. This is genuinely free (GitHub Actions'
 free tier minutes, no persistent infrastructure) and matches the spec's
 own preference for "existing GitHub allowance."
 
-**Not yet run.** The workflow is written and the local script type-checks
-and fails gracefully when unconfigured (verified), but no CI execution has
-happened — it needs `SUPABASE_SERVICE_ROLE_KEY` and
-`NEXT_PUBLIC_SUPABASE_URL` set as GitHub repo secrets first, and its
-`schedule:` trigger is commented out pending a manual `workflow_dispatch`
-run to confirm it actually works before it's allowed to run unattended.
+**Proven and scheduled as of 2026-08-11.** Repo secrets were set, and five
+manual `workflow_dispatch` runs were used to actually debug this against
+the real CI environment rather than guessing:
+
+1. `@/` path-alias resolution failure — `persist.ts` used the alias, but
+   `tsx` running standalone outside Next.js's build pipeline doesn't
+   resolve it the same way. Fixed to a relative import.
+2. `native WebSocket not found` from `@supabase/supabase-js`'s
+   `RealtimeClient`, which is constructed at `createClient()` time
+   regardless of whether realtime features are used, and needs Node 22+.
+   The workflow was pinned to Node 20. Fixed.
+3. An unhandled crash (`Cannot read properties of undefined (reading
+   'toLowerCase')`) when the small local model (`llama3.2:1b`) returned an
+   entity with no `name` field — small models don't reliably follow a
+   requested JSON shape. Fixed with a shared `sanitizeExtractionResult()`
+   (`lib/intelligence/extract/types.ts`) that every LLM provider now runs
+   its output through, plus defensive guards directly in
+   `persistExtraction()` itself.
+
+Run 5 succeeded end to end, including a real Ollama-escalated extraction
+that wrote a genuine new entity + evidence row to production Supabase
+(verified via `execute_sql`, not assumed from a green checkmark). The
+`schedule:` trigger (`cron: "0 6 * * *"`, daily) is now enabled.
 
 ## What's actually proven vs. designed-but-untested
 

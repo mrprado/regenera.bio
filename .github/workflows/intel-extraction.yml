@@ -6,19 +6,20 @@ name: Intelligence OS extraction
 # extraction actually happens in production -- free, per the spec's own
 # free/open-source-first requirement (section 7).
 #
-# First two manual runs (2026-08-11) failed before reaching real work:
-# run 1 hit a @/ path-alias resolution issue in persist.ts (fixed, tsx
-# doesn't resolve Next.js's alias outside its build pipeline), run 2 hit
-# "native WebSocket not found" from supabase-js's RealtimeClient on Node
-# 20 (fixed above, needs 22+). Once a manual run (workflow_dispatch)
-# actually succeeds end to end, uncomment the schedule below -- don't
-# uncomment it preemptively just because the fixes look right on paper.
+# First four manual runs (2026-08-11) surfaced three real bugs before
+# reaching real work: a @/ path-alias resolution issue in persist.ts (tsx
+# doesn't resolve Next.js's alias outside its build pipeline), "native
+# WebSocket not found" from supabase-js's RealtimeClient on Node 20 (needs
+# 22+), and an unhandled crash on malformed LLM output (a small local
+# model doesn't reliably follow the requested JSON shape). All three
+# fixed and verified -- run 5 (2026-08-11) succeeded end to end, including
+# a real Ollama-escalated extraction that wrote a genuine entity/evidence
+# row to Supabase. Schedule enabled below on that basis.
 
 on:
   workflow_dispatch: {}
-  # Uncomment once a manual run has been verified:
-  # schedule:
-  #   - cron: "0 6 * * *"
+  schedule:
+    - cron: "0 6 * * *"
 
 jobs:
   extract:

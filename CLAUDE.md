@@ -909,17 +909,46 @@ finding recorded, not silently left broken. Two captures (SENER, Abu Dhabi's DOE
 came back unusually small compared to earlier test fetches of the same URLs —
 flagged in the stored row as worth re-checking, not quietly trusted.
 
+**Phase 4c (done, 2026-08-11, same session): extraction workflow debugged live and
+scheduled.** User set the two GitHub repo secrets and triggered
+`workflow_dispatch` runs directly — real CI failures, real fixes, not guessed at:
+
+1. Run 1 failed on a `@/` path-alias resolution error in `persist.ts` — `tsx`
+   running standalone outside Next.js's build pipeline doesn't resolve that alias
+   the way Next's own webpack config does. Every other file in this module already
+   used relative imports for exactly this reason; `persist.ts` was the one
+   inconsistent file. Fixed.
+2. Run 2 failed with `native WebSocket not found` from `@supabase/supabase-js`'s
+   `RealtimeClient`, constructed at `createClient()` time regardless of whether
+   realtime features are used, requiring Node 22+. The workflow was pinned to Node
+   20. Fixed (bumped to 22).
+3. Run 3 crashed with `Cannot read properties of undefined (reading 'toLowerCase')`
+   — the actual Ollama-escalated call to `llama3.2:1b` returned an entity with no
+   `name` field. Small local models don't reliably follow a requested JSON shape,
+   confirmed in production, not a theoretical concern. Fixed with a shared
+   `sanitizeExtractionResult()` (`lib/intelligence/extract/types.ts`) that all
+   three LLM providers now run their output through, plus defensive guards
+   directly inside `persistExtraction()` — the one place that must never trust its
+   input regardless of source.
+
+**Run 5 succeeded end to end**, including a real Ollama-escalated extraction that
+wrote a genuine new entity + evidence row to production Supabase (verified via
+`execute_sql`, entities 43→50, evidence 9→10 — not assumed from a green checkmark).
+Daily schedule enabled (`cron: "0 6 * * *"`) on that basis, at the user's explicit
+go-ahead, not unprompted.
+
 **Status**: schema + agent registry (26, all `planned`) + generic collector + a real
-94-source registry (66 active) + a working extraction pipeline, both deterministic
-adapters proven against real data, all exist. **47 real captured documents** now sit
-in `intel_documents`, with entities/relationships/evidence extracted from 4 of them
-(2 World Bank Procurement samples, 1 SEC EDGAR sample) so far — the other 43 captured
-documents are stored and hashed but not yet run through extraction, a real, sizeable
-next increment if this is picked up again. No scheduler wired up yet for either
-collection or extraction (needs `INTEL_COLLECTOR_SECRET` in Netlify, GitHub repo
-secrets for the extraction workflow, and the SEC EDGAR User-Agent fix noted earlier),
-no dashboard route, no named agents built beyond the catalog. This is intentionally
-being built in verified batches, not fabricated ones — never seed a real
-`intel_sources` row without fetch-testing it first, and never claim an extraction
-result is proven without having actually run it against real captured data, per the
-pattern established across every phase so far.
+94-source registry (66 active) + a working, now-scheduled extraction pipeline (both
+deterministic adapters and the free Ollama LLM-escalation path all proven against
+real data) all exist. **47 real captured documents** sit in `intel_documents`, with
+entities/relationships/evidence extracted from 5 of them so far via manual proofs
+plus the first scheduled-path run — the extraction workflow will keep working
+through the backlog daily from here on its own, no further manual intervention
+needed for that specific loop. No dashboard route, no named agents built beyond the
+catalog, `INTEL_COLLECTOR_SECRET` still not set in Netlify (so the collection side
+itself, as opposed to extraction, still runs manually, not on a schedule) — logged
+in `REQUIRED_FROM_ALAN.md`. This is intentionally being built in verified batches,
+not fabricated ones — never seed a real `intel_sources` row without fetch-testing it
+first, and never claim an extraction or workflow result is proven without having
+actually run it and checked the real output, per the pattern established across
+every phase so far.
