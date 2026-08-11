@@ -44,6 +44,15 @@ IDB Procurement Notices (main iadb.org site — use the Open Data API instead, a
 
 **Running total after Batch 3: 94 sources seeded, 67 active, 7 real captured documents, 26 agents (still all `planned`).**
 
+## Batch 4: full collection sweep + award-fact extraction (2026-08-11, same session)
+
+Two follow-up passes at the user's request ("run the collector for more real data"):
+
+1. Ran the collector against every active source that had never been collected once (38 sources first pass, then a further 20 — every active source in the registry has now been fetched at least once). One more JS-rendered empty-shell source found and deactivated (`ComprasMX`, Mexico's federal procurement portal). Registry now at 65 active, **67 real captured documents**.
+2. Enhanced the World Bank Procurement adapter to parse actual award/counterparty facts (who won a contract, for how much) out of Contract Award notices' HTML body, not just project metadata. Found and fixed a real bug in the process (a "Beneficial Ownership Details" section was causing every award to be double-counted). Proven against a real 20-notice solar-sector sample: 3 real Contract Award notices on Pakistan's Sindh Solar Energy Project (World Bank loan IDA-62580) — BBOXX ($38.498M), d.light Design Ltd ($43.276M), Shenzhen Lemi Technology ($30.262M), plus 7 more real solar projects captured as entities. Full detail in `EXTRACTION.md`.
+
+**Running total after Batch 4: 94 sources seeded, 65 active, 67 real captured documents, 62 entities, 26 relationships, 20 evidence-cited claims.**
+
 ## What's explicitly NOT done yet — the rest of the prompt's ask
 
 The 2026-08-11 prompt's real scope is enormous: 20-30 P0 sources (roughly met) plus **50-100 P1 sources** spanning dozens of named global asset managers (BlackRock/GIP, Brookfield, KKR, Blackstone, etc.), ~20 named investment/project-finance banks, the family office/UHNW ecosystem and its gatekeepers, ~13 named private banks, and per-country government/regulatory/procurement portals across 8+ LATAM countries, 13+ African countries, India, 6 GCC states, Europe, and 9+ Asian countries — each with its own energy ministry, utility, regulator, PPP authority, and procurement portal to individually discover and verify. That is realistically several more full research batches of this same kind, not a gap to close in one pass. Doing it properly (real WebSearch + WebFetch verification per source, like the P0 batch above) rather than padding the registry with unverified guesses is the whole point of the "no fabrication" instruction the prompt itself included — so it's being paced, not skipped.
