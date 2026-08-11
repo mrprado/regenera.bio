@@ -964,10 +964,35 @@ electrification program, Pakistan's Tarbela floating solar project). 12 new enti
 Supabase. Full detail in `docs/intelligence-system/EXTRACTION.md`'s new "Award-fact
 extraction" section.
 
+**Phase 4e (done, 2026-08-11, same session): daily email digest.** User asked "I want
+an email digest" after being told nothing surfaces this data anywhere yet (it was
+sitting in Supabase tables, visible only via direct query). Built
+`scripts/intel-digest.ts`: summarizes documents/entities/relationships/evidence/
+changes since the last digest into a plain-text email, sent via the same Resend
+integration the site's contact/lead forms already use (`lib/notify.ts`, which now
+returns a success boolean instead of void so delivery status can be recorded — every
+existing caller ignores the return value, purely additive). Writes to `intel_reports`
+and `intel_report_deliveries`, both designed for exactly this in the Phase 2 schema
+and unused until now. **Deliberately framed as a factual activity summary, not an
+"opportunity report"** — no agent/prioritization/signal-generation code exists yet
+(`intel_signals` is still empty), and the digest's own closing line says so
+explicitly; don't let a future edit upgrade the framing before the substance backing
+it actually exists.
+
+`.github/workflows/intel-digest.yml` runs daily at 06:30 UTC (30 minutes after the
+extraction workflow's 06:00 run, though the two have no real dependency between
+them, GitHub Actions doesn't support that natively). Needs 3 new repo secrets
+(`RESEND_API_KEY`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`) — same values already in
+Netlify, just not shared with GitHub Actions, logged in `REQUIRED_FROM_ALAN.md`. Not
+yet run or verified, same "trigger manually and check it actually landed before
+trusting the schedule" discipline that caught 3 real bugs in the extraction workflow
+last time — don't assume this one works cleanly on the first try either.
+
 **Status**: schema + agent registry (26, all `planned`) + generic collector + a real
-94-source registry (66 active) + a working, now-scheduled extraction pipeline (both
+94-source registry (66 active) + a working, scheduled extraction pipeline (both
 deterministic adapters, now including real award/counterparty/capital facts, and the
-free Ollama LLM-escalation path, all proven against real data) all exist. **47 real captured documents** sit in `intel_documents`, with
+free Ollama LLM-escalation path, all proven against real data) + a built-but-unverified
+daily digest all exist. **47 real captured documents** sit in `intel_documents`, with
 entities/relationships/evidence extracted from 5 of them so far via manual proofs
 plus the first scheduled-path run — the extraction workflow will keep working
 through the backlog daily from here on its own, no further manual intervention
