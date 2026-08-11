@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "../../supabase/admin";
 import type { ExtractionResult } from "./types";
 
 export interface PersistStats {
