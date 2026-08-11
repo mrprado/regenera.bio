@@ -848,14 +848,61 @@ banks beyond UBS/JPM, Europe beyond EIB/EBRD) is in `docs/intelligence-system/
 SOURCE_REGISTRY.md`, not repeated here — read that file before claiming the registry
 is "done," and update it rather than this section if another batch runs.
 
-**Status**: schema + agent registry (26, all `planned`) + generic collector + a real,
-verified 94-source registry (67 active) exist, with 7 real captured documents proving
-the pipeline works end to end. No scheduler wired up yet (needs
-`INTEL_COLLECTOR_SECRET` in Netlify, a `pg_cron`/`pg_net` vs GitHub Actions decision,
-and the SEC User-Agent fix above), no dashboard route, no extraction/agent code
-beyond the catalog entries, so nothing yet turns a captured document into an
-entity/claim/signal, only into a stored, hashed, change-tracked row. This is
-intentionally being built in verified batches, not fabricated ones — never seed a
-real `intel_sources` row without actually fetch-testing it first (status code AND
-extracted text, not status code alone), per the pattern established across all four
-Phase 3 batches.
+**Phase 4 (done, 2026-08-11, same session): extraction pipeline, zero-cost-first by
+explicit instruction.** Asked whether to wire up extraction next; user's answer was
+specific and different from the default I proposed: **do not require Anthropic/OpenAI
+for V1**, build deterministic extraction first (regex/schema adapters), and make any
+LLM escalation provider-agnostic with Ollama (free, local) as the default option,
+Anthropic/OpenAI present but off unless a key is set later. Full design in
+`docs/intelligence-system/EXTRACTION.md` — read that file before touching this
+pipeline again, only the highlights are repeated here.
+
+Built: `lib/intelligence/extract/deterministic/` (schema-specific adapters for World
+Bank Procurement Notices and SEC EDGAR, both built from real observed JSON shapes,
+plus a generic regex fallback for money/capacity figures that deliberately does NOT
+attempt entity-name extraction from free text, since that heuristic is too
+false-positive-prone to trust); `lib/intelligence/extract/llm/` (provider-agnostic
+interface, Ollama/Anthropic/OpenAI adapters, tried in that free-first order,
+`getConfiguredProvider()` returns `null` — a normal outcome, not an error — if none
+are available); `lib/intelligence/extract/index.ts` (`extractDocument`: deterministic
+first, only escalates to an LLM if confidence < 0.6 AND a provider is actually
+configured); `lib/intelligence/extract/persist.ts` (writes results into
+`intel_entities`/`intel_entity_relationships`/`intel_evidence`, deduped by
+entity_type+name, claims without a resolvable subject are dropped rather than forced
+into the schema's exactly-one-subject constraint).
+
+**Real bug found and fixed while proving this against real data**:
+`lib/intelligence/collect.ts` was truncating ALL captured content at 20,000
+characters, including JSON — which corrupts JSON into something `JSON.parse()` can't
+read. Confirmed a real World Bank Procurement response can hit 54KB for just 2
+notices. Fixed to only truncate non-JSON content. This would have silently broken
+every deterministic adapter the first time a real capture exceeded the old limit,
+found by actually running extraction against real data, not by code review.
+
+**Proven, not just built**: ran the World Bank Procurement adapter against two real
+captured API responses. A 3-notice sample produced 7 entities, 4 relationships
+(including a real fact: UNDP awarded a $20.7M contract on Turkey's Health System
+Strengthening project, 2016-11-09), and 3 evidence rows, all persisted and verified
+in production Supabase. A 15-notice sample added 30 more entities and 15 more
+relationships, though those currently lack evidence rows (the full source document
+wasn't persisted for that batch, a known, documented gap, not hidden). `npm run
+build` and `npx tsc --noEmit` both clean after all of this.
+
+**Designed, not live-tested**: the Ollama provider (real HTTP client, no Ollama
+installation exists in this dev environment to test against) and
+`.github/workflows/intel-extraction.yml` (installs Ollama in an ephemeral runner,
+runs `scripts/intel-extract-ollama.ts` against queued documents — its `schedule:`
+trigger is deliberately commented out pending a manual `workflow_dispatch` run once
+`SUPABASE_SERVICE_ROLE_KEY`/`NEXT_PUBLIC_SUPABASE_URL` are set as repo secrets).
+Anthropic/OpenAI adapters are real, standard API integrations, off until a key is
+set, also untested.
+
+**Status**: schema + agent registry (26, all `planned`) + generic collector + a real
+94-source registry (67 active) + a working, partially-proven extraction pipeline all
+exist. No scheduler wired up yet for either collection or extraction (needs
+`INTEL_COLLECTOR_SECRET` in Netlify, GitHub repo secrets for the extraction workflow,
+and the SEC EDGAR User-Agent fix noted earlier), no dashboard route, no named agents
+built beyond the catalog. This is intentionally being built in verified batches, not
+fabricated ones — never seed a real `intel_sources` row without fetch-testing it
+first, and never claim an extraction result is proven without having actually run it
+against real captured data, per the pattern established across every phase so far.

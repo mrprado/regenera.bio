@@ -1,0 +1,50 @@
+name: Intelligence OS extraction
+
+# Runs deterministic + Ollama-escalated extraction against queued
+# intel_documents. Ollama has no persistent home in the Netlify serverless
+# collector route, so this ephemeral runner is where LLM-escalated
+# extraction actually happens in production -- free, per the spec's own
+# free/open-source-first requirement (section 7).
+#
+# NOT YET RUN as of 2026-08-11 -- written and reviewed, but this workflow
+# has never executed. Before enabling the schedule, confirm
+# SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_URL are set as repo
+# secrets (Settings -> Secrets and variables -> Actions), then trigger a
+# manual run (workflow_dispatch) and check the Action log before trusting
+# the schedule to run unattended.
+
+on:
+  workflow_dispatch: {}
+  # Uncomment once a manual run has been verified:
+  # schedule:
+  #   - cron: "0 6 * * *"
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Start Ollama and pull model
+        run: |
+          ollama serve &
+          sleep 5
+          ollama pull llama3.2:1b
+
+      - name: Run extraction
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OLLAMA_MODEL: "llama3.2:1b"
+        run: npx tsx scripts/intel-extract-ollama.ts

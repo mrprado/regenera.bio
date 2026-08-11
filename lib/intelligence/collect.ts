@@ -58,6 +58,7 @@ export async function collectSource(sourceId: string): Promise<CollectResult> {
 
   const body = await response.text();
   const contentType = response.headers.get("content-type");
+  const isJson = Boolean(contentType?.includes("json"));
   const text = extractText(contentType, body);
   const contentHash = createHash("sha256").update(text).digest("hex");
 
@@ -75,7 +76,14 @@ export async function collectSource(sourceId: string): Promise<CollectResult> {
       source_id: sourceId,
       url: source.url,
       content_hash: contentHash,
-      raw_content: text.length > MAX_INLINE_CONTENT_LENGTH ? text.slice(0, MAX_INLINE_CONTENT_LENGTH) : text,
+      // JSON is never truncated: cutting a JSON payload at an arbitrary
+      // character offset produces invalid JSON, silently breaking every
+      // deterministic adapter that expects to JSON.parse() this later
+      // (found by actually running extraction against a real capture,
+      // see docs/intelligence-system/EXTRACTION.md). HTML/plain text is
+      // fine to truncate -- losing the tail just means less context, not
+      // a parse failure.
+      raw_content: !isJson && text.length > MAX_INLINE_CONTENT_LENGTH ? text.slice(0, MAX_INLINE_CONTENT_LENGTH) : text,
       http_status: response.status
     })
     .select("id")
