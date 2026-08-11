@@ -897,12 +897,29 @@ trigger is deliberately commented out pending a manual `workflow_dispatch` run o
 Anthropic/OpenAI adapters are real, standard API integrations, off until a key is
 set, also untested.
 
+**Phase 4b (done, 2026-08-11, same session): SEC EDGAR proven + broad collection
+pass.** Ran the SEC EDGAR adapter against a real full-text search ("solar power",
+4,452 total hits) — 6 real organizations, each fully evidence-cited to a real filing
+(form type, date, business location, accession number). Then ran raw collection
+(fetch → hash → store, no extraction, exactly what a scheduler will eventually do
+automatically) across 38 previously-uncollected active sources in one pass: 37
+succeeded, 1 (`mercadopublico.cl`, Chile's procurement portal) turned out to be
+another JS-rendered empty shell like CENACE/SIE/Etimad and was deactivated with that
+finding recorded, not silently left broken. Two captures (SENER, Abu Dhabi's DOE)
+came back unusually small compared to earlier test fetches of the same URLs —
+flagged in the stored row as worth re-checking, not quietly trusted.
+
 **Status**: schema + agent registry (26, all `planned`) + generic collector + a real
-94-source registry (67 active) + a working, partially-proven extraction pipeline all
-exist. No scheduler wired up yet for either collection or extraction (needs
-`INTEL_COLLECTOR_SECRET` in Netlify, GitHub repo secrets for the extraction workflow,
-and the SEC EDGAR User-Agent fix noted earlier), no dashboard route, no named agents
-built beyond the catalog. This is intentionally being built in verified batches, not
-fabricated ones — never seed a real `intel_sources` row without fetch-testing it
-first, and never claim an extraction result is proven without having actually run it
-against real captured data, per the pattern established across every phase so far.
+94-source registry (66 active) + a working extraction pipeline, both deterministic
+adapters proven against real data, all exist. **47 real captured documents** now sit
+in `intel_documents`, with entities/relationships/evidence extracted from 4 of them
+(2 World Bank Procurement samples, 1 SEC EDGAR sample) so far — the other 43 captured
+documents are stored and hashed but not yet run through extraction, a real, sizeable
+next increment if this is picked up again. No scheduler wired up yet for either
+collection or extraction (needs `INTEL_COLLECTOR_SECRET` in Netlify, GitHub repo
+secrets for the extraction workflow, and the SEC EDGAR User-Agent fix noted earlier),
+no dashboard route, no named agents built beyond the catalog. This is intentionally
+being built in verified batches, not fabricated ones — never seed a real
+`intel_sources` row without fetch-testing it first, and never claim an extraction
+result is proven without having actually run it against real captured data, per the
+pattern established across every phase so far.

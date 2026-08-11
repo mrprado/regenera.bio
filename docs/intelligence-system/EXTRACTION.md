@@ -71,11 +71,11 @@ run to confirm it actually works before it's allowed to run unattended.
 
 ## What's actually proven vs. designed-but-untested
 
-**Proven, with real data**: the World Bank Procurement Notices deterministic
-adapter, run against real captured API responses (not synthetic test
-data). A 3-notice sample produced 7 new entities (3 projects, 2
-jurisdictions, 1 organization, 1 regulator), 4 relationships (3
-`located_in`, 1 `awarded_contract_to` — the real fact that UNDP was
+**Proven, with real data**: both schema-specific adapters, run against real
+captured API responses (not synthetic test data). The World Bank
+Procurement Notices adapter: a 3-notice sample produced 7 new entities (3
+projects, 2 jurisdictions, 1 organization, 1 regulator), 4 relationships
+(3 `located_in`, 1 `awarded_contract_to` — the real fact that UNDP was
 awarded a $20.7M contract on Turkey's Health System Strengthening project,
 signed 2016-11-09), and 3 evidence rows citing the real captured document.
 A separate 15-notice sample produced 30 more entities and 15 more
@@ -83,7 +83,23 @@ A separate 15-notice sample produced 30 more entities and 15 more
 the full 195KB source document wasn't persisted for context-budget
 reasons during this proof; the entities/relationships are real and
 correctly derived, just not yet formally cited, a gap worth closing before
-treating this batch as fully evidence-complete).
+treating this batch as fully evidence-complete). The SEC EDGAR adapter: a
+real full-text search for "solar power" (4,452 total hits, 12 sampled)
+produced 6 real organizations (Solar Power Inc, Evergreen Solar, Prime Sun
+Power, Coronus Solar, Fairview Energy, American Electric Technologies),
+each with a real, fully evidence-cited 8-K filing claim.
+
+**Collection breadth also proven, not just extraction depth**: ran the raw
+fetch-hash-store logic (no extraction, this is what a scheduler will
+eventually do automatically) against 38 previously-uncollected active
+sources in one pass. 37 succeeded with real content; one
+(`mercadopublico.cl`, Chile's procurement portal) returned an empty
+JS-rendered shell like CENACE/SIE/Etimad before it and was deactivated
+with that finding recorded. Two captures (Mexico's SENER, Abu Dhabi's DOE)
+returned unusually small bodies compared to earlier test fetches of the
+same URLs — noted in `intel_documents.raw_content` as worth re-checking,
+not silently trusted. Total real captured documents across all proving
+passes: 47.
 
 **Designed, not yet live-tested**: the Ollama provider (real HTTP client
 matching Ollama's documented API, but no Ollama installation exists in the
