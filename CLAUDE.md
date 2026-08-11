@@ -638,3 +638,72 @@ even rendered) were deleted from `lib/projects.ts`.
   `lib/practices.ts` is the source of truth, `opportunities.service` CRM
   attribution wired end to end from every practice CTA (see "Commercial platform"
   above).
+
+## Intelligence OS — in progress, read before continuing
+
+On 2026-08-10 the user provided a 100-section "REGENERA AGENTIC INTELLIGENCE OS —
+FINAL MASTER BUILD SPECIFICATION" requesting a full private business-intelligence
+platform: web collectors, change detection, an evidence-backed knowledge graph, 25
+named specialized agents, capital/family-office/mining intelligence, an
+opportunity/prospecting engine, a private `app.regenera.bio` dashboard, and daily
+7am/7pm email+WhatsApp reports, with extensive docs under `docs/intelligence-system/`.
+This is genuinely months of work, not a single session. Explicitly told the user this
+and committed to the spec's own phasing (Phase 0 audit → Phase 1 architecture → Phase 2
+schema → ... → later collector/agent/dashboard phases) rather than attempting
+everything at once or producing an architecture-only response with no real artifacts.
+
+**Phase 0 (done)**: `docs/intelligence-system/EXISTING_SYSTEM_AUDIT.md`. Confirmed no
+scraping/agent libraries installed yet (`package.json` has only
+`@supabase/ssr`/`@supabase/supabase-js`/`next`/`react`/`react-dom`/`resend`), no GitHub
+Actions, no existing Edge Functions or cron jobs on the Supabase project. Key finding
+worth remembering: `pg_cron`, `pg_net`, and `vector` (pgvector) are all available on
+this Supabase project's extension list and were unused before this work, meaning the
+daily-scheduling and embeddings requirements can be met natively inside Supabase rather
+than reaching for an external scheduler or vector DB.
+
+**Phase 1 (done)**: `docs/intelligence-system/ARCHITECTURE.md`. Ontology: a single
+polymorphic `intel_entities` table (organization/person/fund/project/asset/regulator/
+jurisdiction) rather than one table per type, since relationships cross types
+constantly; typed/evidence-backed/time-bounded `intel_entity_relationships`; an
+evidence-first discipline where every entity/relationship fact traces back to a
+specific `intel_documents` row via `intel_evidence` (same proof-discipline already
+enforced on the public site, applied to an automated pipeline); a source registry
+(`intel_sources`) and change-detection log (`intel_changes`); an agent catalog
+(`intel_agents`/`intel_agent_runs`) seeded as a registry now, flipped from `planned` to
+`active` per agent as each is actually built later, so it stays a truthful picture, not
+aspirational; a `intel_signals` table for **unreviewed** agent-generated prospecting
+output, deliberately separate from the CRM's own `opportunities` table (CRM
+`opportunities` = confirmed real pipeline per the Selected Mandates proof-discipline
+rules; `intel_signals` = raw pattern-matching, promoted to a real opportunity only via
+an explicit logged action, never automatically); `intel_reports`/
+`intel_report_deliveries` for the digest system.
+
+**Phase 2 (done)**: schema implemented as three migrations,
+`supabase/migrations/20260810160000_enable_intelligence_os_extensions.sql`,
+`20260810160100_create_intelligence_os_core_schema.sql`, and a follow-up
+`20260810160200_fix_intelligence_os_extension_schema_and_grants.sql` (moved `pg_net`/
+`vector` out of `public` into the `extensions` schema, and re-asserted the
+`is_intel_access()` revoke-from-anon that didn't fully take on the first pass, both
+found via `get_advisors(security)` after applying, not guessed preemptively). Access
+control: a new `staff.has_intel_access` boolean (default false) plus an
+`is_intel_access()` `SECURITY DEFINER` helper function, following the exact
+`is_active_staff()` pattern from `docs/crm/SECURITY_MODEL.md` — **never write an inline
+`EXISTS` policy referencing a table from its own policy**, that's the recursion bug
+already hit once on the `staff` table itself, don't repeat it here. Intel-system access
+is intentionally a separate flag from CRM staff access, not implied by being CRM staff.
+`get_advisors(security)` after all three migrations shows only the two pre-existing,
+already-accepted findings (the `authenticated` role being able to call the
+`is_active_staff`/`is_active_admin`/`is_intel_access` helper functions directly, which
+is required for RLS policies to work at all, and "Leaked Password Protection Disabled,"
+unrelated, magic-link-only auth doesn't use passwords) — no new unresolved findings.
+
+**Status**: schema only, zero rows in any `intel_*` table, no collector code, no agent
+code, no dashboard route, nothing seeded. `docs/intelligence-system/
+REQUIRED_FROM_ALAN.md` logs what later phases will need (LLM API key, which real
+sources to prioritize first, WhatsApp provider choice, `app.regenera.bio` DNS) without
+blocking on any of it now, per the spec's own instruction not to interrupt repeatedly
+for credentials. **Next phases (3+, not started)**: real source registry seeding,
+actual collector code (no scraping library chosen yet), the private dashboard, the
+first real named agents. This is intentionally being built in small, verified batches
+matching how the CRM and website work went, not as one giant unsupervised pass — don't
+attempt to jump ahead to later phases without picking this section back up first.
