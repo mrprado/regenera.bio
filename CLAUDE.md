@@ -697,13 +697,62 @@ already-accepted findings (the `authenticated` role being able to call the
 is required for RLS policies to work at all, and "Leaked Password Protection Disabled,"
 unrelated, magic-link-only auth doesn't use passwords) — no new unresolved findings.
 
-**Status**: schema only, zero rows in any `intel_*` table, no collector code, no agent
-code, no dashboard route, nothing seeded. `docs/intelligence-system/
-REQUIRED_FROM_ALAN.md` logs what later phases will need (LLM API key, which real
-sources to prioritize first, WhatsApp provider choice, `app.regenera.bio` DNS) without
-blocking on any of it now, per the spec's own instruction not to interrupt repeatedly
-for credentials. **Next phases (3+, not started)**: real source registry seeding,
-actual collector code (no scraping library chosen yet), the private dashboard, the
-first real named agents. This is intentionally being built in small, verified batches
+**Phase 3a (done, 2026-08-11): agent registry seeded + generic collector built.**
+Went back to the raw spec text (the original 100-section prompt, recovered from this
+session's own transcript file rather than re-derived from memory, since the earlier
+summary didn't preserve it verbatim) to get the *real* agent roster instead of
+guessing one — section 64 names 26 agents exactly (`ORCHESTRATOR` plus 25 named
+specialists: Source Discovery, Project Intelligence, Capital Intelligence, Family
+Office/UHNW, Private Bank/Distribution, Project Finance, Private Credit, Transaction
+Intelligence, Mining & Gold, Developer Intelligence, Procurement, Market Intelligence,
+People Intelligence, Relationship Intelligence, Competitor Intelligence, Regulatory
+Intelligence, Document Intelligence, Project Readiness, Risk, Systems/Seven Layers,
+Content Intelligence, Data Quality, Unknown Unknowns, Opportunity Analyst, Executive
+Analyst). All 26 inserted into `intel_agents` verbatim from the spec, `status =
+'planned'`, short functional `role_description`s grounded either in the spec's own
+elaboration (Orchestrator, Source Discovery) or the plain meaning of the name where
+the spec only listed it (most of the 25) — don't treat those descriptions as spec text
+if the spec is ever consulted again, only the names and existence are verbatim.
+
+Also confirmed from the raw spec while there: section 6 states the core architectural
+rule "collect once, normalize once, store once, reason many times" (exactly what the
+Phase 1 schema already does, good validation) and section 7 requires free/open-source-
+first, explicitly naming GitHub Actions and Supabase scheduled functions as preferred
+schedulers and telling us not to introduce paid SaaS "merely because it's easier."
+
+Built `lib/intelligence/collect.ts` (`collectSource(sourceId)`: fetch a source's URL,
+strip HTML via `cheerio` down to plain text, SHA-256 hash it, store an
+`intel_documents` row, and insert an `intel_changes` row only if the hash differs from
+the previous capture for that source — the literal "collect once" pattern) and
+`app/api/intel/collect/route.ts` (thin wrapper, gated by a new shared-secret header
+`x-collector-secret` checked against `INTEL_COLLECTOR_SECRET`, since this route is
+called by a scheduler, never a logged-in staff session, so the usual
+`is_active_staff()` cookie-based gate doesn't apply here — see `.env.example`).
+`cheerio` is the one new dependency, open-source, matches the free/open-source
+requirement, no headless browser or paid scraping service.
+
+**Verified, not just built-and-assumed**: `npm run build` clean with the new route.
+The fetch/extract/hash logic was proven for real against a live URL
+(`https://regenera.bio/philosophy`, chosen only because it's neutral and already
+public, not because it's a real intelligence target). Since this environment has no
+`SUPABASE_SERVICE_ROLE_KEY` locally (same known gap as the CRM ingestion path), the
+resulting document row was inserted via `execute_sql` using the exact shape
+`collectSource()` produces, proving the schema accepts real collector output end to
+end; the live route itself has not been exercised over HTTP (that needs a deploy plus
+`INTEL_COLLECTOR_SECRET` set in Netlify). The throwaway `intel_sources`/
+`intel_documents`/`intel_changes` test rows were deleted immediately after verifying
+(cascade delete confirmed all three tables back to the rows that should exist, i.e.
+none) — no fake "source" is left sitting in the registry pretending to be real.
+`get_advisors(security)` re-checked clean (same two pre-existing accepted findings,
+nothing new) after this batch.
+
+**Status**: schema + agent registry + generic collector infrastructure exist. Zero
+rows in every `intel_*` table except `intel_agents` (26, all `planned`). No real
+source has been added, no scheduler is wired up yet, no dashboard route, no agent code
+beyond the catalog entry. `docs/intelligence-system/REQUIRED_FROM_ALAN.md` is current
+and names the one real blocker to further progress: a real prioritized source list
+from Alan, since building against an arbitrary source would be wasted work per the
+audit's own reasoning. This is intentionally being built in small, verified batches
 matching how the CRM and website work went, not as one giant unsupervised pass — don't
-attempt to jump ahead to later phases without picking this section back up first.
+attempt to jump ahead to later phases without picking this section back up first, and
+don't seed real `intel_sources` rows on a guess about what matters.
