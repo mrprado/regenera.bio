@@ -135,12 +135,20 @@ export function extract(rawContent: string): ExtractionResult {
           fromEntityName: award.name,
           toEntityName: notice.project_name,
           relationshipType: "awarded_contract_on",
-          confidence: 0.85
+          confidence: 0.95
         });
         result.claims.push({
           entityName: award.name,
+          // Higher confidence than a plain notice claim (0.9, below): an
+          // award represents a completed, signed transaction, a strictly
+          // more certain and more valuable fact than "a bid was invited"
+          // -- confirmed to matter in practice: the digest's highlights
+          // section ranks by confidence, and award facts (the real $112M
+          // in Sindh Solar contracts) were getting crowded out entirely
+          // by ordinary bid-invitation boilerplate sitting at the same
+          // score.
           claimText: `${award.name} was awarded a contract on "${notice.project_name}" (${notice.project_id})${notice.bid_description ? ` — ${notice.bid_description}` : ""}${award.amount ? `, signed contract price ${award.currency} ${award.amount}` : ""}${notice.noticedate ? `, notice dated ${notice.noticedate}` : ""}.`,
-          confidence: 0.85
+          confidence: 0.95
         });
       }
     }
