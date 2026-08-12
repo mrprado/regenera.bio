@@ -53,7 +53,12 @@ export default async function CrmDashboardPage() {
             Signed in as {staff.email ?? staff.id} ({staff.role})
           </p>
         </div>
-        <SignOutButton />
+        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <a href="/crm/intelligence/investors" className="btn btn-line" style={{ fontSize: 13 }}>
+            Investor Intelligence
+          </a>
+          <SignOutButton />
+        </div>
       </div>
 
       <div

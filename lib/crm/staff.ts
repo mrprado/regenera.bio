@@ -58,3 +58,36 @@ export async function getCurrentStaff(): Promise<StaffRecord | null> {
   const result = await checkStaffAccess();
   return result.state === "authorized" ? result.staff : null;
 }
+
+// Intelligence-system access (has_intel_access) is granted per person,
+// independent of general CRM staff access (see the intel_* schema
+// migration's own comment on is_intel_access()) -- a CRM staff member does
+// not automatically see the Investor Intelligence area. This mirrors
+// checkStaffAccess's shape rather than reusing it, since "authorized" here
+// means something stricter than plain active staff.
+export type IntelAccessCheckResult = StaffCheckResult | { state: "no_intel_access"; staff: StaffRecord };
+
+export async function checkIntelAccess(): Promise<IntelAccessCheckResult> {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) return { state: "no_session" };
+
+  const { data: staff, error } = await supabase
+    .from("staff")
+    .select("id, email, full_name, role, has_intel_access")
+    .eq("id", user.id)
+    .eq("is_active", true)
+    .maybeSingle();
+
+  if (error) {
+    console.error("[intel-auth] staff lookup failed", { userId: user.id, message: error.message, code: error.code });
+  }
+
+  if (!staff) return { state: "not_authorized" };
+  const staffRecord: StaffRecord = { id: staff.id, email: staff.email, full_name: staff.full_name, role: staff.role };
+  if (!staff.has_intel_access) return { state: "no_intel_access", staff: staffRecord };
+  return { state: "authorized", staff: staffRecord };
+}

@@ -16,6 +16,23 @@ Running log of decisions, credentials, and access this build needs from Alan, ad
 - **WhatsApp delivery**: which API/provider (WhatsApp Business API via Meta directly, or a provider like Twilio) and the destination number(s) for the daily reports.
 - **`app.regenera.bio` subdomain**: DNS access to point it at wherever the private dashboard ends up hosted (likely the same Netlify site as a new route, or a second Netlify site — architecture decision still open).
 
+## Investor Intelligence module (added 2026-08-12, see INVESTOR_INTELLIGENCE.md)
+
+- ~~`has_intel_access` grant for your own staff row~~ -- **done 2026-08-12**. `alanprado@regenera.bio` now has `has_intel_access = true`; `/crm/intelligence/investors` is reachable on the next sign-in.
+- **Agent Reach / LinkedIn decision**: not installed, and this build deliberately does not
+  install it or write real LinkedIn call logic for you -- both because it's a system-level
+  install decision and because LinkedIn scraping carries real ToS/legal exposure for a
+  live business. If you want the LinkedIn contact-intelligence half of this module
+  working, that's a real conversation (what's the actual legal posture you're comfortable
+  with), not a config value. Exa (semantic web search) is lower-risk and could be wired
+  first if useful.
+- **No scheduled discovery/monitoring runner yet**: today, discovery is 100% staff-
+  triggered from the UI (paste a URL, review, confirm). Worth revisiting once there's
+  real usage to justify a GitHub Actions cron workflow like the existing
+  `intel-collect.yml`.
+- **`JINA_API_KEY`, fully optional**: only worth getting if the free public rate limit on
+  Jina Reader turns out to be a real bottleneck once you're using the module regularly.
+
 ## Already resolved (context, not a pending ask)
 
 - Supabase project, Resend domain, and CRM staff auth are all already set up and reused as-is by this system (see `EXISTING_SYSTEM_AUDIT.md`) — no new credentials needed for the schema work done in Phase 1–2.

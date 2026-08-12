@@ -1067,3 +1067,67 @@ not fabricated ones — never seed a real `intel_sources` row without fetch-test
 first, and never claim an extraction or workflow result is proven without having
 actually run it and checked the real output, per the pattern established across
 every phase so far.
+
+## Investor Intelligence — bounded domain, built 2026-08-12, read before continuing
+
+On 2026-08-12 the user provided another large, formally-structured spec ("Build a new,
+bounded Investor Intelligence domain module") asking for investor discovery, LinkedIn
+contact intelligence, evidence-backed profiles, per-project matching, monitoring, and CRM
+export, explicitly as an add-on to the existing Intelligence OS, not a rebuild. Full
+design and status: `docs/intelligence-system/INVESTOR_INTELLIGENCE.md` — read that before
+touching anything in `lib/intelligence/investors/` or `app/crm/intelligence/investors/`.
+
+**Audit found the spec's own assumptions didn't match this repo**: no 26-agent
+orchestrator actually runs (the `intel_agents` catalog is 26 rows, all still `status =
+'planned'`), no job queue, no worker process, no test framework existed at all, deployed
+to Netlify (no persistent process to host a worker on). Rather than build to the spec's
+literal assumptions, extended what's real: the existing generic collector
+(`lib/intelligence/collect.ts`, unmodified), the existing extraction pipeline
+(`lib/intelligence/extract/*`, unmodified), and the existing `intel_entities`/
+`intel_evidence` knowledge graph (extended with 4 nullable columns, not replaced).
+
+**Schema**: one migration,
+`supabase/migrations/20260812120000_create_investor_intelligence_schema.sql`, applied to
+production. 16 new tables, all RLS-gated by the existing `is_intel_access()` helper.
+Named the project-side raise `project_investment_mandates`, deliberately not
+`capital_mandates` — that name was already taken by the CRM Phase 1 schema's own
+investor-appetite table (`investor_organization_id`-keyed, a different concept: what an
+investor wants vs. what a project needs). Candidate investor organizations/people are
+rows in the existing `intel_entities` table, extended with typed `investor_organization_
+profiles`/`investor_person_profiles` tables, not a parallel entity system — same "extend,
+don't duplicate" discipline as everything else in this file.
+
+**Scoring**: `lib/intelligence/investors/scoring.ts`, two deterministic, fully explainable
+models (project-match and accredited-individual) matching the spec's own weight tables
+exactly, unit-tested for every penalty/exclusion/classification-band case. No LLM
+involved in scoring, ever.
+
+**Deliberately not built, and why** (all logged as real asks in `REQUIRED_FROM_ALAN.md`,
+not silently skipped): LinkedIn/Exa are wired as interfaces with live install-detection
+health checks (`agent-reach doctor --json`, never an install), but their actual calls are
+not implemented — the spec itself said not to hardcode a guessed CLI/MCP schema before
+inspecting a real installation, and LinkedIn access carries real ToS/legal exposure for a
+live business that needs Alan's explicit decision, not an agent's guess. No standalone
+worker service — this app has no infra for one, and the existing GitHub Actions cron
+pattern (`intel-collect.yml` etc.) already solves the same "don't block the web app"
+problem at zero cost; `investor_discovery_jobs` is schema-ready for the same pattern once
+there's real volume to justify it.
+
+**Testing**: this repository had zero test infrastructure before this. Added Vitest
+(dev-only dependency) specifically to cover this module's deterministic logic — 61 tests,
+`npm run test`, all passing. Not extended to server actions or React components (need a
+live Supabase project); those are exercised manually per the acceptance-criteria
+walkthrough in `INVESTOR_INTELLIGENCE.md`.
+
+**Status**: schema live in production, working end-to-end slice for organizations
+(mandate → generate queries → collect a URL through the existing collector → confirm a
+candidate with cited evidence → score against the mandate → promote to a real CRM
+`organizations` row), all via `/crm/intelligence/investors` gated by a new
+`has_intel_access` grant (separate from general CRM staff access, not yet granted to
+anyone — logged in `REQUIRED_FROM_ALAN.md`). Person-side discovery has full schema/
+scoring support but no UI create/promote flow yet, same pattern as organizations just not
+extended there. No scheduled discovery/monitoring runner exists yet, no real search
+provider is wired (Jina Reader works for single-URL fetch, not yet search), LinkedIn/Exa
+remain interfaces only. This is intentionally a working, tested foundation slice, not a
+simulation of the full spec — see "Recommended next step" in `INVESTOR_INTELLIGENCE.md`
+for what's actually next.
