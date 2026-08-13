@@ -10,7 +10,14 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default async function ConnectorSettingsPage() {
-  const health = await getConnectorHealth();
+  // The parent layout (app/crm/intelligence/investors/layout.tsx) already
+  // redirects unauthenticated/unauthorized visitors before this page would
+  // ever be shown to one. But Next.js can start rendering this async Server
+  // Component before that redirect fully unwinds, so getConnectorHealth()'s
+  // own access check can throw here first -- caught and swallowed rather
+  // than left as an unhandled server-side exception, since the layout's
+  // redirect is what actually determines the response either way.
+  const health = await getConnectorHealth().catch(() => []);
 
   return (
     <div>
